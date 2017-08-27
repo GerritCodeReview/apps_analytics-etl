@@ -12,7 +12,6 @@ libraryDependencies ++= Seq(
 
   // fixed versions for apache spark 2.1.1
   "org.json4s" %% "json4s-native" % "3.2.11",
-  "joda-time" % "joda-time" % "2.9.3",
 
   "com.github.scopt" %% "scopt" % "3.6.0",
   "org.scalactic" %% "scalactic" % "3.0.1" % "test",
