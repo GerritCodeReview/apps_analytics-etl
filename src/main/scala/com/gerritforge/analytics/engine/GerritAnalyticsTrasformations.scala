@@ -3,8 +3,8 @@ package com.gerritforge.analytics.engine
 import java.io.{BufferedReader, IOException, InputStreamReader}
 import java.net.URL
 import java.nio.charset.StandardCharsets
-import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 import java.time.format.DateTimeFormatter
+import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 
 import com.gerritforge.analytics.model.{GerritEndpointConfig, ProjectContribution, ProjectContributionSource}
 import org.apache.spark.rdd.RDD
@@ -23,11 +23,22 @@ object GerritAnalyticsTrasformations {
       ZoneOffset.UTC, ZoneId.of("Z")
     ) format DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
+  private[analytics] val emailToDomain: PartialFunction[JValue,String] = {
+    case JString(email) if email.contains("@") && !email.endsWith("@") =>
+      email.split("@").last.toLowerCase
+  }
+
   private[analytics] def transformLongDateToISO(in: String): JObject = {
     parse(in).transformField {
       case JField(fieldName, JInt(v)) if (fieldName=="date" || fieldName=="last_commit_date") =>
         JField(fieldName, JString(longDateToISO(v)))
     }.asInstanceOf[JObject]
+  }
+
+  private[analytics] def transformAddOrganization(in: JObject): JObject = {
+    Some(in \ "email")
+      .collect(emailToDomain)
+      .fold(in)(org => ("organization" -> org) ~ in)
   }
 
   def getFileContentAsProjectContributions(sourceUrl: String, projectName: String): Iterator[ProjectContribution] = {
@@ -36,6 +47,7 @@ object GerritAnalyticsTrasformations {
       .lines.iterator().asScala
       .filterNot(_.trim.isEmpty)
       .map(transformLongDateToISO)
+      .map(transformAddOrganization)
       .map(ProjectContribution(projectName, _))
 
   }
@@ -74,6 +86,3 @@ object GerritAnalyticsTrasformations {
   }
 
 }
-
-
-
