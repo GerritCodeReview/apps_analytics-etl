@@ -19,3 +19,5 @@ libraryDependencies ++= Seq(
 )
 
 mainClass in (Compile,run) := Some("com.gerritforge.analytics.job.Main")
+
+parallelExecution in Test := false
