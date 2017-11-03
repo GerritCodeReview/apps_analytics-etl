@@ -4,13 +4,15 @@ version := "1.0"
 
 scalaVersion := "2.11.8"
 
+val sparkVersion = "2.1.1"
+
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % "2.1.1" % "provided"
+  "org.apache.spark" %% "spark-core" % sparkVersion % "provided"
     exclude("org.spark-project.spark", "unused"),
+  "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
   "org.elasticsearch" %% "elasticsearch-spark-20" % "5.0.2"
     excludeAll ExclusionRule(organization = "org.apache.spark"),
-
-  // fixed versions for apache spark 2.1.1
+  // json4s still needed by GerritProjects
   "org.json4s" %% "json4s-native" % "3.2.11",
 
   "com.github.scopt" %% "scopt" % "3.6.0",

@@ -16,81 +16,152 @@ package com.gerritforge.analytics
 
 import java.io.{File, FileWriter}
 
-import com.gerritforge.analytics.model.{GerritEndpointConfig, ProjectContribution, ProjectContributionSource}
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjects, ProjectContributionSource}
+import org.apache.spark.sql.Row
 import org.json4s.JsonDSL._
 import org.json4s._
-import org.json4s.jackson.JsonMethods._
-import org.scalatest.{FlatSpec, Inside, Matchers, PartialFunctionValues}
+import org.scalatest.{FlatSpec, Inside, Matchers}
+import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
+import org.json4s.jackson.JsonMethods.{compact, render}
 
-class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with SparkTestSupport with Inside with PartialFunctionValues {
+import scala.io.Source
 
-  import com.gerritforge.analytics.engine.GerritAnalyticsTrasformations._
+class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
+  with SparkTestSupport with Inside {
 
-  "A project" should "be enriched with its contributors URL endpoint" in {
-    withSparkContext { sc =>
-      val projectRdd = sc.parallelize(Seq("project"))
-      val config = GerritEndpointConfig("http://somewhere.com")
+  "GerritProjects" should "parse project names" in {
 
-      val projectWithSource = projectRdd.enrichWithSource(config).collect
+    val projectNames = GerritProjects(Source.fromString(
+      """)]}'
+        |{
+        | "All-Projects": {
+        |   "id": "All-Projects",
+        | },
+        | "Test": {
+        |   "id": "Test",
+        | }
+        |}
+        |""".stripMargin))
 
-      projectWithSource should have size 1
+    projectNames should have size 2
+    projectNames should contain allOf("All-Projects", "Test")
+  }
 
-      inside(projectWithSource.head) {
-        case ProjectContributionSource(project, url) => {
-          project should be("project")
-          url should startWith("http://somewhere.com")
-        }
+
+  "enrichWithSource" should "enrich project RDD object with its source" in {
+
+    val projectRdd = sc.parallelize(Seq("project"))
+    implicit val config = GerritEndpointConfig("http://somewhere.com")
+
+    val projectWithSource = projectRdd
+      .enrichWithSource
+      .collect
+
+    projectWithSource should have size 1
+    inside(projectWithSource.head) {
+      case ProjectContributionSource(project, url) => {
+        project should be("project")
+        url should startWith("http://somewhere.com")
       }
     }
   }
 
-  it should "return two lines enriched with its two contributors" in {
-    val contributor1: JObject = ("foo" -> "bar")
-    val contributor2: JObject = ("first" -> "John")
-    val projectSource = ProjectContributionSource("project", newSource(contributor1, contributor2))
+  "fetchRawContributors" should "fetch file content from the initial list of project names and file names" in {
 
-    withSparkContext { sc =>
-      val projectContributions = sc.parallelize(Seq(projectSource))
-        .fetchContributors
-        .collect()
+    val line1 = "foo" -> "bar"
+    val line2 = "foo1" -> "bar1"
+    val line3 = "foo2" -> "bar2\u0100" // checks UTF-8 as well
+    val line3b = "foo3" -> "bar3\u0101"
 
-      projectContributions should contain allOf(
-        ProjectContribution("project", contributor1),
-        ProjectContribution("project", contributor2)
-      )
-    }
-  }
+    val projectSource1 = ProjectContributionSource("p1", newSource(line1, line2, line3))
+    val projectSource2 = ProjectContributionSource("p2", newSource(line3b))
 
-  "A ProjectContribution RDD" should "serialize to Json" in {
-    val pc1 = ProjectContribution("project", ("foo" -> "bar"))
-    val pc2 = ProjectContribution("project", ("foo2" -> "bar2"))
-    withSparkContext { sc =>
-      sc.parallelize(Seq(pc1, pc2)).toJson.collect should contain allOf(
-        """{"project":"project","foo":"bar"}""",
-        """{"project":"project","foo2":"bar2"}""")
-    }
-  }
+    val rawContributors = sc.parallelize(Seq(projectSource1, projectSource2))
+      .fetchRawContributors
+      .collect
 
-  "getFileContentAsProjectContributions" should "collect contributors and handle utf-8" in {
-    val contributor1: JObject = ("foo" -> "bar")
-    val contributor2: JObject = ("first" -> "(A with macron) in unicode is: \u0100")
-    val url = newSource(contributor1, contributor2)
-    val projectContributions = getFileContentAsProjectContributions(url, "project").toArray
-
-    projectContributions should contain allOf(
-      ProjectContribution("project", contributor1),
-      ProjectContribution("project", contributor2)
+    rawContributors should have size (4)
+    rawContributors should contain allOf(
+      ("p1","""{"foo":"bar"}"""),
+      ("p1","""{"foo1":"bar1"}"""),
+      ("p1", "{\"foo2\":\"bar2\u0100\"}"),
+      ("p2", "{\"foo3\":\"bar3\u0101\"}")
     )
   }
 
-  "emailToDomain" should "parse domain" in {
-    emailToDomain.valueAt("a@x.y") should be ("x.y")
+  "transformWorkableDF" should "transform a DataFrame with project and json to a workable DF with separated columns" in {
+
+    import sql.implicits._
+
+    val rdd = sc.parallelize(Seq(
+      ("p1","""{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1, "num_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false}]}"""),
+      ("p2","""{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428, "num_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1500000000000,"merge":true}]}"""),
+      // last commit is missing hour,day,month,year to check optionality
+      ("p3","""{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true}]}""")
+    ))
+
+    val df = rdd.toDF("project", "json")
+      .transformWorkableDF
+
+    df.count should be(3)
+    val collected = df.collect
+
+    df.schema.fields.map(_.name) should contain allOf(
+      "project", "name", "email",
+      "year", "month", "day", "hour",
+      "num_files", "added_lines", "deleted_lines",
+      "num_commits", "last_commit_date")
+
+    collected should contain allOf(
+      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 1, 1, 1, 0),
+      Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 1, 1, 428, 1500000000000L),
+      Row("p3", "c", "c@mail.com", null, null, null, null, 2, 1, 1, 12, 1600000000000L)
+    )
   }
 
-  "transformAddOrganization" should "add organization" in {
-    val contributor: JObject = ("name" -> "contributor1") ~ ("email" -> "name1@domain1")
-    val transformed = transformAddOrganization(contributor)
-    transformed \ "organization" should be(JString("domain1"))
+  "addOrganization" should "compute organization column from the email" in {
+    import sql.implicits._
+
+    val df = sc.parallelize(Seq(
+      "",
+      "@", // corner case
+      "not an email",
+      "email@domain"
+    )).toDF("email")
+
+    val transformed = df.addOrganization()
+
+    transformed.schema.fields.map(_.name) should contain allOf("email","organization")
+
+    transformed.collect should contain allOf(
+      Row("", ""),
+      Row("@", ""),
+      Row("not an email", ""),
+      Row("email@domain", "domain")
+    )
+
+  }
+
+  "convertDates" should "process specific column from Long to ISO date" in {
+    // some notable dates converted in UnixMillisecs and ISO format
+    val DATES = Map(
+      0L -> "1970-01-01T00:00:00Z",
+      1500000000000L -> "2017-07-14T02:40:00Z",
+      1600000000000L -> "2020-09-13T12:26:40Z")
+    import sql.implicits._
+    val df = sc.parallelize(Seq(
+      ("a", 0L, 1),
+      ("b", 1500000000000L, 2),
+      ("c", 1600000000000L, 3))).toDF("name", "date", "num")
+
+    val converted = df
+      .convertDates("date")
+
+    converted.collect should contain allOf(
+      Row("a", DATES(0), 1),
+      Row("b", DATES(1500000000000L), 2),
+      Row("c", DATES(1600000000000L), 3)
+    )
   }
 
   private def newSource(contributorsJson: JObject*): String = {

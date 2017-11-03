@@ -19,9 +19,6 @@ import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
 
-/**
-  * Created by lucamilanesio on 22/08/2017.
-  */
 object GerritProjects {
 
   type GerritProjects = Seq[String]
@@ -37,6 +34,4 @@ object GerritProjects {
 }
 
 case class ProjectContributionSource(name: String, contributorsUrl: String)
-
-case class ProjectContribution(projectName: String, authorContribution: JObject)
 

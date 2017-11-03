@@ -14,12 +14,11 @@
 
 package com.gerritforge.analytics.job
 
-import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjects, ProjectContribution}
-import org.apache.spark.rdd.RDD
-import org.apache.spark.{SparkConf, SparkContext}
+import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjects}
+import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.io.{Codec, Source}
-import org.elasticsearch.spark._
 
 object Main extends App with Job {
 
@@ -45,14 +44,13 @@ object Main extends App with Job {
     } text "aggregate email/email_hour/email_day/email_month/email_year"
   }.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
-      val sparkConf = new SparkConf().setAppName("Gerrit Analytics ETL")
-      val sc = new SparkContext(sparkConf)
-
-      val outRDD = run(config, sc)
-      outRDD.saveAsTextFile(config.outputDir)
-      saveES(config,outRDD)
-
-
+      implicit val spark = SparkSession.builder()
+        .appName("Gerrit Analytics ETL")
+        .getOrCreate()
+      implicit val implicitConfig = config;
+      val dataFrame = run()
+      dataFrame.write.json(config.outputDir)
+      saveES(dataFrame)
     case None => // invalid configuration usage has been displayed
   }
 }
@@ -60,15 +58,25 @@ object Main extends App with Job {
 trait Job {
   implicit val codec = Codec.ISO8859
 
-  import com.gerritforge.analytics.engine.GerritAnalyticsTrasformations._
+  def run()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
+    import spark.sqlContext.implicits._ // toDF
 
-  def run(implicit config: GerritEndpointConfig, sc: SparkContext): RDD[ProjectContribution] = {
-    val rdd: RDD[String] = sc.parallelize(GerritProjects(Source.fromURL(s"${config.baseUrl}/projects/")))
+    val sc = spark.sparkContext
+    val projects = sc.parallelize(GerritProjects(Source.fromURL(s"${config.baseUrl}/projects/")))
 
-    rdd.enrichWithSource(config).fetchContributors
+    val processedDF = projects
+      .enrichWithSource
+      .fetchRawContributors
+      .toDF("project", "json")
+      .transformWorkableDF
+      .convertDates("last_commit_date")
+      .addOrganization()
+
+    processedDF
   }
-  def saveES(implicit config: GerritEndpointConfig, rdd: RDD[ProjectContribution]) = {
-      config.elasticIndex.map(rdd.toJson().saveJsonToEs(_))
+  def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
+    import org.elasticsearch.spark.sql._
+    config.elasticIndex.map(df.saveToEs(_))
   }
 }
 

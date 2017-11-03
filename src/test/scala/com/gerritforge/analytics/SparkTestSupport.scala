@@ -14,19 +14,14 @@
 
 package com.gerritforge.analytics
 
-import org.apache.commons.lang.RandomStringUtils
-import org.apache.spark.{SparkConf, SparkContext}
+import org.apache.log4j.{Level, Logger}
+import org.apache.spark.sql.SparkSession
 
 trait SparkTestSupport {
-
-  def withSparkContext(test: SparkContext => Unit): Unit = {
-    val sc = new SparkContext("local[4]", RandomStringUtils.randomAlphabetic(10))
-    try {
-      test(sc)
-    } finally {
-      sc.stop()
-      // To avoid Akka rebinding to the same port, since it doesn't unbind immediately on shutdown
-      System.clearProperty("spark.master.port")
-    }
-  }
+  Logger.getLogger("org").setLevel(Level.ERROR)
+  implicit val spark = SparkSession.builder()
+    .master("local[4]")
+    .getOrCreate()
+  implicit val sc = spark.sparkContext
+  implicit val sql = spark.sqlContext
 }
