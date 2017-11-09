@@ -23,3 +23,18 @@ bin/spark-submit \
 - -o --out folder location for storing the output as JSON files
     if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
     the system temporary directory
+
+## Development environment
+
+A docker compose file is provided to spin up an instance of Elastisearch with Kibana locally.
+Just run `docker-compose up`.
+
+Kibana will run on port `5601` and Elastisearch on port `9200`
+
+### Default credentials
+
+The Elastisearch default user is `elastic` and the default password `changeme`
+
+### Caveats
+
+If Elastisearch dies with `exit code 137` you might have to give Docker more memory ([check this article for more details](https://github.com/moby/moby/issues/22211))
