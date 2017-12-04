@@ -23,6 +23,11 @@ bin/spark-submit \
 - -o --out folder location for storing the output as JSON files
     if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
     the system temporary directory
+- -a --email-aliases (*optional*) "emails to author alias" input data path. Here an example of the required files structure:
+  ```json
+  {"author": "John", "emails": ["john@email.com", "john@anotheremail.com"]}
+  {"author": "David", "emails": ["david.smith@email.com", "david@myemail.com"]}
+  ```
 
 ## Development environment
 

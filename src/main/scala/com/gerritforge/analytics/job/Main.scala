@@ -42,6 +42,13 @@ object Main extends App with Job {
     opt[String]('g', "aggregate") optional() action { (x, c) =>
       c.copy(aggregate = Some(x))
     } text "aggregate email/email_hour/email_day/email_month/email_year"
+    opt[String]('a', "email-aliases") optional() action { (path, c) =>
+      if (!new java.io.File(path).exists) {
+        println(s"ERROR: Path '${path}' doesn't exists!")
+        System.exit(1)
+      }
+      c.copy(emailAlias = Some(path))
+    } text "\"emails to author alias\" input data path"
   }.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
       implicit val spark = SparkSession.builder()
@@ -60,19 +67,18 @@ trait Job {
 
   def run()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
     import spark.sqlContext.implicits._ // toDF
-
     val sc = spark.sparkContext
     val projects = sc.parallelize(GerritProjects(Source.fromURL(s"${config.baseUrl}/projects/")))
-
-    val processedDF = projects
+    val aliasesRDD = config.emailAlias.map(path => sc.textFile(path)).getOrElse(sc.emptyRDD)
+    val emailAliasesDF = getEmailAliasDF(aliasesRDD)
+    projects
       .enrichWithSource
       .fetchRawContributors
       .toDF("project", "json")
-      .transformWorkableDF
+      .transformCommitterInfo
+      .handleAuthorEMailAliases(emailAliasesDF)
       .convertDates("last_commit_date")
       .addOrganization()
-
-    processedDF
   }
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
     import org.elasticsearch.spark.sql._

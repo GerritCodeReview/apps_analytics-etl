@@ -19,7 +19,8 @@ case class GerritEndpointConfig(baseUrl: String = "",
                                 elasticIndex: Option[String] = None,
                                 since: Option[String] = None,
                                 until: Option[String] = None,
-                                aggregate: Option[String] = None) {
+                                aggregate: Option[String] = None,
+                                emailAlias: Option[String] = None) {
 
   def queryOpt(opt: (String, Option[String])): Option[String] = {
     opt match {

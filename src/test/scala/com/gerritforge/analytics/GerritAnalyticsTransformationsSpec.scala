@@ -16,13 +16,13 @@ package com.gerritforge.analytics
 
 import java.io.{File, FileWriter}
 
+import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjects, ProjectContributionSource}
 import org.apache.spark.sql.Row
 import org.json4s.JsonDSL._
 import org.json4s._
-import org.scalatest.{FlatSpec, Inside, Matchers}
-import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
 import org.json4s.jackson.JsonMethods.{compact, render}
+import org.scalatest.{FlatSpec, Inside, Matchers}
 
 import scala.io.Source
 
@@ -89,8 +89,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     )
   }
 
-  "transformWorkableDF" should "transform a DataFrame with project and json to a workable DF with separated columns" in {
-
+  "transformCommitterInfo" should "transform a DataFrame with project and json to a workable DF with separated columns" in {
     import sql.implicits._
 
     val rdd = sc.parallelize(Seq(
@@ -101,7 +100,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     ))
 
     val df = rdd.toDF("project", "json")
-      .transformWorkableDF
+      .transformCommitterInfo
 
     df.count should be(3)
     val collected = df.collect
@@ -119,6 +118,45 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     )
   }
 
+  "handleAuthorEMailAliases" should "enrich the data with author from the alias DF" in {
+    import spark.implicits._
+    val goodAliasDF = sc.parallelize(Seq(
+      ("aliased_author", "aliased_email@mail.com")
+    )).toDF("author", "email_alias")
+
+    val inputSampleDF = sc.parallelize(Seq(
+      ("author_from_name_a", "non_aliased_email@mail.com"),
+      ("author_from_name_b", "aliased_email@mail.com")
+    )).toDF("name", "email")
+
+    val expectedDF = sc.parallelize(Seq(
+      ("non_aliased_email@mail.com", "author_from_name_a"),
+      ("aliased_email@mail.com", "aliased_author")
+    )).toDF("email", "author")
+
+    val df = inputSampleDF.handleAuthorEMailAliases(goodAliasDF)
+
+    df.schema.fields.map(_.name) should contain allOf(
+      "author", "email")
+
+    df.collect should contain theSameElementsAs expectedDF.collect
+  }
+
+  "getEmailAliasDF" should "not choke on syntax errors in json file" in {
+    val wrongAliasesJSON = """{"unexpected_field": "unexpected_value"}"""
+
+    val df = getEmailAliasDF(sc.parallelize(Seq(wrongAliasesJSON)))
+    df.collect() should be(empty)
+  }
+
+  it should "return a DF with authors and email aliases" in {
+    val aliasesJSON = """{"author": "author_from_alias_file", "emails": ["aliased_email@mail.com"]}"""
+
+    val df = getEmailAliasDF(sc.parallelize(Seq(aliasesJSON)))
+
+    df.schema.fields.map(_.name) should contain allOf("author", "email_alias")
+  }
+
   "addOrganization" should "compute organization column from the email" in {
     import sql.implicits._
 
@@ -131,7 +169,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
 
     val transformed = df.addOrganization()
 
-    transformed.schema.fields.map(_.name) should contain allOf("email","organization")
+    transformed.schema.fields.map(_.name) should contain allOf("email", "organization")
 
     transformed.collect should contain allOf(
       Row("", ""),

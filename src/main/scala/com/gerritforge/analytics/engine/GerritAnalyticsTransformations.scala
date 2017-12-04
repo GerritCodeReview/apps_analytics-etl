@@ -26,6 +26,7 @@ import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.collection.JavaConverters._
+import scala.util.Try
 
 object GerritAnalyticsTransformations {
 
@@ -55,6 +56,16 @@ object GerritAnalyticsTransformations {
     }
   }
 
+  def getEmailAliasDF(emailAliasesRDD: RDD[String])(implicit spark: SparkSession): DataFrame = {
+    import spark.sqlContext.implicits._
+    Try {
+      val df = spark.sqlContext.read.json(emailAliasesRDD).toDF()
+      df.withColumn("email_alias", explode(df("emails"))).drop("emails")
+    }.getOrElse(spark.emptyDataset[CommitterInfo].toDF())
+  }
+
+  case class CommitterInfo(author: String, email_alias: String)
+
   case class CommitInfo(sha1: String, date: Long, isMerge: Boolean)
 
   case class UserActivitySummary(year: Integer,
@@ -75,15 +86,21 @@ object GerritAnalyticsTransformations {
   val schema = Encoders.product[UserActivitySummary].schema
 
   implicit class PimpedDataFrame(val df: DataFrame) extends AnyVal {
-    def transformWorkableDF(implicit spark: SparkSession): DataFrame = {
+    def transformCommitterInfo()(implicit spark: SparkSession): DataFrame = {
       import org.apache.spark.sql.functions.from_json
       import spark.sqlContext.implicits._
-      val decoded = df.withColumn("json", from_json($"json", schema))
-      decoded.selectExpr(
-        "project", "json.name as name", "json.email as email",
-        "json.year as year", "json.month as month", "json.day as day", "json.hour as hour",
-        "json.num_files as num_files", "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
-        "json.num_commits as num_commits", "json.last_commit_date as last_commit_date")
+      df.withColumn("json", from_json($"json", schema))
+        .selectExpr(
+          "project", "json.name as name", "json.email as email",
+          "json.year as year", "json.month as month", "json.day as day", "json.hour as hour",
+          "json.num_files as num_files", "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
+          "json.num_commits as num_commits", "json.last_commit_date as last_commit_date")
+    }
+
+    def handleAuthorEMailAliases(emailAliasesDF: DataFrame)(implicit spark: SparkSession): DataFrame = {
+      import spark.sqlContext.implicits._
+      df.join(emailAliasesDF, df("email") === emailAliasesDF("email_alias"), "left_outer" )
+        .withColumn("author", coalesce($"author", $"name")).drop("name", "email_alias")
     }
 
     def convertDates(columnName: String)(implicit spark: SparkSession): DataFrame = {
