@@ -1,0 +1,12 @@
+{
+  "_index": ".kibana",
+  "_type": "config",
+  "_id": "5.5.2",
+  "_score": 1,
+  "_source": {
+    "buildNum": 15443,
+    "xPackMonitoring:allowReport": true,
+    "xPackMonitoring:showBanner": true,
+    "defaultIndex": "gerrit"
+  }
+}
