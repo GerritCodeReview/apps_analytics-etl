@@ -26,7 +26,6 @@ import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.collection.JavaConverters._
-import scala.util.Try
 
 object GerritAnalyticsTransformations {
 
@@ -56,12 +55,15 @@ object GerritAnalyticsTransformations {
     }
   }
 
-  def getEmailAliasDF(emailAliasesRDD: RDD[String])(implicit spark: SparkSession): DataFrame = {
-    import spark.sqlContext.implicits._
-    Try {
-      val df = spark.sqlContext.read.json(emailAliasesRDD).toDF()
-      df.withColumn("email_alias", explode(df("emails"))).drop("emails")
-    }.getOrElse(spark.emptyDataset[CommitterInfo].toDF())
+  def getEmailAliasDF(emailAliases: Option[String])(implicit spark: SparkSession): Option[DataFrame] = {
+    emailAliases.map { path =>
+      spark.sqlContext.read
+        .option("header", "true")
+        .option("mode", "DROPMALFORMED")
+        .option("inferSchema", "true")
+        .csv(path)
+        .toDF()
+    }
   }
 
   case class CommitterInfo(author: String, email_alias: String)
@@ -91,16 +93,23 @@ object GerritAnalyticsTransformations {
       import spark.sqlContext.implicits._
       df.withColumn("json", from_json($"json", schema))
         .selectExpr(
-          "project", "json.name as name", "json.email as email",
+          "project", "json.name as author", "json.email as email",
           "json.year as year", "json.month as month", "json.day as day", "json.hour as hour",
           "json.num_files as num_files", "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
           "json.num_commits as num_commits", "json.last_commit_date as last_commit_date")
     }
 
-    def handleAuthorEMailAliases(emailAliasesDF: DataFrame)(implicit spark: SparkSession): DataFrame = {
-      import spark.sqlContext.implicits._
-      df.join(emailAliasesDF, df("email") === emailAliasesDF("email_alias"), "left_outer" )
-        .withColumn("author", coalesce($"author", $"name")).drop("name", "email_alias")
+    def handleAuthorEMailAliases(emailAliasesDF: Option[DataFrame])(implicit spark: SparkSession): DataFrame = {
+      emailAliasesDF
+        .map{ eaDF =>
+                val renamedAliasesDF = eaDF
+                                        .withColumnRenamed("email", "email_alias")
+                                        .withColumnRenamed("author", "author_alias")
+                df.join(renamedAliasesDF, df("email") === renamedAliasesDF("email_alias"), "left_outer" )
+                  .withColumn("author", coalesce(renamedAliasesDF("author_alias"), df("author")))
+                  .drop("email_alias","author_alias")
+            }
+        .getOrElse(df)
     }
 
     def convertDates(columnName: String)(implicit spark: SparkSession): DataFrame = {

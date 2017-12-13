@@ -69,8 +69,8 @@ trait Job {
     import spark.sqlContext.implicits._ // toDF
     val sc = spark.sparkContext
     val projects = sc.parallelize(GerritProjects(Source.fromURL(s"${config.baseUrl}/projects/")))
-    val aliasesRDD = config.emailAlias.map(path => sc.textFile(path)).getOrElse(sc.emptyRDD)
-    val emailAliasesDF = getEmailAliasDF(aliasesRDD)
+    val emailAliasesDF = getEmailAliasDF(config.emailAlias)
+
     projects
       .enrichWithSource
       .fetchRawContributors
