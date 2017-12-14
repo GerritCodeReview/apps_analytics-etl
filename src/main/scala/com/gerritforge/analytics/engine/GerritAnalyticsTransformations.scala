@@ -55,7 +55,7 @@ object GerritAnalyticsTransformations {
     }
   }
 
-  def getEmailAliasDF(emailAliases: Option[String])(implicit spark: SparkSession): Option[DataFrame] = {
+  def getAliasDF(emailAliases: Option[String])(implicit spark: SparkSession): Option[DataFrame] = {
     emailAliases.map { path =>
       spark.sqlContext.read
         .option("header", "true")
@@ -99,26 +99,31 @@ object GerritAnalyticsTransformations {
           "json.num_commits as num_commits", "json.last_commit_date as last_commit_date")
     }
 
-    def handleAuthorEMailAliases(emailAliasesDF: Option[DataFrame])(implicit spark: SparkSession): DataFrame = {
-      emailAliasesDF
+    def handleAliases(aliasesDF: Option[DataFrame])(implicit spark: SparkSession): DataFrame = {
+      aliasesDF
         .map{ eaDF =>
                 val renamedAliasesDF = eaDF
                                         .withColumnRenamed("email", "email_alias")
                                         .withColumnRenamed("author", "author_alias")
+                                        .withColumnRenamed("organization", "organization_alias")
+
                 df.join(renamedAliasesDF, df("email") === renamedAliasesDF("email_alias"), "left_outer" )
+                  .withColumn("organization",
+                    when(renamedAliasesDF("organization_alias").notEqual(""), renamedAliasesDF("organization_alias"))
+                      .otherwise(df("organization")) )
                   .withColumn("author", coalesce(renamedAliasesDF("author_alias"), df("author")))
-                  .drop("email_alias","author_alias")
+                  .drop("email_alias","author_alias", "organization_alias")
             }
         .getOrElse(df)
     }
+
 
     def convertDates(columnName: String)(implicit spark: SparkSession): DataFrame = {
       df.withColumn(columnName, longDateToISOUdf(col(columnName)))
     }
 
-    def addOrganization()(implicit spark: SparkSession): DataFrame = {
+    def addOrganization()(implicit spark: SparkSession): DataFrame =
       df.withColumn("organization", emailToDomainUdf(col("email")))
-    }
   }
 
   private def emailToDomain(email: String): String = {

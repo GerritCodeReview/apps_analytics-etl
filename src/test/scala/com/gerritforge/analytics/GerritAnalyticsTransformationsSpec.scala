@@ -118,26 +118,57 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     )
   }
 
-  "handleAuthorEMailAliases" should "enrich the data with author from the alias DF" in {
+  "handleAliases" should "enrich the data with author from the alias DF" in {
     import spark.implicits._
-    val goodAliasDF = sc.parallelize(Seq(
-      ("aliased_author", "aliased_email@mail.com")
-    )).toDF("author", "email")
+
+    val aliasDF = sc.parallelize(Seq(
+      ("aliased_author", "aliased_email@aliased_author.com", "")
+    )).toDF("author", "email", "organization")
 
     val inputSampleDF = sc.parallelize(Seq(
-      ("author_from_name_a", "non_aliased_email@mail.com"),
-      ("author_from_name_b", "aliased_email@mail.com")
-    )).toDF("author", "email")
+      ("author_from_name_a", "non_aliased_email@a_mail.com", "a_mail.com"),
+      ("author_from_name_b", "aliased_email@aliased_author.com", "aliased_author.com")
+    )).toDF("author", "email", "organization")
 
     val expectedDF = sc.parallelize(Seq(
-      ("author_from_name_a", "non_aliased_email@mail.com"),
-      ("aliased_author", "aliased_email@mail.com")
-    )).toDF("author", "email")
+      ("author_from_name_a", "non_aliased_email@a_mail.com", "a_mail.com"),
+      ("aliased_author", "aliased_email@aliased_author.com", "aliased_author.com")
+    )).toDF("author", "email", "organization")
 
-    val df = inputSampleDF.handleAuthorEMailAliases(Some(goodAliasDF))
+    val df = inputSampleDF.handleAliases(Some(aliasDF))
 
     df.schema.fields.map(_.name) should contain allOf(
-      "author", "email")
+      "author", "email", "organization")
+
+    df.collect should contain theSameElementsAs expectedDF.collect
+  }
+
+  it should "enrich the data with organization from the alias DF when available" in {
+    import spark.implicits._
+
+    val aliasDF = sc.parallelize(Seq(
+      ("aliased_author_with_organization", "aliased_email@aliased_organization.com", "aliased_organization"),
+      ("aliased_author_empty_organization", "aliased_email@emtpy_organization.com", ""),
+      ("aliased_author_null_organization", "aliased_email@null_organization.com", null)
+
+    )).toDF("author", "email", "organization")
+
+    val inputSampleDF = sc.parallelize(Seq(
+      ("author_from_name_a", "aliased_email@aliased_organization.com", "aliased_organization.com"),
+      ("author_from_name_b", "aliased_email@emtpy_organization.com", "emtpy_organization.com"),
+      ("author_from_name_c", "aliased_email@null_organization.com", "null_organization.com")
+    )).toDF("author", "email", "organization")
+
+    val expectedDF = sc.parallelize(Seq(
+      ("aliased_author_with_organization", "aliased_email@aliased_organization.com", "aliased_organization"),
+      ("aliased_author_empty_organization", "aliased_email@emtpy_organization.com", "emtpy_organization.com"),
+      ("aliased_author_null_organization", "aliased_email@null_organization.com", "null_organization.com")
+    )).toDF("author", "email", "organization")
+
+    val df = inputSampleDF.handleAliases(Some(aliasDF))
+
+    df.schema.fields.map(_.name) should contain allOf(
+      "author", "email", "organization")
 
     df.collect should contain theSameElementsAs expectedDF.collect
   }
@@ -145,27 +176,27 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
   it should "return correct columns when alias DF is defined" in {
     import spark.implicits._
     val inputSampleDF = sc.parallelize(Seq(
-      ("author_name", "email@mail.com")
-    )).toDF("author", "email")
+      ("author_name", "email@mail.com", "an_organization")
+    )).toDF("author", "email", "organization")
 
     val aliasDF = sc.parallelize(Seq(
-      ("a_random_author", "a_random_email@mail.com")
-    )).toDF("author", "email")
+      ("a_random_author", "a_random_email@mail.com", "a_random_organization")
+    )).toDF("author", "email", "organization")
 
-    val df = inputSampleDF.handleAuthorEMailAliases(Some(aliasDF))
+    val df = inputSampleDF.handleAliases(Some(aliasDF))
 
-    df.schema.fields.map(_.name) should contain allOf("author", "email")
+    df.schema.fields.map(_.name) should contain allOf("author", "email", "organization")
   }
 
   it should "return correct columns when alias DF is not defined" in {
     import spark.implicits._
     val inputSampleDF = sc.parallelize(Seq(
-      ("author_name", "email@mail.com")
-    )).toDF("author", "email")
+      ("author_name", "email@mail.com", "an_organization")
+    )).toDF("author", "email", "organization")
 
-    val df = inputSampleDF.handleAuthorEMailAliases(None)
+    val df = inputSampleDF.handleAliases(None)
 
-    df.schema.fields.map(_.name) should contain allOf("author", "email")
+    df.schema.fields.map(_.name) should contain allOf("author", "email", "organization")
   }
 
   "addOrganization" should "compute organization column from the email" in {
@@ -188,7 +219,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
       Row("not an email", ""),
       Row("email@domain", "domain")
     )
-
   }
 
   "convertDates" should "process specific column from Long to ISO date" in {

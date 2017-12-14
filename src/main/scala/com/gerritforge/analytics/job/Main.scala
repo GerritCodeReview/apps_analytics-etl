@@ -69,16 +69,17 @@ trait Job {
     import spark.sqlContext.implicits._ // toDF
     val sc = spark.sparkContext
     val projects = sc.parallelize(GerritProjects(Source.fromURL(s"${config.baseUrl}/projects/")))
-    val emailAliasesDF = getEmailAliasDF(config.emailAlias)
+    val aliasesDF = getAliasDF(config.emailAlias)
 
     projects
       .enrichWithSource
       .fetchRawContributors
       .toDF("project", "json")
       .transformCommitterInfo
-      .handleAuthorEMailAliases(emailAliasesDF)
-      .convertDates("last_commit_date")
       .addOrganization()
+      .handleAliases(aliasesDF)
+      .convertDates("last_commit_date")
+
   }
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
     import org.elasticsearch.spark.sql._

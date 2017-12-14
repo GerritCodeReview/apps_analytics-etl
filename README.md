@@ -25,21 +25,26 @@ bin/spark-submit \
     the system temporary directory
 - -a --email-aliases (*optional*) "emails to author alias" input data path.
 
-  CSVs with 2 columns are expected in input.
+  CSVs with 3 columns are expected in input.
 
   Here an example of the required files structure:
   ```csv
-  author,email
-  John Smith,john@email.com
-  John Smith,john@anotheremail.com
-  David Smith,david.smith@email.com
-  David Smith,david@myemail.com
+  author,email,organization
+  John Smith,john@email.com,John's Company
+  John Smith,john@anotheremail.com,John's Company
+  David Smith,david.smith@email.com,Indipendent
+  David Smith,david@myemail.com,Indipendent
   ```
 
-  You can use the following command to quickly extract the list of authors and emails to create an input CSV file:
+  You can use the following command to quickly extract the list of authors and emails to create part of an input CSV file:
   ```bash
   echo -e "author,email\n$(git log --pretty="%an,%ae%n%cn,%ce"|sort |uniq )" > /tmp/my_aliases.csv
   ```
+  Once you have it, you just have to add the organization column.
+
+  *NOTE:*
+  * **organization** will be extracted from the committer email if not specified
+  * **author** will be defaulted to the committer name if not specified
 
 ## Development environment
 
