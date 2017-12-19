@@ -1,0 +1,14 @@
+{
+	"_id": "176b0730-d9ce-11e7-bc47-b39f13297094",
+	"_type": "visualization",
+	"_source": {
+		"title": "Organisation's stats",
+		"visState": "{\"aggs\":[{\"enabled\":true,\"id\":\"1\",\"params\":{\"customLabel\":\"#Authors\",\"field\":\"author.keyword\"},\"schema\":\"metric\",\"type\":\"cardinality\"},{\"enabled\":true,\"id\":\"2\",\"params\":{\"customLabel\":\"#Projects\",\"field\":\"project.keyword\"},\"schema\":\"metric\",\"type\":\"cardinality\"},{\"enabled\":true,\"id\":\"3\",\"params\":{\"customLabel\":\"#Commits\",\"field\":\"num_commits\"},\"schema\":\"metric\",\"type\":\"sum\"},{\"enabled\":true,\"id\":\"4\",\"params\":{\"field\":\"added_lines\"},\"schema\":\"metric\",\"type\":\"sum\"},{\"enabled\":true,\"id\":\"5\",\"params\":{\"field\":\"deleted_lines\"},\"schema\":\"metric\",\"type\":\"sum\"},{\"enabled\":true,\"id\":\"6\",\"params\":{\"customLabel\":\"AVG num files\",\"field\":\"num_files\"},\"schema\":\"metric\",\"type\":\"avg\"},{\"enabled\":true,\"id\":\"7\",\"params\":{\"customLabel\":\"AVG changes per commit\",\"field\":\"changes_per_commit\"},\"schema\":\"metric\",\"type\":\"avg\"},{\"enabled\":true,\"id\":\"8\",\"params\":{\"field\":\"organization.keyword\",\"order\":\"desc\",\"orderBy\":\"3\",\"size\":30},\"schema\":\"bucket\",\"type\":\"terms\"}],\"listeners\":{},\"params\":{\"perPage\":10,\"showMeticsAtAllLevels\":false,\"showPartialRows\":false,\"showTotal\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"totalFunc\":\"sum\"},\"title\":\"Organisation's stats\",\"type\":\"table\"}",
+		"uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
+		"description": "",
+		"version": 1,
+		"kibanaSavedObjectMeta": {
+			"searchSourceJSON": "{\"index\":\"gerrit\",\"query\":{\"match_all\":{}},\"filter\":[]}"
+		}
+	}
+}
