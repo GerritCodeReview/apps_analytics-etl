@@ -15,12 +15,15 @@
 package com.gerritforge.analytics.model
 
 case class GerritEndpointConfig(baseUrl: String = "",
+                                prefix: Option[String] = None,
                                 outputDir: String = s"${System.getProperty("java.io.tmp")}/analytics-${System.nanoTime()}",
                                 elasticIndex: Option[String] = None,
                                 since: Option[String] = None,
                                 until: Option[String] = None,
                                 aggregate: Option[String] = None,
                                 emailAlias: Option[String] = None) {
+
+  val gerritProjectsUrl: String = s"${baseUrl}/projects/" + prefix.fold("")("?p=" + _)
 
   def queryOpt(opt: (String, Option[String])): Option[String] = {
     opt match {

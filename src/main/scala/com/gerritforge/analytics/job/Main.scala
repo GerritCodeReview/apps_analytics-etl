@@ -27,6 +27,9 @@ object Main extends App with Job {
     opt[String]('u', "url") optional() action { (x, c) =>
       c.copy(baseUrl = x)
     } text "gerrit url"
+    opt[String]('p', "prefix") optional() action { (p, c) =>
+      c.copy(prefix = Some(p))
+    } text "projects prefix"
     opt[String]('o', "out") optional() action { (x, c) =>
       c.copy(outputDir = x)
     } text "output directory"
@@ -68,7 +71,7 @@ trait Job {
   def run()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
     import spark.sqlContext.implicits._ // toDF
     val sc = spark.sparkContext
-    val projects = sc.parallelize(GerritProjects(Source.fromURL(s"${config.baseUrl}/projects/")))
+    val projects = sc.parallelize(GerritProjects(Source.fromURL(config.gerritProjectsUrl)))
     val aliasesDF = getAliasDF(config.emailAlias)
 
     projects

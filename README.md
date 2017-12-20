@@ -18,6 +18,7 @@ bin/spark-submit \
 - since, until, aggregate are the same defined in Gerrit Analytics plugin
     see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
 - -u --url Gerrit server URL with the analytics plugins installed
+- -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
 - -e --elasticIndex specify as <index>/<type> to be loaded in Elastic Search
     if not provided no ES export will be performed
 - -o --out folder location for storing the output as JSON files
