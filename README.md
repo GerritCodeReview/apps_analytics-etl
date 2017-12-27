@@ -6,14 +6,15 @@ Job can be launched with the following parameters:
 ```
 bin/spark-submit \
     --conf spark.es.nodes=es.mycompany.com \
-    --conf spark.es.net.http.auth.user=elastic \
-    --conf spark.es.net.http.auth.pass=changeme \
     $JARS/SparkAnalytics-assembly-1.0.jar \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
     -e gerrit/analytics
 ```
+
+Should ElasticSearch need authentication (i.e.: if X-Pack is enabled), credentials can be
+passed through the *spark.es.net.http.auth.pass* and *spark.es.net.http.auth.user* parameters.
 ### Parameters
 - since, until, aggregate are the same defined in Gerrit Analytics plugin
     see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
@@ -53,10 +54,6 @@ A docker compose file is provided to spin up an instance of Elastisearch with Ki
 Just run `docker-compose up`.
 
 Kibana will run on port `5601` and Elastisearch on port `9200`
-
-### Default credentials
-
-The Elastisearch default user is `elastic` and the default password `changeme`
 
 ### Caveats
 

@@ -6,8 +6,6 @@ services:
     build: dashboard-importer
     networks:
       - ek
-    env_file:
-      - ./dashboard-importer/credentials.env
     links:
       - elasticsearch
       - kibana
@@ -30,6 +28,7 @@ services:
       - ES_JAVA_OPTS=-Xmx256m -Xms256m
       - http.host=0.0.0.0
       - http.publish_host=127.0.0.1
+      - xpack.security.enabled=false
     networks:
       - ek
 
