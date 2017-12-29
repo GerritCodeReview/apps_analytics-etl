@@ -14,24 +14,23 @@
 
 package com.gerritforge.analytics.model
 
-import org.json4s.JObject
-import org.json4s.native.JsonMethods.parse
-
 import scala.io.Source
+import org.json4s.native.JsonMethods.parse
 
 object GerritProjects {
 
   type GerritProjects = Seq[String]
 
-  val GERRIT_PREFIX_LEN = ")]}'\n".length
+  val GERRIT_PREFIX = ")]}'\n"
+  private val GERRIT_PREFIX_LEN = GERRIT_PREFIX.length
 
   def apply(jsonSource: Source) =
     parse(jsonSource.drop(GERRIT_PREFIX_LEN).mkString)
-      .asInstanceOf[JObject]
       .values
-      .keys
+      .asInstanceOf[Map[String,Map[String,String]]]
+      .values
+      .map(_("id"))
       .toSeq
 }
 
 case class ProjectContributionSource(name: String, contributorsUrl: String)
-
