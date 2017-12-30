@@ -15,7 +15,7 @@
 package com.gerritforge.analytics.job
 
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
-import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjects}
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjectsRDD}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.io.{Codec, Source}
@@ -70,8 +70,8 @@ trait Job {
 
   def run()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
     import spark.sqlContext.implicits._ // toDF
-    val sc = spark.sparkContext
-    val projects = sc.parallelize(GerritProjects(Source.fromURL(config.gerritProjectsUrl)))
+    implicit val sc = spark.sparkContext
+    val projects = GerritProjectsRDD(Source.fromURL(config.gerritProjectsUrl))
     val aliasesDF = getAliasDF(config.emailAlias)
 
     projects
@@ -84,6 +84,7 @@ trait Job {
       .convertDates("last_commit_date")
 
   }
+
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
     import org.elasticsearch.spark.sql._
     config.elasticIndex.map(df.saveToEs(_))

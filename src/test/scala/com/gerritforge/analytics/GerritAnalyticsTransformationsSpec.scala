@@ -17,7 +17,7 @@ package com.gerritforge.analytics
 import java.io.{File, FileWriter}
 
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
-import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjects, ProjectContributionSource}
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProject, GerritProjectsRDD, ProjectContributionSource}
 import org.apache.spark.sql.Row
 import org.json4s.JsonDSL._
 import org.json4s._
@@ -29,28 +29,29 @@ import scala.io.Source
 class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
   with SparkTestSupport with Inside {
 
-  "GerritProjects" should "parse project names" in {
+  "GerritProjects" should "parse JSON into a GerritProject objects" in {
 
-    val projectNames = GerritProjects(Source.fromString(
+    val projects = GerritProjectsRDD(Source.fromString(
       """)]}'
         |{
-        | "All-Projects": {
-        |   "id": "All-Projects",
+        | "All-Projects-name": {
+        |   "id": "All-Projects-id",
         | },
-        | "Test": {
-        |   "id": "Test",
+        | "Test-name": {
+        |   "id": "Test-id",
         | }
         |}
-        |""".stripMargin))
+        |""".stripMargin)).collect()
 
-    projectNames should have size 2
-    projectNames should contain allOf("All-Projects", "Test")
+    projects should have size 2
+    projects should contain
+    allOf(GerritProject("All-Projects-id", "All-Projects-name"), GerritProject("Test-id", "Test-name"))
   }
 
 
   "enrichWithSource" should "enrich project RDD object with its source" in {
 
-    val projectRdd = sc.parallelize(Seq("project"))
+    val projectRdd = sc.parallelize(Seq(GerritProject("project-id", "project-name")))
     implicit val config = GerritEndpointConfig("http://somewhere.com")
 
     val projectWithSource = projectRdd
@@ -59,8 +60,8 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
 
     projectWithSource should have size 1
     inside(projectWithSource.head) {
-      case ProjectContributionSource(project, url) => {
-        project should be("project")
+      case ProjectContributionSource(projectName, url) => {
+        projectName should be("project-name")
         url should startWith("http://somewhere.com")
       }
     }

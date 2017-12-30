@@ -20,21 +20,20 @@ import java.nio.charset.StandardCharsets
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 
-import com.gerritforge.analytics.model.{Email, GerritEndpointConfig, ProjectContributionSource}
+import com.gerritforge.analytics.model._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.collection.JavaConverters._
-import scala.util.{Failure, Success, Try}
 
 object GerritAnalyticsTransformations {
 
-  implicit class PimpedRDDString(val rdd: RDD[String]) extends AnyVal {
+  implicit class PimpedRDDString(val rdd: RDD[GerritProject]) extends AnyVal {
 
     def enrichWithSource(implicit config: GerritEndpointConfig): RDD[ProjectContributionSource] = {
-      rdd.map { projectName =>
-        ProjectContributionSource(projectName, config.contributorsUrl(projectName))
+      rdd.map { project =>
+        ProjectContributionSource(project.name, config.contributorsUrl(project.id))
       }
     }
   }
