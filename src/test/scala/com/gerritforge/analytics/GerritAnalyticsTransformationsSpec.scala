@@ -206,7 +206,14 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
       "",
       "@", // corner case
       "not an email",
-      "email@domain"
+      "email@domain-simple",
+      "email@domain-com.com",
+      "email@domain-couk.co.uk",
+      "email@domain-info.info",
+      "email@mail.companyname-couk.co.uk",
+      "email@mail.companyname-com.com",
+      "email@mail.companyname-info.info"
+
     )).toDF("email")
 
     val transformed = df.addOrganization()
@@ -217,7 +224,13 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
       Row("", ""),
       Row("@", ""),
       Row("not an email", ""),
-      Row("email@domain", "domain")
+      Row("email@domain-simple", "domain-simple"),
+      Row("email@domain-com.com", "domain-com"),
+      Row("email@domain-couk.co.uk", "domain-couk"),
+      Row("email@domain-info.info", "domain-info"),
+      Row("email@mail.companyname-couk.co.uk", "mail.companyname-couk"),
+      Row("email@mail.companyname-com.com", "mail.companyname-com"),
+      Row("email@mail.companyname-info.info", "mail.companyname-info")
     )
   }
 

@@ -20,12 +20,13 @@ import java.nio.charset.StandardCharsets
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 
-import com.gerritforge.analytics.model.{GerritEndpointConfig, ProjectContributionSource}
+import com.gerritforge.analytics.model.{Email, GerritEndpointConfig, ProjectContributionSource}
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.collection.JavaConverters._
+import scala.util.{Failure, Success, Try}
 
 object GerritAnalyticsTransformations {
 
@@ -126,11 +127,9 @@ object GerritAnalyticsTransformations {
       df.withColumn("organization", emailToDomainUdf(col("email")))
   }
 
-  private def emailToDomain(email: String): String = {
-    email split "@" match {
-      case parts if (parts.length == 2) => parts.last.toLowerCase
-      case _ => ""
-    }
+  private def emailToDomain(email: String): String = email match {
+    case Email(_, domain) => domain
+    case _ => ""
   }
 
   private def emailToDomainUdf = udf(emailToDomain(_: String))
