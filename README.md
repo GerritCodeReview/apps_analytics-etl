@@ -1,5 +1,9 @@
-# spark-gerrit-analytics-etl
+# Gerrit Analytics ETL
 Spark ETL to extra analytics data from Gerrit Projects.
+
+Requires a [Gerrit 2.13.x](https://www.gerritcodereview.com/releases/README.md) or later
+with the [analytics](https://gerrit.googlesource.com/plugins/analytics/)
+plugin installed and [Apache Spark 2.11](https://spark.apache.org/downloads.html) or later.
 
 Job can be launched with the following parameters:
 
