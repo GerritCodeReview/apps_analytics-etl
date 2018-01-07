@@ -109,8 +109,8 @@ object GerritAnalyticsTransformations {
 
                 df.join(renamedAliasesDF, df("email") === renamedAliasesDF("email_alias"), "left_outer" )
                   .withColumn("organization",
-                    when(renamedAliasesDF("organization_alias").notEqual(""), renamedAliasesDF("organization_alias"))
-                      .otherwise(df("organization")) )
+                    when(renamedAliasesDF("organization_alias").notEqual(""), lower(renamedAliasesDF("organization_alias")))
+                      .otherwise(df("organization")))
                   .withColumn("author", coalesce(renamedAliasesDF("author_alias"), df("author")))
                   .drop("email_alias","author_alias", "organization_alias")
             }

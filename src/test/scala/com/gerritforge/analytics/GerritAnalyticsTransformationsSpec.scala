@@ -200,6 +200,25 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     df.schema.fields.map(_.name) should contain allOf("author", "email", "organization")
   }
 
+  it should "lowercase aliased organizations" in {
+    import spark.implicits._
+    val inputSampleDF = sc.parallelize(Seq(
+      ("author_name", "email@mail.com", "an_organization")
+    )).toDF("author", "email", "organization")
+
+    val aliasDF = sc.parallelize(Seq(
+      ("author_name", "email@mail.com", "OrGaNiZaTiOnToBeLoWeRcAsEd")
+    )).toDF("author", "email", "organization")
+
+    val df = inputSampleDF.handleAliases(Some(aliasDF))
+
+    val expectedDF = sc.parallelize(Seq(
+      ("author_name", "email@mail.com", "organizationtobelowercased")
+    )).toDF("author", "email", "organization")
+
+    df.collect should contain theSameElementsAs expectedDF.collect
+  }
+
   "addOrganization" should "compute organization column from the email" in {
     import sql.implicits._
 
