@@ -16,6 +16,7 @@ package com.gerritforge.analytics.job
 
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjectsRDD}
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.io.{Codec, Source}
@@ -54,13 +55,21 @@ object Main extends App with Job {
     } text "\"emails to author alias\" input data path"
   }.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
-      implicit val spark = SparkSession.builder()
+      implicit val spark: SparkSession = SparkSession.builder()
         .appName("Gerrit Analytics ETL")
         .getOrCreate()
-      implicit val implicitConfig = config;
+
+      implicit val _: GerritEndpointConfig = config
+
+      System.out.println(s"Starting analytics app with config $config")
+
       val dataFrame = run()
+
+      System.out.println(s"ES content created, saving it to '${config.outputDir}'")
       dataFrame.write.json(config.outputDir)
+
       saveES(dataFrame)
+
     case None => // invalid configuration usage has been displayed
   }
 }
@@ -70,8 +79,10 @@ trait Job {
 
   def run()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
     import spark.sqlContext.implicits._ // toDF
-    implicit val sc = spark.sparkContext
+    implicit val sc: SparkContext = spark.sparkContext
+
     val projects = GerritProjectsRDD(Source.fromURL(config.gerritProjectsUrl))
+
     val aliasesDF = getAliasDF(config.emailAlias)
 
     projects
@@ -87,7 +98,12 @@ trait Job {
 
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
     import org.elasticsearch.spark.sql._
-    config.elasticIndex.map(df.saveToEs(_))
+    config.elasticIndex.foreach { esIndex =>
+      System.out.println(s"ES content created, saving it to elastic search instance at '${config.elasticIndex}'")
+
+      df.saveToEs(esIndex)
+    }
+
   }
 }
 
