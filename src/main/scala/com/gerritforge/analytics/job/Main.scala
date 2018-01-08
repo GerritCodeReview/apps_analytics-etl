@@ -16,11 +16,13 @@ package com.gerritforge.analytics.job
 
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjectsRDD}
+import com.typesafe.scalalogging.LazyLogging
+import org.apache.spark.SparkContext
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 import scala.io.{Codec, Source}
 
-object Main extends App with Job {
+object Main extends App with Job with LazyLogging {
 
   new scopt.OptionParser[GerritEndpointConfig]("scopt") {
     head("scopt", "3.x")
@@ -54,24 +56,34 @@ object Main extends App with Job {
     } text "\"emails to author alias\" input data path"
   }.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
-      implicit val spark = SparkSession.builder()
+      implicit val spark: SparkSession = SparkSession.builder()
         .appName("Gerrit Analytics ETL")
         .getOrCreate()
-      implicit val implicitConfig = config;
+
+      implicit val _: GerritEndpointConfig = config
+
+      logger.info(s"Starting analytics app with config $config")
+
       val dataFrame = run()
+
+      logger.info(s"ES content created, saving it to '${config.outputDir}'")
       dataFrame.write.json(config.outputDir)
+
       saveES(dataFrame)
+
     case None => // invalid configuration usage has been displayed
   }
 }
 
-trait Job {
+trait Job { self: LazyLogging =>
   implicit val codec = Codec.ISO8859
 
   def run()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
     import spark.sqlContext.implicits._ // toDF
-    implicit val sc = spark.sparkContext
+    implicit val sc: SparkContext = spark.sparkContext
+
     val projects = GerritProjectsRDD(Source.fromURL(config.gerritProjectsUrl))
+
     val aliasesDF = getAliasDF(config.emailAlias)
 
     projects
@@ -87,7 +99,12 @@ trait Job {
 
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
     import org.elasticsearch.spark.sql._
-    config.elasticIndex.map(df.saveToEs(_))
+    config.elasticIndex.foreach { esIndex =>
+      logger.info(s"ES content created, saving it to elastic search instance at '${config.elasticIndex}'")
+
+      df.saveToEs(esIndex)
+    }
+
   }
 }
 

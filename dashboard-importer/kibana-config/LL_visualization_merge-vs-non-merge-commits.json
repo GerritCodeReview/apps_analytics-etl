@@ -1,0 +1,14 @@
+{
+"_id": "6a0b5b60-d1e8-42cc-9934-16673b657934",
+"_type": "visualization",
+"_source": {
+"title": "Merge vs Non-Merge commits",
+"visState": "{\"title\":\"Commits per type\",\"type\":\"pie\",\"params\":{\"addTooltip\":true,\"addLegend\":true,\"legendPosition\":\"right\",\"isDonut\":false},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"sum\",\"schema\":\"metric\",\"params\":{\"field\":\"num_commits\",\"customLabel\":\"#Commits\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"segment\",\"params\":{\"field\":\"is_merge\",\"size\":50,\"order\":\"desc\",\"orderBy\":\"1\"}}],\"listeners\":{}}",
+"uiStateJSON": "{}",
+"description": "",
+"version": 1,
+"kibanaSavedObjectMeta": {
+"searchSourceJSON": "{\"index\":\"gerrit\",\"query\":{\"match_all\":{}},\"filter\":[]}"
+}
+}
+}
