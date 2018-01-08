@@ -15,6 +15,8 @@ libraryDependencies ++= Seq(
   // json4s still needed by GerritProjects
   "org.json4s" %% "json4s-native" % "3.2.11",
 
+  "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
+
   "com.github.scopt" %% "scopt" % "3.6.0",
   "org.scalactic" %% "scalactic" % "3.0.1" % "test",
   "org.scalatest" %% "scalatest" % "3.0.1" % "test"

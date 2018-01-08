@@ -16,7 +16,7 @@ package com.gerritforge.analytics.model
 
 case class GerritEndpointConfig(baseUrl: String = "",
                                 prefix: Option[String] = None,
-                                outputDir: String = s"${System.getProperty("java.io.tmp")}/analytics-${System.nanoTime()}",
+                                outputDir: String = s"file://${System.getProperty("java.io.tmpdir")}/analytics-${System.nanoTime()}",
                                 elasticIndex: Option[String] = None,
                                 since: Option[String] = None,
                                 until: Option[String] = None,
@@ -35,5 +35,5 @@ case class GerritEndpointConfig(baseUrl: String = "",
     .flatMap(queryOpt).mkString("?", "&", "")
 
   def contributorsUrl(projectName: String) =
-    s"${baseUrl}/projects/$projectName/analytics~contributors${queryString}"
+    s"$baseUrl/projects/$projectName/analytics~contributors$queryString"
 }
