@@ -78,6 +78,7 @@ object GerritAnalyticsTransformations {
                                  email: String,
                                  num_commits: Integer,
                                  num_files: Integer,
+                                 num_distinct_files: Integer,
                                  added_lines: Integer,
                                  deleted_lines: Integer,
                                  commits: Array[CommitInfo],
@@ -96,7 +97,8 @@ object GerritAnalyticsTransformations {
         .selectExpr(
           "project", "json.name as author", "json.email as email",
           "json.year as year", "json.month as month", "json.day as day", "json.hour as hour",
-          "json.num_files as num_files", "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
+          "json.num_files as num_files", "json.num_distinct_files as num_distinct_files",
+          "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
           "json.num_commits as num_commits", "json.last_commit_date as last_commit_date",
           "json.is_merge as is_merge"
         )
