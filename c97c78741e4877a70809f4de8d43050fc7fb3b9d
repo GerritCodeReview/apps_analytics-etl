@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c696a27e_358e5ff0",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-01-15T16:19:50Z",
+      "side": 1,
+      "message": "Do we want to use a different number of files than \u0027num_files\u0027 just to check that it is propagating in the right way?",
+      "range": {
+        "startLine": 97,
+        "startChar": 126,
+        "endLine": 97,
+        "endChar": 149
+      },
+      "revId": "c97c78741e4877a70809f4de8d43050fc7fb3b9d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
