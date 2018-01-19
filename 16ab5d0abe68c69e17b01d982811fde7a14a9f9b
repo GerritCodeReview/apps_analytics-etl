@@ -93,6 +93,30 @@
       "revId": "16ab5d0abe68c69e17b01d982811fde7a14a9f9b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "739829f7_84cb9a27",
+        "filename": "README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-01-19T14:42:58Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "192f5129_ea645e87",
+      "range": {
+        "startLine": 68,
+        "startChar": 84,
+        "endLine": 68,
+        "endChar": 85
+      },
+      "revId": "16ab5d0abe68c69e17b01d982811fde7a14a9f9b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
