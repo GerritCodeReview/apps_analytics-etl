@@ -62,3 +62,12 @@ Kibana will run on port `5601` and Elastisearch on port `9200`
 ### Caveats
 
 If Elastisearch dies with `exit code 137` you might have to give Docker more memory ([check this article for more details](https://github.com/moby/moby/issues/22211))
+
+## Distribute as Docker Container
+
+To Distribute the `gerritforge/spark-gerrit-analytics-etl` docker container just run 
+
+  ```bash
+  sbt clean assembly
+  docker-compose -f analytics-etl.yaml build
+  ```
