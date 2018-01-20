@@ -65,11 +65,11 @@ If Elastisearch dies with `exit code 137` you might have to give Docker more mem
 
 ## Distribute as Docker Container
 
-To Distribute the `gerritforge/spark-gerrit-analytics-etl` docker container just run:
+To Distribute the `gerritforge/spark-gerrit-analytics-etl` docker container just run (this assumes you tagged your release on git):
 
   ```bash
   sbt clean assembly
   docker-compose -f analytics-etl.yaml build
-  docker push
-  docker push gerritforge/spark-gerrit-analytics-etl:1.0
+  docker tag gerritforge/spark-gerrit-analytics-etl gerritforge/spark-gerrit-analytics-etl:`git describe --long master`
+  docker push gerritforge/spark-gerrit-analytics-etl:`git describe --long master`
   ```

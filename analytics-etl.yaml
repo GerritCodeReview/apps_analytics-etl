@@ -4,6 +4,6 @@ services:
 
  analytics-etl:
     build: .
-    image: gerritforge/spark-gerrit-analytics-etl:1.0
+    image: gerritforge/spark-gerrit-analytics-etl
 
 
