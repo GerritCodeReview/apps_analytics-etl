@@ -1,6 +1,11 @@
+enablePlugins(GitVersioning)
+enablePlugins(DockerPlugin)
+
+organization := "gerritforge"
+
 name := "GerritAnalytics"
 
-version := "1.0"
+git.useGitDescribe := true
 
 scalaVersion := "2.11.8"
 
@@ -25,3 +30,28 @@ libraryDependencies ++= Seq(
 mainClass in (Compile,run) := Some("com.gerritforge.analytics.job.Main")
 
 parallelExecution in Test := false
+
+dockerfile in docker := {
+  val artifact: File = assembly.value
+  val artifactTargetPath = s"/app/${artifact.name}"
+
+  new Dockerfile {
+   from("gerritforge/jw2017-spark")
+    runRaw("apk add --no-cache wget")
+    runRaw("mkdir -p /app")
+    add(artifact, artifactTargetPath)
+  }
+}
+
+
+imageNames in docker := Seq(
+  ImageName(s"${organization.value}/spark-gerrit-analytics-etl:latest"),
+
+  ImageName(
+    namespace = Some(organization.value),
+    repository = "spark-gerrit-analytics-etl",
+    tag = Some(version.value)
+  )
+)
+
+buildOptions in docker := BuildOptions(cache = false)

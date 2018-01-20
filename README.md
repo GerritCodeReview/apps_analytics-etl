@@ -10,7 +10,7 @@ Job can be launched with the following parameters:
 ```
 bin/spark-submit \
     --conf spark.es.nodes=es.mycompany.com \
-    $JARS/SparkAnalytics-assembly-1.0.jar \
+    $JARS/SparkAnalytics-assembly.jar \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
@@ -65,11 +65,9 @@ If Elastisearch dies with `exit code 137` you might have to give Docker more mem
 
 ## Distribute as Docker Container
 
-To Distribute the `gerritforge/spark-gerrit-analytics-etl` docker container just run:
+To build the `gerritforge/spark-gerrit-analytics-etl` docker container just run `sbt docker`. If you want to distribute
+use `sbt dockerBuildAndPush`.
 
-  ```bash
-  sbt clean assembly
-  docker-compose -f analytics-etl.yaml build
-  docker push
-  docker push gerritforge/spark-gerrit-analytics-etl:1.0
-  ```
+The build and distribution override the `latest` image tag too
+
+Remember to create an annotated tag for a relase. The tag is used to define the docker image tag too
