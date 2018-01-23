@@ -24,6 +24,7 @@ import org.json4s._
 import org.json4s.jackson.JsonMethods.{compact, render}
 import org.scalatest.{FlatSpec, Inside, Matchers}
 
+import scala.collection.mutable
 import scala.io.Source
 
 class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with SparkTestSupport with Inside {
@@ -102,17 +103,20 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     df.count should be(3)
     val collected = df.collect
 
-    df.schema.fields.map(_.name) should contain inOrder (
+    df.schema.fields.map(_.name) should contain inOrder(
       "project", "author", "email",
       "year", "month", "day", "hour",
       "num_files", "num_distinct_files", "added_lines", "deleted_lines",
       "num_commits", "last_commit_date",
-      "is_merge")
+      "is_merge", "commits")
 
     collected should contain allOf(
-      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false),
-      Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 3, 1, 1, 428, 1500000000000L, true),
-      Row("p3", "c", "c@mail.com", null, null, null, null, 4, 2, 1, 1, 12, 1600000000000L, true)
+      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false,
+        new mutable.WrappedArray.ofRef(Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, false)))),
+      Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 3, 1, 1, 428, 1500000000000L, true,
+        new mutable.WrappedArray.ofRef[Row](Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, true), Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 1500000000000L, true)))),
+      Row("p3", "c", "c@mail.com", null, null, null, null, 4, 2, 1, 1, 12, 1600000000000L, true,
+        new mutable.WrappedArray.ofRef[Row](Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, true), Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 1600000000000L, true))))
     )
   }
 
@@ -271,6 +275,27 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
       Row("b", DATES(1500000000000L), 2),
       Row("c", DATES(1600000000000L), 3)
     )
+  }
+
+  "extractCommitsPerProject" should "generate a Dataset with the all the SHA of commits with associated project" in {
+    import sql.implicits._
+
+    val committerInfo = sc.parallelize(Seq(
+      ("p1","""{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1, "num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0, "is_merge": false, "commits":[{ "sha1": "sha_1", "date":0,"merge":false, "files": ["file1.txt", "file2.txt"]}] }"""),
+      ("p2","""{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428, "num_files": 2, "num_distinct_files": 3, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000, "is_merge": true, "commits":[{"sha1":"sha_2", "date":0,"merge":true, "files": ["file3.txt", "file4.txt"] },{"sha1":"sha_3", "date":1500000000000,"merge":true, "files": ["file1.txt", "file4.txt"]}]}"""),
+      // last commit is missing hour,day,month,year to check optionality
+      ("p3","""{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"is_merge": true,"commits":[{"sha1":"sha_4", "date":0,"merge":true, "files": ["file1.txt", "file2.txt"] },{"sha1":"sha_5", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}]}""")
+    )).toDF("project", "json")
+      .transformCommitterInfo
+
+    committerInfo.commitSet.collect() should contain only(
+      "sha_1",
+      "sha_2",
+      "sha_3",
+      "sha_4",
+      "sha_5"
+    )
+
   }
 
   private def newSource(contributorsJson: JObject*): String = {
