@@ -14,6 +14,8 @@ bin/spark-submit \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
+    --events file:///tmp/gerrit-events-export.json
+    --writeNotProcessedEventsTo file:///tmp/failed-events
     -e gerrit/analytics
 ```
 
