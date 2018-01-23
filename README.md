@@ -14,6 +14,8 @@ bin/spark-submit \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
+    --events file:///tmp/gerrit-events-export.json
+    --writeNotProcessedEventsTo file:///tmp/failed-events
     -e gerrit/analytics
 ```
 
@@ -30,6 +32,12 @@ passed through the *spark.es.net.http.auth.pass* and *spark.es.net.http.auth.use
     if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
     the system temporary directory
 - -a --email-aliases (*optional*) "emails to author alias" input data path.
+
+- --events location where to load the Gerrit Events
+    If not specified events will be ignored
+- --writeNotProcessedEventsTo location where to write a TSV file containing the events we couldn't process
+    with a description fo the reason why
+
 
   CSVs with 3 columns are expected in input.
 

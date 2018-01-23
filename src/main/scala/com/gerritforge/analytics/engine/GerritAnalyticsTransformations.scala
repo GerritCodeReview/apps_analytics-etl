@@ -89,6 +89,19 @@ object GerritAnalyticsTransformations {
 
   val schema = Encoders.product[UserActivitySummary].schema
 
+  /**
+    * Assumes the data frame contains the 'commits' column with an array of CommitInfo in it
+    * and returns a DataSet[String] with the commits SHA1
+    */
+  def extractCommits(df: DataFrame)(implicit spark: SparkSession) : Dataset[String] = {
+    import spark.implicits._
+
+    df
+      .select(explode($"commits.sha1"))
+      .as[String]
+      .distinct() //might be useless this distinct, just want to be sure I'm respecting the contract
+  }
+
   implicit class PimpedDataFrame(val df: DataFrame) extends AnyVal {
     def transformCommitterInfo()(implicit spark: SparkSession): DataFrame = {
       import org.apache.spark.sql.functions.from_json
@@ -100,7 +113,7 @@ object GerritAnalyticsTransformations {
           "json.num_files as num_files", "json.num_distinct_files as num_distinct_files",
           "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
           "json.num_commits as num_commits", "json.last_commit_date as last_commit_date",
-          "json.is_merge as is_merge"
+          "json.is_merge as is_merge", "json.commits as commits"
         )
     }
 
@@ -127,15 +140,23 @@ object GerritAnalyticsTransformations {
       df.withColumn(columnName, longDateToISOUdf(col(columnName)))
     }
 
+    def dropCommits(implicit spark: SparkSession): DataFrame = {
+      df.drop("commits")
+    }
+
     def addOrganization()(implicit spark: SparkSession): DataFrame =
       df.withColumn("organization", emailToDomainUdf(col("email")))
 
+    def commitSet(implicit spark: SparkSession) : Dataset[String] = {
+      extractCommits(df)
+    }
 
     def dashboardStats(aliasesDFMaybe: Option[DataFrame])(implicit spark: SparkSession) : DataFrame = {
       df
         .addOrganization()
         .handleAliases(aliasesDFMaybe)
         .convertDates("last_commit_date")
+        .dropCommits
     }
   }
 
