@@ -23,17 +23,17 @@ import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 import com.gerritforge.analytics.model._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions.{udf, _}
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 
 import scala.collection.JavaConverters._
 
 object GerritAnalyticsTransformations {
 
-  implicit class PimpedRDDString(val rdd: RDD[GerritProject]) extends AnyVal {
+  implicit class PimpedGerritProjectRDD(val rdd: RDD[GerritProject]) extends AnyVal {
 
-    def enrichWithSource(implicit config: GerritEndpointConfig): RDD[ProjectContributionSource] = {
+    def enrichWithSource(projectToContributorsAnalyticsUrlFactory: String => String): RDD[ProjectContributionSource] = {
       rdd.map { project =>
-        ProjectContributionSource(project.name, config.contributorsUrl(project.id))
+        ProjectContributionSource(project.name, projectToContributorsAnalyticsUrlFactory(project.id))
       }
     }
   }
@@ -68,7 +68,7 @@ object GerritAnalyticsTransformations {
 
   case class CommitterInfo(author: String, email_alias: String)
 
-  case class CommitInfo(sha1: String, date: Long, isMerge: Boolean)
+  case class CommitInfo(sha1: String, date: Long, merge: Boolean)
 
   case class UserActivitySummary(year: Integer,
                                  month: Integer,
@@ -89,6 +89,19 @@ object GerritAnalyticsTransformations {
 
   val schema = Encoders.product[UserActivitySummary].schema
 
+  /**
+    * Assumes the data frame contains the 'commits' column with an array of CommitInfo in it
+    * and returns a DataSet[ProjectWithCommitSHA]
+    */
+  def extractCommits(df: DataFrame)(implicit spark: SparkSession) : Dataset[String] = {
+    import spark.implicits._
+
+    df
+      .select(explode($"commits.sha1"))
+      .as[String]
+      .distinct() //might be useless this distinct, just want to be sure I'm respecting the contract
+  }
+
   implicit class PimpedDataFrame(val df: DataFrame) extends AnyVal {
     def transformCommitterInfo()(implicit spark: SparkSession): DataFrame = {
       import org.apache.spark.sql.functions.from_json
@@ -100,7 +113,7 @@ object GerritAnalyticsTransformations {
           "json.num_files as num_files", "json.num_distinct_files as num_distinct_files",
           "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
           "json.num_commits as num_commits", "json.last_commit_date as last_commit_date",
-          "json.is_merge as is_merge"
+          "json.is_merge as is_merge", "json.commits as commits"
         )
     }
 
@@ -127,8 +140,24 @@ object GerritAnalyticsTransformations {
       df.withColumn(columnName, longDateToISOUdf(col(columnName)))
     }
 
+    def dropCommits(implicit spark: SparkSession): DataFrame = {
+      df.drop("commits")
+    }
+
     def addOrganization()(implicit spark: SparkSession): DataFrame =
       df.withColumn("organization", emailToDomainUdf(col("email")))
+
+    def commitSet(implicit spark: SparkSession) : Dataset[String] = {
+      extractCommits(df)
+    }
+
+    def dashboardStats(aliasesDFMaybe: Option[DataFrame])(implicit spark: SparkSession) : DataFrame = {
+      df
+        .addOrganization()
+        .handleAliases(aliasesDFMaybe)
+        .convertDates("last_commit_date")
+        .dropCommits
+    }
   }
 
   private def emailToDomain(email: String): String = email match {
@@ -157,5 +186,15 @@ object GerritAnalyticsTransformations {
       LocalDateTime.ofEpochSecond(in.longValue() / 1000L, 0, ZoneOffset.UTC),
       ZoneOffset.UTC, ZoneId.of("Z")
     ) format DateTimeFormatter.ISO_OFFSET_DATE_TIME
+
+  def getContributorStatsFromAnalyticsPlugin(projects: RDD[GerritProject], projectToContributorsAnalyticsUrlFactory: String => String)(implicit spark: SparkSession) = {
+    import spark.sqlContext.implicits._ // toDF
+
+    projects
+      .enrichWithSource(projectToContributorsAnalyticsUrlFactory)
+      .fetchRawContributors
+      .toDF("project", "json")
+      .transformCommitterInfo
+  }
 
 }
