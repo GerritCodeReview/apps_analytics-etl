@@ -14,14 +14,20 @@
 
 package com.gerritforge.analytics.model
 
+import java.time.format.DateTimeFormatter
+import java.time.{LocalDate, ZoneId}
+
 case class GerritEndpointConfig(baseUrl: String = "",
                                 prefix: Option[String] = None,
                                 outputDir: String = s"file://${System.getProperty("java.io.tmpdir")}/analytics-${System.nanoTime()}",
                                 elasticIndex: Option[String] = None,
-                                since: Option[String] = None,
-                                until: Option[String] = None,
+                                since: Option[LocalDate] = None,
+                                until: Option[LocalDate] = None,
                                 aggregate: Option[String] = None,
-                                emailAlias: Option[String] = None) {
+                                emailAlias: Option[String] = None,
+                                eventsPath: Option[String] = None,
+                                eventsFailureOutputPath: Option[String] = Some("file:///tmp/analytics-etl-not-parseable-events")
+                               ) {
 
   val gerritProjectsUrl: String = s"${baseUrl}/projects/" + prefix.fold("")("?p=" + _)
 
@@ -31,7 +37,9 @@ case class GerritEndpointConfig(baseUrl: String = "",
     }
   }
 
-  val queryString = Seq("since" -> since, "until" -> until, "aggregate" -> aggregate)
+  @transient
+  private lazy val format = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.of("UTC"))
+  val queryString = Seq("since" -> since.map(format.format), "until" -> until.map(format.format), "aggregate" -> aggregate)
     .flatMap(queryOpt).mkString("?", "&", "")
 
   def contributorsUrl(projectName: String) =
