@@ -49,7 +49,7 @@ object Main extends App with Job with LazyLogging {
     } text "aggregate email/email_hour/email_day/email_month/email_year"
     opt[String]('a', "email-aliases") optional() action { (path, c) =>
       if (!new java.io.File(path).exists) {
-        println(s"ERROR: Path '${path}' doesn't exists!")
+        println(s"ERROR: Path '$path' doesn't exists!")
         System.exit(1)
       }
       c.copy(emailAlias = Some(path))
