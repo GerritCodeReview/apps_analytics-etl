@@ -14,17 +14,27 @@
 
 package com.gerritforge.analytics.job
 
-import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
-import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjectsRDD}
+import com.gerritforge.analytics.engine.events.{AggregationStrategy, EventParser, GerritJsonEvent, GerritRefHasNewRevisionEvent}
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProject, GerritProjectsRDD}
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
+import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
+import scopt.OptionParser
 
 import scala.io.{Codec, Source}
 
 object Main extends App with Job with LazyLogging {
 
-  new scopt.OptionParser[GerritEndpointConfig]("scopt") {
+  private val fileExists: String => Either[String, Unit] = { path =>
+    if (!new java.io.File(path).exists) {
+      Left(s"ERROR: Path '$path' doesn't exists!")
+    } else {
+      Right()
+    }
+  }
+
+  private val cliOptionParser: OptionParser[GerritEndpointConfig] = new scopt.OptionParser[GerritEndpointConfig]("scopt") {
     head("scopt", "3.x")
     opt[String]('u', "url") optional() action { (x, c) =>
       c.copy(baseUrl = x)
@@ -47,14 +57,16 @@ object Main extends App with Job with LazyLogging {
     opt[String]('g', "aggregate") optional() action { (x, c) =>
       c.copy(aggregate = Some(x))
     } text "aggregate email/email_hour/email_day/email_month/email_year"
-    opt[String]('a', "email-aliases") optional() action { (path, c) =>
-      if (!new java.io.File(path).exists) {
-        println(s"ERROR: Path '${path}' doesn't exists!")
-        System.exit(1)
-      }
+
+    opt[String]('a', "email-aliases") optional() validate fileExists action { (path, c) =>
       c.copy(emailAlias = Some(path))
     } text "\"emails to author alias\" input data path"
-  }.parse(args, GerritEndpointConfig()) match {
+    opt[String]("events") optional() action { (eventsPath, config) =>
+      config.copy(eventsPath = Some(eventsPath))
+    }
+  }
+
+  cliOptionParser.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
       implicit val spark: SparkSession = SparkSession.builder()
         .appName("Gerrit Analytics ETL")
@@ -79,22 +91,46 @@ trait Job { self: LazyLogging =>
   implicit val codec = Codec.ISO8859
 
   def run()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
-    import spark.sqlContext.implicits._ // toDF
+    import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
+    import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
+
     implicit val sc: SparkContext = spark.sparkContext
+
+    val aggregationStrategy: AggregationStrategy =
+      config.aggregate.map(AggregationStrategy.byName).getOrElse(AggregationStrategy.aggregateByEmail)
 
     val projects = GerritProjectsRDD(Source.fromURL(config.gerritProjectsUrl))
 
     val aliasesDF = getAliasDF(config.emailAlias)
 
-    projects
-      .enrichWithSource
-      .fetchRawContributors
-      .toDF("project", "json")
-      .transformCommitterInfo
-      .addOrganization()
-      .handleAliases(aliasesDF)
-      .convertDates("last_commit_date")
+    //We might want to use the time of the events as information to feed to the collection of data from the repository
+    val allEvents  = loadEvents.repositoryWithNewRevisionEvents
 
+    val statsFromAnalyticsPlugin = getContributorStatsFromAnalyticsPlugin(projects, config.contributorsUrl)
+
+    val statsFromEvents = getContributorStatsFromGerritEvents(allEvents, statsFromAnalyticsPlugin.commitSet.rdd, aggregationStrategy)
+
+    require(statsFromAnalyticsPlugin.schema == statsFromEvents.schema,
+      s""" Schemas from the stats collected from events and from the analytics datasets differs!!
+        | From analytics plugin: ${statsFromAnalyticsPlugin.schema}
+        | From gerrit events: ${statsFromEvents.schema}
+      """.stripMargin)
+
+    (statsFromAnalyticsPlugin union statsFromEvents).dashboardStats(aliasesDF)
+  }
+
+  def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[GerritJsonEvent] = { // toDF
+    import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
+
+    config.eventsPath.fold(spark.sparkContext.emptyRDD[GerritJsonEvent]) { eventsPath =>
+      spark
+        .read.textFile(eventsPath).rdd
+        .parseEvents(EventParser)
+        //We should handle the Left cases with some diagnostics
+        .collect { case Right(event) =>
+        event
+      }
+    }
   }
 
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {

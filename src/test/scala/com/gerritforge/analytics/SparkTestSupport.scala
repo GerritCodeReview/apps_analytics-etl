@@ -14,14 +14,20 @@
 
 package com.gerritforge.analytics
 
-import org.apache.log4j.{Level, Logger}
-import org.apache.spark.sql.SparkSession
+import org.apache.spark.SparkContext
+import org.apache.spark.sql.{SQLContext, SparkSession}
+import org.scalatest.{BeforeAndAfterAll, Suite}
 
-trait SparkTestSupport {
-  Logger.getLogger("org").setLevel(Level.ERROR)
-  implicit val spark = SparkSession.builder()
+trait SparkTestSupport extends BeforeAndAfterAll { this: Suite =>
+
+  implicit val spark : SparkSession = SparkSession.builder()
     .master("local[4]")
     .getOrCreate()
-  implicit val sc = spark.sparkContext
-  implicit val sql = spark.sqlContext
+
+  implicit lazy val sc: SparkContext = spark.sparkContext
+  implicit lazy val sql: SQLContext = spark.sqlContext
+
+  override protected def afterAll() = {
+    spark.close()
+  }
 }
