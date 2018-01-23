@@ -22,6 +22,8 @@ libraryDependencies ++= Seq(
   // json4s still needed by GerritProjects
   "org.json4s" %% "json4s-native" % "3.2.11",
 
+  "com.sonymobile.tools.gerrit" % "gerrit-events" % "2.11.3",
+
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
 
   "com.github.scopt" %% "scopt" % "3.6.0",
