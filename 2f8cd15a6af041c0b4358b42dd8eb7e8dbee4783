@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "bd4c0f24_bb8ca1ed",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-01-25T13:04:02Z",
+      "side": 1,
+      "message": "This look really and good and much simpler :-) well done.",
+      "range": {
+        "startLine": 69,
+        "startChar": 5,
+        "endLine": 69,
+        "endChar": 27
+      },
+      "revId": "2f8cd15a6af041c0b4358b42dd8eb7e8dbee4783",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
