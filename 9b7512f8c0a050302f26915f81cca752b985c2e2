@@ -45,6 +45,29 @@
       "revId": "9b7512f8c0a050302f26915f81cca752b985c2e2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d2b8ca3_459ebf0d",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformations.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-01-26T08:14:53Z",
+      "side": 1,
+      "message": "Leftover? Is this change a WIP? If yes, please add the WIP flag :-)",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 9
+      },
+      "revId": "9b7512f8c0a050302f26915f81cca752b985c2e2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
