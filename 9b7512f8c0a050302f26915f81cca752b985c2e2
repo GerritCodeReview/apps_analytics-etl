@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "2b82fdab_4f5f111f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-01-27T10:36:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "48baba85_c920e02b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 120
+      },
+      "revId": "9b7512f8c0a050302f26915f81cca752b985c2e2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c431500_b8c67f33",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "c967ecc9_987fdfb1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-01-27T10:36:56Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0c431500_b8c67f33",
+      "range": {
+        "startLine": 8,
+        "startChar": 0,
+        "endLine": 8,
+        "endChar": 133
+      },
+      "revId": "9b7512f8c0a050302f26915f81cca752b985c2e2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "8d2b8ca3_459ebf0d",
         "filename": "src/main/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformations.scala",
         "patchSetId": 2
@@ -59,6 +107,30 @@
       "writtenOn": "2018-01-26T08:14:53Z",
       "side": 1,
       "message": "Leftover? Is this change a WIP? If yes, please add the WIP flag :-)",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 166,
+        "endChar": 9
+      },
+      "revId": "9b7512f8c0a050302f26915f81cca752b985c2e2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "706cfdc7_d655e573",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformations.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-01-27T10:36:56Z",
+      "side": 1,
+      "message": "I am waiting for the PR on the branch in the ETL to decomment this.",
+      "parentUuid": "8d2b8ca3_459ebf0d",
       "range": {
         "startLine": 159,
         "startChar": 0,
