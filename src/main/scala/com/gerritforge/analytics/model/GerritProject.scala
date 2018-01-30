@@ -14,29 +14,27 @@
 
 package com.gerritforge.analytics.model
 
-import org.apache.spark.SparkContext
-import org.apache.spark.rdd.RDD
 import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
 
 case class GerritProject(id: String, name: String)
 
-object GerritProjectsRDD {
+object GerritProjectsSupport {
 
   val GERRIT_PREFIX = ")]}'\n"
   private val GERRIT_PREFIX_LEN = GERRIT_PREFIX.length
 
-  def apply(jsonSource: Source)(implicit sc: SparkContext): RDD[GerritProject] =
-    sc.parallelize(
-      parse(jsonSource.drop(GERRIT_PREFIX_LEN).mkString)
-        .values
-        .asInstanceOf[Map[String, Map[String, String]]]
-        .mapValues(_ ("id"))
-        .toSeq)
+  def parseJsonProjectListResponse(jsonSource: Source): Seq[GerritProject] = {
+    parse(jsonSource.drop(GERRIT_PREFIX_LEN).mkString)
+      .values
+      .asInstanceOf[Map[String, Map[String, String]]]
+      .mapValues(projectAttributes => projectAttributes("id"))
+      .toSeq
       .map {
-        case (id, name) => GerritProject(id, name)
+        case (name, id) => GerritProject(id, name)
       }
+  }
 }
 
 case class ProjectContributionSource(name: String, contributorsUrl: String)
