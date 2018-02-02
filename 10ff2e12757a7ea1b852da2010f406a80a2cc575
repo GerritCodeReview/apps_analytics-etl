@@ -301,6 +301,30 @@
     },
     {
       "key": {
+        "uuid": "9f52ae57_33f280de",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformations.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-02T14:29:26Z",
+      "side": 1,
+      "message": "OK, in this case, you should keep the code in a separate change and define a topic called \u0027branch-support\u0027.",
+      "parentUuid": "7cec84e7_056b5aab",
+      "range": {
+        "startLine": 48,
+        "startChar": 0,
+        "endLine": 48,
+        "endChar": 229
+      },
+      "revId": "10ff2e12757a7ea1b852da2010f406a80a2cc575",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f006a11e_eaca478f",
         "filename": "src/main/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformations.scala",
         "patchSetId": 5
@@ -430,6 +454,30 @@
       "side": 1,
       "message": "Should be just to return an RDD keyed by project, I can check if I can make it nicer to read",
       "parentUuid": "dc2228f9_da675dad",
+      "range": {
+        "startLine": 71,
+        "startChar": 10,
+        "endLine": 71,
+        "endChar": 22
+      },
+      "revId": "10ff2e12757a7ea1b852da2010f406a80a2cc575",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "aedccdbc_e84d38e1",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformations.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-02T14:29:26Z",
+      "side": 1,
+      "message": "ah, got the point. Possibly a comment on the right side?",
+      "parentUuid": "f5840843_ffe79a4a",
       "range": {
         "startLine": 71,
         "startChar": 10,
