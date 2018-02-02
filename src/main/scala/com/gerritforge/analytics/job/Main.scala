@@ -37,7 +37,7 @@ object Main extends App with Job with LazyLogging {
     } text "output directory"
     opt[String]('e', "elasticIndex") optional() action { (x, c) =>
       c.copy(elasticIndex = Some(x))
-    } text "output directory"
+    } text "index name"
     opt[String]('s', "since") optional() action { (x, c) =>
       c.copy(since = Some(x))
     } text "begin date "
@@ -54,6 +54,13 @@ object Main extends App with Job with LazyLogging {
       }
       c.copy(emailAlias = Some(path))
     } text "\"emails to author alias\" input data path"
+    opt[String]('r',"extract-branches") optional() action { (_, c) =>
+      c.copy(extractBranches = Some("true"))
+    } text "extract branches"
+    opt[String]('i',"extract-issues") optional() action { (_, c) =>
+      c.copy(extractIssues = Some("true"))
+    } text "extract issues"
+
   }.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
       implicit val spark: SparkSession = SparkSession.builder()

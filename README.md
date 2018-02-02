@@ -13,6 +13,8 @@ bin/spark-submit \
     $JARS/SparkAnalytics-assembly.jar \
     --since 2000-06-01 \
     --aggregate email_hour \
+    --extract-branches true \
+    --extract-issues true \
     --url http://gerrit.mycompany.com \
     -e gerrit/analytics
 ```
@@ -24,6 +26,8 @@ passed through the *spark.es.net.http.auth.pass* and *spark.es.net.http.auth.use
     see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
 - -u --url Gerrit server URL with the analytics plugins installed
 - -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
+- -r --extract-branches optionally extract branch names (when enabled more cpu and memory is needed)
+- -i --extract-issues optionally extract issues from comments
 - -e --elasticIndex specify as <index>/<type> to be loaded in Elastic Search
     if not provided no ES export will be performed
 - -o --out folder location for storing the output as JSON files

@@ -24,6 +24,7 @@ import org.json4s._
 import org.json4s.jackson.JsonMethods.{compact, render}
 import org.scalatest.{FlatSpec, Inside, Matchers}
 
+import scala.collection.mutable
 import scala.io.Source
 
 class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
@@ -94,10 +95,30 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     import sql.implicits._
 
     val rdd = sc.parallelize(Seq(
-      ("p1","""{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1, "num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0, "is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false, "files": ["file1.txt", "file2.txt"]}] }"""),
-      ("p2","""{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428, "num_files": 2, "num_distinct_files": 3, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000, "is_merge": true, "commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file3.txt", "file4.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1500000000000,"merge":true, "files": ["file1.txt", "file4.txt"]}]}"""),
+      ("p1",
+        """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1,
+          |"num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0,
+          |"is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false,
+          |"files": ["file1.txt", "file2.txt"]}],
+          |"branches":["master"],
+          |"issue_codes":["c1"], "issue_links":["http://link/c1"] }"""
+          .stripMargin),
+      ("p2",
+        """{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428,
+          |"num_files": 2, "num_distinct_files": 3, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000,
+          | "is_merge": true, "commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true,
+          | "files": ["file3.txt", "file4.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1500000000000,"merge":true, "files": ["file1.txt", "file4.txt"]}],
+          | "branches":["master"],
+          |"issue_codes":["c1"], "issue_links":["http://link/c1"] }"""
+          .stripMargin),
       // last commit is missing hour,day,month,year to check optionality
-      ("p3","""{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"is_merge": true,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file1.txt", "file2.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}]}""")
+      ("p3",
+        """{"name":"c","email":"c@mail.com","num_commits":12,
+          |"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,
+          |"is_merge": true,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true,
+          |"files": ["file1.txt", "file2.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}],
+          |"branches":["master"],
+          |"issue_codes":["c1"], "issue_links":["http://link/c1"]}""".stripMargin)
     ))
 
     val df = rdd.toDF("project", "json")
@@ -106,7 +127,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     df.count should be(3)
     val collected = df.collect
 
-    df.schema.fields.map(_.name) should contain inOrder (
+    df.schema.fields.map(_.name) should contain inOrder(
       "project", "author", "email",
       "year", "month", "day", "hour",
       "num_files", "num_distinct_files", "added_lines", "deleted_lines",
@@ -114,9 +135,23 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
       "is_merge")
 
     collected should contain allOf(
-      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false),
-      Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 3, 1, 1, 428, 1500000000000L, true),
-      Row("p3", "c", "c@mail.com", null, null, null, null, 4, 2, 1, 1, 12, 1600000000000L, true)
+      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false,
+        mutable.WrappedArray.make(Array("master")),
+        mutable.WrappedArray.make(Array("c1")),
+        mutable.WrappedArray.make(Array("http://link/c1"))
+      ),
+      Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 3, 1, 1, 428,
+        1500000000000L, true,
+        mutable.WrappedArray.make(Array("master")),
+        mutable.WrappedArray.make(Array("c1")),
+        mutable.WrappedArray.make(Array("http://link/c1"))
+      ),
+      Row("p3", "c", "c@mail.com", null, null, null, null, 4, 2, 1, 1, 12,
+        1600000000000L, true,
+        mutable.WrappedArray.make(Array("master")),
+        mutable.WrappedArray.make(Array("c1")),
+        mutable.WrappedArray.make(Array("http://link/c1"))
+      )
     )
   }
 
