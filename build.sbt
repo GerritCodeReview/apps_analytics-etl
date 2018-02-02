@@ -21,6 +21,8 @@ libraryDependencies ++= Seq(
     excludeAll ExclusionRule(organization = "org.apache.spark"),
   // json4s still needed by GerritProjects
   "org.json4s" %% "json4s-native" % "3.2.11",
+  // some useful functions like Bool.option not to reinvent the wheel
+  "org.scalaz" %% "scalaz-core" % "7.2.19",
 
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
 
