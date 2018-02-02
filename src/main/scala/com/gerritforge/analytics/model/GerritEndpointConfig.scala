@@ -14,6 +14,8 @@
 
 package com.gerritforge.analytics.model
 
+import scalaz.syntax.std.boolean._
+
 case class GerritEndpointConfig(baseUrl: String = "",
                                 prefix: Option[String] = None,
                                 outputDir: String = s"file://${System.getProperty("java.io.tmpdir")}/analytics-${System.nanoTime()}",
@@ -21,6 +23,8 @@ case class GerritEndpointConfig(baseUrl: String = "",
                                 since: Option[String] = None,
                                 until: Option[String] = None,
                                 aggregate: Option[String] = None,
+                                extractBranches: Boolean = false,
+                                extractIssues: Boolean = false,
                                 emailAlias: Option[String] = None) {
 
   val gerritProjectsUrl: String = s"${baseUrl}/projects/" + prefix.fold("")("?p=" + _)
@@ -31,7 +35,10 @@ case class GerritEndpointConfig(baseUrl: String = "",
     }
   }
 
-  val queryString = Seq("since" -> since, "until" -> until, "aggregate" -> aggregate)
+  val queryString = Seq("since" -> since, "until" -> until,
+    "aggregate" -> aggregate,
+    "extract-branches" -> extractBranches.option("true"),
+    "extract-issues" -> extractIssues.option("true"))
     .flatMap(queryOpt).mkString("?", "&", "")
 
   def contributorsUrl(projectName: String) =
