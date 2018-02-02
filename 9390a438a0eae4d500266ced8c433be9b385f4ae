@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f56176f4_4d7c5a6f",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-02T14:31:09Z",
+      "side": 1,
+      "message": "Very smart :-) It shouldn\u0027t be a duty of this method knowing what is a configuration and how it should work. Well done.",
+      "range": {
+        "startLine": 34,
+        "startChar": 25,
+        "endLine": 34,
+        "endChar": 83
+      },
+      "revId": "9390a438a0eae4d500266ced8c433be9b385f4ae",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "525a45a0_8409d5e2",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-02T14:31:09Z",
+      "side": 1,
+      "message": "Good for debugging :-)",
+      "range": {
+        "startLine": 110,
+        "startChar": 4,
+        "endLine": 110,
+        "endChar": 173
+      },
+      "revId": "9390a438a0eae4d500266ced8c433be9b385f4ae",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "578ab24c_74ac84af",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-02T14:31:09Z",
+      "side": 1,
+      "message": "Good catch :-)",
+      "range": {
+        "startLine": 45,
+        "startChar": 28,
+        "endLine": 45,
+        "endChar": 32
+      },
+      "revId": "9390a438a0eae4d500266ced8c433be9b385f4ae",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    }
+  ]
+}
