@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "fda000bb_f2625096",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-02-03T22:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f70d4874_30a97d21",
+      "revId": "499c4b482995736f7847ea0b9ea4966644caa90f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d0a019a8_2c12fc08",
         "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "499c4b482995736f7847ea0b9ea4966644caa90f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07813b19_5fe12831",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-02-03T22:15:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0a019a8_2c12fc08",
+      "revId": "499c4b482995736f7847ea0b9ea4966644caa90f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
