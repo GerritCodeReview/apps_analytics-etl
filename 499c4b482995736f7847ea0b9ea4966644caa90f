@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f70d4874_30a97d21",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-02-03T09:34:34Z",
+      "side": 1,
+      "message": "See comment below on using a Boolean, you can have a opt[Unit] to have enable/disable a flag",
+      "revId": "499c4b482995736f7847ea0b9ea4966644caa90f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0a019a8_2c12fc08",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-02-03T09:34:34Z",
+      "side": 1,
+      "message": "Can we just use a Boolean defaulting to false?",
+      "revId": "499c4b482995736f7847ea0b9ea4966644caa90f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
