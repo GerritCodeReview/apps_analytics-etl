@@ -1,0 +1,186 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6471fd8d_afff02b8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Is it possible to add a screenshoot to see how the new dashboard would look like?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c86f23d_df4ddf93",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "White space :P",
+      "range": {
+        "startLine": 30,
+        "startChar": 12,
+        "endLine": 30,
+        "endChar": 13
+      },
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9d25307c_c670ed2d",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Question: is the ETL that needs more memory or the analytics plugin?",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 24
+      },
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98a79245_7c0bb49c",
+        "filename": "build.sbt",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Just a curiosity: Why did you pick `Scalaz` over `Cats` ?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b9b71d69_0f100754",
+        "filename": "dashboard-importer/kibana-config/000_config.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Ordering of the json imported is important, i.e.: this has always to be the first file imported, followed by the index-pattern, etc.\n\nI believe it should be fine with this naming convention, but can you double check the import ordering is ok?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "859bc192_bd1630b3",
+        "filename": "dashboard-importer/kibana-config/000_config.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Shall we move the file renaming in a different changset ?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "257335e2_d4252a8e",
+        "filename": "dashboard-importer/kibana-config/002_dashboard_projects.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Looks like you changed the order you are importing the Kibana files. Can you double check it is fine? Logically the `Visualizations` creation should go first, but practically it might not make any difference.",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1d9a135b_c4286fb2",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Where is this used?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e2c0dcf2_a2ca671f",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Shall we add a test specifically for the new feature rather than making the existent one testing more things ?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74b997cd_1c1bfa37",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-02-26T10:35:20Z",
+      "side": 1,
+      "message": "Question for my benefit :P Why do we beed a mutable data structure here?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
