@@ -65,6 +65,30 @@
     },
     {
       "key": {
+        "uuid": "ee058b8c_bea6b738",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-26T14:08:53Z",
+      "side": 1,
+      "message": "Yes, and how much? I would avoid mentioning it IF we are not specific about how much. What is the reader supposed to do? How much more memory would he need? Is it needed for every scenarios?",
+      "parentUuid": "9d25307c_c670ed2d",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 24
+      },
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "98a79245_7c0bb49c",
         "filename": "build.sbt",
         "patchSetId": 3
@@ -116,6 +140,24 @@
     },
     {
       "key": {
+        "uuid": "a46fa0d0_b652857c",
+        "filename": "dashboard-importer/kibana-config/000_config.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-26T14:08:53Z",
+      "side": 1,
+      "message": "Yep. I\u0027m lost on why we need to rename all files :-O",
+      "parentUuid": "859bc192_bd1630b3",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "257335e2_d4252a8e",
         "filename": "dashboard-importer/kibana-config/002_dashboard_projects.json",
         "patchSetId": 3
@@ -127,6 +169,29 @@
       "writtenOn": "2018-02-26T10:35:20Z",
       "side": 1,
       "message": "Looks like you changed the order you are importing the Kibana files. Can you double check it is fine? Logically the `Visualizations` creation should go first, but practically it might not make any difference.",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1dae053_32710a77",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-26T14:08:53Z",
+      "side": 1,
+      "message": "Good catch :-) Shall we have it as separate Change and merge it quickly?",
+      "range": {
+        "startLine": 40,
+        "startChar": 12,
+        "endLine": 40,
+        "endChar": 22
+      },
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
@@ -161,6 +226,24 @@
       "writtenOn": "2018-02-26T10:35:20Z",
       "side": 1,
       "message": "Shall we add a test specifically for the new feature rather than making the existent one testing more things ?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4c9eb7a_fb06cb1c",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-02-26T14:08:53Z",
+      "side": 1,
+      "message": "Yes, agreed: one test \u003d one thing.",
+      "parentUuid": "e2c0dcf2_a2ca671f",
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
