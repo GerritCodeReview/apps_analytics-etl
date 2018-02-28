@@ -14,13 +14,20 @@
 
 package com.gerritforge.analytics
 
-import java.io.{File, FileOutputStream, FileWriter, OutputStreamWriter}
+import java.io.{File, FileOutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
+import java.time.LocalDate
 
+import com.gerritforge.analytics.engine.GerritAnalyticsTransformations
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
-import com.gerritforge.analytics.model.{GerritProject, GerritProjectsSupport, ProjectContributionSource}
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.support.api.GerritServiceApi
+import com.gerritforge.analytics.support.{AnalyticPluginFixture, SparkTestSupport}
+import com.github.tomakehurst.wiremock.WireMockServer
+import com.github.tomakehurst.wiremock.client.WireMock
+import com.github.tomakehurst.wiremock.client.WireMock.{aResponse, get, stubFor, urlEqualTo}
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig
 import org.apache.spark.sql.Row
-import org.json4s.JsonDSL._
 import org.json4s._
 import org.json4s.jackson.JsonMethods.{compact, render}
 import org.scalatest.{FlatSpec, Inside, Matchers}
@@ -28,7 +35,7 @@ import org.scalatest.{FlatSpec, Inside, Matchers}
 import scala.collection.mutable
 import scala.io.Source
 
-class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with SparkTestSupport with Inside {
+class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with AnalyticPluginFixture with SparkTestSupport with Inside {
 
   "GerritProjects" should "parse JSON into a GerritProject objects" in {
 
@@ -47,55 +54,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     projects should contain only(GerritProject("All-Projects-id", "All-Projects-name"), GerritProject("Test-id", "Test-name"))
   }
 
-
-  "enrichWithSource" should "enrich project RDD object with its source" in {
-
-    val projectRdd = sc.parallelize(Seq(GerritProject("project-id", "project-name")))
-
-    val projectWithSource = projectRdd
-      .enrichWithSource(projectId => Some(s"http://somewhere.com/$projectId"))
-      .collect
-
-    projectWithSource should have size 1
-    inside(projectWithSource.head) {
-      case ProjectContributionSource(projectName, url) => {
-        projectName should be("project-name")
-        url should contain("http://somewhere.com/project-id")
-      }
-    }
-  }
-
-  "fetchRawContributors" should "fetch file content from the initial list of project names and file names" in {
-
-    val line1 = "foo" -> "bar"
-    val line2 = "foo1" -> "bar1"
-    val line3 = "foo2" -> "bar2"
-    val line3b = "foo3" -> "bar3"
-
-    val projectSource1 = ProjectContributionSource("p1", newSource(line1, line2, line3))
-    val projectSource2 = ProjectContributionSource("p2", newSource(line3b))
-
-    val rawContributors = sc.parallelize(Seq(projectSource1, projectSource2))
-      .fetchRawContributors
-      .collect
-
-    rawContributors should have size (4)
-    rawContributors should contain allOf(
-      ("p1","""{"foo":"bar"}"""),
-      ("p1","""{"foo1":"bar1"}"""),
-      ("p1", """{"foo2":"bar2"}"""),
-      ("p2", """{"foo3":"bar3"}""")
-    )
-  }
-
-  it should "fetch file content from the initial list of project names and file names with non-latin chars" in {
-    val rawContributors = sc.parallelize(Seq(ProjectContributionSource("p1", newSource("foo2" -> "bar2\u0100"))))
-      .fetchRawContributors
-      .collect
-
-    rawContributors should have size (1)
-    rawContributors.head._2 should be ("""{"foo2":"bar2\u0100"}""")
-  }
 
   "transformCommitterInfo" should "transform a DataFrame with project and json to a workable DF with separated columns" in {
     import sql.implicits._
@@ -285,8 +243,59 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
       "sha_4",
       "sha_5"
     )
-
   }
+
+  "getContributorStatsFromAnalyticsPlugin" should "get contributors stats from plugin" in {
+    import spark.implicits._
+    val wiremockHost: String = "localhost"
+    lazy val wiremockPortConfig = wireMockConfig().dynamicPort()
+    lazy val wiremockServer: WireMockServer = new WireMockServer(wiremockPortConfig)
+
+    val projectId = "hello-world"
+    wiremockServer.start
+    val wiremockAssignedPort = wiremockServer.port()
+    WireMock.configureFor(wiremockHost, wiremockAssignedPort)
+
+    val conf = GerritEndpointConfig(
+      since = Some(LocalDate.of(2018, 1, 1)),
+      until = Some(LocalDate.of(2018, 4, 30)),
+      aggregate = Some("email")
+    )
+
+    val request: String = s"http://$wiremockHost:$wiremockAssignedPort"
+    val projects = List(GerritProject(projectId, "Hello World")).toDS()
+    val gerritApiService: GerritServiceApi = new GerritServiceApi(request, None, None)
+
+    val pluginPath = conf.contributorsUrl(projectId)
+    val pluginResponseContent = anResponseFromAnalyticsPlugin
+
+
+    stubFor(get(urlEqualTo(pluginPath))
+      .willReturn(
+        aResponse()
+          .withStatus(200)
+          .withBody(pluginResponseContent)
+      )
+    )
+
+
+    import GerritAnalyticsTransformations._
+    val projectsWithAnalytics = GerritAnalyticsTransformations.getContributorStatsFromAnalyticsPlugin(projects, conf.contributorsUrl, gerritApiService)
+    val expectedResult: List[String] = List(
+      "06acddab876fa4f0af5e92ef38ee797ccabc435f",
+      "51f5757d7489b52c2b317aebc9453af2aea7fe78",
+      "976821ca2d1324a98a1b30a035456616d5307b05",
+      "02d2787b3862aced9ac13c82b85be98db8fb6900",
+      "f2dd6d322655ce7f28a937f85dcec93d69b98a66"
+    )
+
+    val actualResult = projectsWithAnalytics.commitSet(spark).collect.toList
+
+    actualResult.intersect(expectedResult).size should equal(expectedResult.size)
+
+    wiremockServer.stop
+  }
+
 
   private def newSource(contributorsJson: JObject*): Option[String] = {
     val tmpFile = File.createTempFile(System.getProperty("java.io.tmpdir"),

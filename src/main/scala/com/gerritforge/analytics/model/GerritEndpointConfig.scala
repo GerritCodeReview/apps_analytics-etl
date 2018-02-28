@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
 
 import com.gerritforge.analytics.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
+import com.typesafe.scalalogging.LazyLogging
 
 case class GerritEndpointConfig(baseUrl: Option[String] = None,
                                 prefix: Option[String] = None,
@@ -28,10 +29,11 @@ case class GerritEndpointConfig(baseUrl: Option[String] = None,
                                 aggregate: Option[String] = None,
                                 emailAlias: Option[String] = None,
                                 eventsPath: Option[String] = None,
-                                eventsFailureOutputPath: Option[String] = None
-                               ) {
+                                eventsFailureOutputPath: Option[String] = None,
+                                maybeUsername: Option[String] = None,
+                                maybePassword: Option[String] = None
+                               ) extends LazyLogging {
 
-  val gerritProjectsUrl: Option[String] = baseUrl.map { url => s"${url}/projects/" + prefix.fold("")("?p=" + _) }
 
   def queryOpt(opt: (String, Option[String])): Option[String] = {
     opt match {
@@ -44,6 +46,9 @@ case class GerritEndpointConfig(baseUrl: Option[String] = None,
   val queryString = Seq("since" -> since.map(format.format), "until" -> until.map(format.format), "aggregate" -> aggregate)
     .flatMap(queryOpt).mkString("?", "&", "")
 
-  def contributorsUrl(projectName: String): Option[String] =
-    baseUrl.map { url => s"$url/projects/$projectName/analytics~contributors$queryString" }
+  def contributorsUrl(projectId: String): String = {
+    val query: String = s"/projects/$projectId/analytics~contributors$queryString"
+    logger.info(s"Querying analytics plugin: ${queryString}")
+    query
+  }
 }

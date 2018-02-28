@@ -28,7 +28,8 @@ libraryDependencies ++= Seq(
   "com.google.gerrit" % "gerrit-plugin-api" % gerritApiVersion % Provided withSources(),
 
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
-
+  "com.urswolfer.gerrit.client.rest" % "gerrit-rest-java-client" % "0.8.14",
+  "com.github.tomakehurst" % "wiremock" % "1.58" % Test,
   "com.github.scopt" %% "scopt" % "3.6.0",
   "org.scalactic" %% "scalactic" % "3.0.1" % "test",
   "org.scalatest" %% "scalatest" % "3.0.1" % "test"

@@ -19,16 +19,18 @@ import java.time.LocalDate
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
 import com.gerritforge.analytics.engine.events.{AggregationStrategy, EventParser, GerritJsonEvent}
 import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.support.api.GerritServiceApi
 import com.gerritforge.analytics.support.ops.AnalyticsTimeOps
 import com.gerritforge.analytics.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
+import com.google.gerrit.extensions.common.ProjectInfo
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import scopt.Read.reads
 import scopt.{OptionParser, Read}
 
-import scala.io.{Codec, Source}
+import scala.io.Codec
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
@@ -61,6 +63,12 @@ object Main extends App with Job with LazyLogging with FetchRemoteProjects {
     opt[String]('p', "prefix") optional() action { (p, c) =>
       c.copy(prefix = Some(p))
     } text "projects prefix"
+    opt[String]('n', "username") optional() action { (u, c) =>
+      c.copy(maybeUsername = Some(u))
+    } text "username"
+    opt[String]('a', "password") optional() action { (a, c) =>
+      c.copy(maybePassword = Some(a))
+    } text "password"
     opt[String]('o', "out") optional() action { (x, c) =>
       c.copy(outputDir = x)
     } text "output directory"
@@ -161,9 +169,14 @@ trait Job { self: LazyLogging with FetchProjects =>
         config
       }
     }
+    import spark.implicits._
+    val projectsDataset: Dataset[GerritProject] = projects.toDS
 
-    val statsFromAnalyticsPlugin =
-      getContributorStatsFromAnalyticsPlugin(spark.sparkContext.parallelize(projects), configWithOverriddenUntil.contributorsUrl)
+    import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
+
+    require(config.baseUrl.isDefined, "Gerrit base url needs to be defined")
+    val gerritApiService: GerritServiceApi = new GerritServiceApi(config.baseUrl.get, config.maybeUsername, config.maybeUsername)
+    val statsFromAnalyticsPlugin: DataFrame = getContributorStatsFromAnalyticsPlugin(projectsDataset, configWithOverriddenUntil.contributorsUrl, gerritApiService)
 
     val statsFromEvents = getContributorStatsFromGerritEvents(repositoryAlteringEvents, statsFromAnalyticsPlugin.commitSet.rdd, aggregationStrategy)
 
@@ -210,7 +223,12 @@ trait FetchProjects {
 trait FetchRemoteProjects extends FetchProjects {
 
   def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
-    config.gerritProjectsUrl.toSeq.flatMap { url => GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(url)) }
+    val gerritApiService: GerritServiceApi = new GerritServiceApi(config.baseUrl.get, config.maybeUsername, config.maybeUsername)
+    val gerritProjects: Iterator[ProjectInfo] = gerritApiService.listProjectsWithPrefix(config.prefix)
+
+    gerritProjects.map { project =>
+      GerritProject(project.id, project.name)
+    }.toList
   }
 }
 
