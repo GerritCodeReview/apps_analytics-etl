@@ -19,15 +19,17 @@ import java.time.{LocalDate, ZoneId}
 
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
 import com.gerritforge.analytics.engine.events.{AggregationStrategy, EventParser, GerritJsonEvent}
-import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjectsSupport}
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProject}
+import com.gerritforge.analytics.support.api.GerritServiceApi
+import com.google.gerrit.extensions.common.ProjectInfo
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import scopt.Read.reads
 import scopt.{OptionParser, Read}
 
-import scala.io.{Codec, Source}
+import scala.io.Codec
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
@@ -59,6 +61,12 @@ object Main extends App with Job with LazyLogging {
     opt[String]('p', "prefix") optional() action { (p, c) =>
       c.copy(prefix = Some(p))
     } text "projects prefix"
+    opt[String]('n', "username") optional() action { (u, c) =>
+      c.copy(maybeUsername = Some(u))
+    } text "username"
+    opt[String]('a', "password") optional() action { (a, c) =>
+      c.copy(maybePassword = Some(a))
+    } text "password"
     opt[String]('o', "out") optional() action { (x, c) =>
       c.copy(outputDir = x)
     } text "output directory"
@@ -81,7 +89,7 @@ object Main extends App with Job with LazyLogging {
     opt[String]("events") optional() action { (eventsPath, config) =>
       config.copy(eventsPath = Some(eventsPath))
     } text "location where to load the Gerrit Events"
-    opt[String]("writeNotProcessedEventsTo") optional() action{ (failedEventsPath, config) =>
+    opt[String]("writeNotProcessedEventsTo") optional() action { (failedEventsPath, config) =>
       config.copy(eventsFailureOutputPath = Some(failedEventsPath))
     } text "location where to write a TSV file containing the events we couldn't process with a description fo the reason why"
   }
@@ -98,7 +106,9 @@ object Main extends App with Job with LazyLogging {
 
       val dataFrame = buildProjectStats().cache() //This dataframe is written twice
 
-      logger.info(s"ES content created, saving it to '${config.outputDir}'")
+      logger.info(s"ES content created, saving it to '${
+        config.outputDir
+      }'")
       dataFrame.write.json(config.outputDir)
 
       saveES(dataFrame)
@@ -107,8 +117,9 @@ object Main extends App with Job with LazyLogging {
   }
 }
 
-trait Job { self: LazyLogging =>
-  implicit val codec = Codec.ISO8859
+trait Job {
+  self: LazyLogging =>
+  implicit val codec = Codec.ISO8859 // FIXME: Cannot find where this is being used
 
   def buildProjectStats()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
     import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
@@ -126,17 +137,22 @@ trait Job { self: LazyLogging =>
         }
       }.getOrElse(AggregationStrategy.aggregateByEmail)
 
-    val projects = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(config.gerritProjectsUrl))
+    val gerritApiService: GerritServiceApi = new GerritServiceApi(config.baseUrl, config.maybeUsername, config.maybeUsername)
+    val gerritProjects: Iterator[ProjectInfo] = gerritApiService.listProjectsWithPrefix(config.prefix)
 
-    logger.info(s"Loaded a list of ${projects.size} projects ${if(projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")}")
 
+    val projects: List[GerritProject] = gerritProjects.map { project =>
+      GerritProject(project.id, project.name)
+    }.toList
+
+    logger.info(s"Loaded a list of ${projects.size} projects ${if (projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")}")
     val aliasesDF = getAliasDF(config.emailAlias)
 
     val events = loadEvents
 
     val failedEvents: RDD[NotParsableJsonEvent] = events.collect { case Left(eventFailureDescription) => eventFailureDescription }
 
-    if(!failedEvents.isEmpty()) {
+    if (!failedEvents.isEmpty()) {
       config.eventsFailureOutputPath.foreach { failurePath =>
         logger.info(s"Events failures will be stored at '$failurePath'")
 
@@ -148,36 +164,39 @@ trait Job { self: LazyLogging =>
     //We might want to use the time of the events as information to feed to the collection of data from the repository
     val repositoryAlteringEvents = events.collect { case Right(event) => event }.repositoryWithNewRevisionEvents
 
-    val firstEventDateMaybe: Option[LocalDate] = if(repositoryAlteringEvents.isEmpty()) None else Some(repositoryAlteringEvents.earliestEventTime.toLocalDate)
+    val firstEventDateMaybe: Option[LocalDate] = if (repositoryAlteringEvents.isEmpty()) None else Some(repositoryAlteringEvents.earliestEventTime.toLocalDate)
 
-    val configWithOverriddenUntil = firstEventDateMaybe.fold(config) { firstEventDate =>
+    val configWithOverriddenUntil: GerritEndpointConfig = firstEventDateMaybe.fold(config) { firstEventDate =>
       val lastAggregationDate = firstEventDate.plusMonths(1)
-      if(lastAggregationDate.isBefore(LocalDate.now())) {
+      if (lastAggregationDate.isBefore(LocalDate.now())) {
         logger.info(s"Overriding 'until' date '${config.until}' with '$lastAggregationDate' since events ara available until $firstEventDate")
         config.copy(until = Some(lastAggregationDate))
       } else {
         config
       }
     }
+    import spark.implicits._
+    val projectsDataset: Dataset[GerritProject] = projects.toDS
 
-    val statsFromAnalyticsPlugin =
-      getContributorStatsFromAnalyticsPlugin(spark.sparkContext.parallelize(projects), configWithOverriddenUntil.contributorsUrl)
+    import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
+
+    val statsFromAnalyticsPlugin: DataFrame = getContributorStatsFromAnalyticsPlugin(projectsDataset, configWithOverriddenUntil.contributorsUrl, gerritApiService)
 
     val statsFromEvents = getContributorStatsFromGerritEvents(repositoryAlteringEvents, statsFromAnalyticsPlugin.commitSet.rdd, aggregationStrategy)
 
     require(statsFromAnalyticsPlugin.schema == statsFromEvents.schema,
       s""" Schemas from the stats collected from events and from the analytics datasets differs!!
-        | From analytics plugin: ${statsFromAnalyticsPlugin.schema}
-        | From gerrit events: ${statsFromEvents.schema}
+         | From analytics plugin: ${statsFromAnalyticsPlugin.schema}
+         | From gerrit events: ${statsFromEvents.schema}
       """.stripMargin)
 
     (statsFromAnalyticsPlugin union statsFromEvents).dashboardStats(aliasesDF)
   }
 
-  def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent,GerritJsonEvent]] = { // toDF
+  def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent, GerritJsonEvent]] = { // toDF
     import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
 
-    config.eventsPath.fold(spark.sparkContext.emptyRDD[Either[NotParsableJsonEvent,GerritJsonEvent]]) { eventsPath =>
+    config.eventsPath.fold(spark.sparkContext.emptyRDD[Either[NotParsableJsonEvent, GerritJsonEvent]]) { eventsPath =>
       spark
         .read.textFile(eventsPath).rdd
         .parseEvents(EventParser)
