@@ -68,8 +68,8 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
 
     val line1 = "foo" -> "bar"
     val line2 = "foo1" -> "bar1"
-    val line3 = "foo2" -> "bar2\u0100" // checks UTF-8 as well
-    val line3b = "foo3" -> "bar3\u0101"
+    val line3 = "foo2" -> "bar2"
+    val line3b = "foo3" -> "bar3"
 
     val projectSource1 = ProjectContributionSource("p1", newSource(line1, line2, line3))
     val projectSource2 = ProjectContributionSource("p2", newSource(line3b))
@@ -82,9 +82,18 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     rawContributors should contain allOf(
       ("p1","""{"foo":"bar"}"""),
       ("p1","""{"foo1":"bar1"}"""),
-      ("p1", "{\"foo2\":\"bar2\u0100\"}"),
-      ("p2", "{\"foo3\":\"bar3\u0101\"}")
+      ("p1", """{"foo2":"bar2"}"""),
+      ("p2", """{"foo3":"bar3"}""")
     )
+  }
+
+  it should "fetch file content from the initial list of project names and file names with non-latin chars" in {
+    val rawContributors = sc.parallelize(Seq(ProjectContributionSource("p1", newSource("foo2" -> "bar2\u0100"))))
+      .fetchRawContributors
+      .collect
+
+    rawContributors should have size (1)
+    rawContributors.head._2 should be ("""{"foo2":"bar2\u0100"}""")
   }
 
   "transformCommitterInfo" should "transform a DataFrame with project and json to a workable DF with separated columns" in {
