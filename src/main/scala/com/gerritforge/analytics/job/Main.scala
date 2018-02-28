@@ -54,6 +54,13 @@ object Main extends App with Job with LazyLogging {
       }
       c.copy(emailAlias = Some(path))
     } text "\"emails to author alias\" input data path"
+    opt[Unit]('r',"extract-branches") optional() action { (_, c) =>
+      c.copy(extractBranches = true)
+    } text "extract branches"
+    opt[Unit]('i',"extract-issues") optional() action { (_, c) =>
+      c.copy(extractIssues = true)
+    } text "extract issues"
+
   }.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
       implicit val spark: SparkSession = SparkSession.builder()

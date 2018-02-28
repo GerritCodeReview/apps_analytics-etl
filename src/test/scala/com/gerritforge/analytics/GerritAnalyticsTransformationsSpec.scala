@@ -24,10 +24,16 @@ import org.json4s._
 import org.json4s.jackson.JsonMethods.{compact, render}
 import org.scalatest.{FlatSpec, Inside, Matchers}
 
+import scala.collection.mutable
 import scala.io.Source
 
 class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
   with SparkTestSupport with Inside {
+
+  // this implicit conversion is used to have simpler syntax in
+  // ScalaTest Matchers checking Row content when it has Arrays
+  def wrap[A](x: Array[A]): mutable.WrappedArray[A] =
+    mutable.WrappedArray.make(x)
 
   "GerritProjects" should "parse JSON into a GerritProject objects" in {
 
@@ -94,10 +100,25 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     import sql.implicits._
 
     val rdd = sc.parallelize(Seq(
-      ("p1","""{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1, "num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0, "is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false, "files": ["file1.txt", "file2.txt"]}] }"""),
-      ("p2","""{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428, "num_files": 2, "num_distinct_files": 3, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000, "is_merge": true, "commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file3.txt", "file4.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1500000000000,"merge":true, "files": ["file1.txt", "file4.txt"]}]}"""),
+      ("p1",
+        """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1,
+          |"num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0,
+          |"is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false,
+          |"files": ["file1.txt", "file2.txt"]}] }"""
+          .stripMargin),
+      ("p2",
+        """{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428,
+          |"num_files": 2, "num_distinct_files": 3, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000,
+          | "is_merge": true, "commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true,
+          | "files": ["file3.txt", "file4.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1500000000000,"merge":true, "files": ["file1.txt", "file4.txt"]}] }"""
+          .stripMargin),
       // last commit is missing hour,day,month,year to check optionality
-      ("p3","""{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"is_merge": true,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file1.txt", "file2.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}]}""")
+      ("p3",
+        """{"name":"c","email":"c@mail.com","num_commits":12,
+          |"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,
+          |"is_merge": true,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true,
+          |"files": ["file1.txt", "file2.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}] }"""
+          .stripMargin)
     ))
 
     val df = rdd.toDF("project", "json")
@@ -106,7 +127,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
     df.count should be(3)
     val collected = df.collect
 
-    df.schema.fields.map(_.name) should contain inOrder (
+    df.schema.fields.map(_.name) should contain inOrder(
       "project", "author", "email",
       "year", "month", "day", "hour",
       "num_files", "num_distinct_files", "added_lines", "deleted_lines",
@@ -114,10 +135,66 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers
       "is_merge")
 
     collected should contain allOf(
-      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false),
-      Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 3, 1, 1, 428, 1500000000000L, true),
-      Row("p3", "c", "c@mail.com", null, null, null, null, 4, 2, 1, 1, 12, 1600000000000L, true)
+      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false,null,null,null),
+      Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 3, 1, 1, 428, 1500000000000L, true,null,null,null),
+      Row("p3", "c", "c@mail.com", null, null, null, null, 4, 2, 1, 1, 12, 1600000000000L, true,null,null,null)
     )
+  }
+  "transformCommitterInfo" should "recognize branches in input" in {
+    import sql.implicits._
+
+    val sampleProjectJson = Seq(
+      ("p1",
+        """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1,
+          |"num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0,
+          |"is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false,
+          |"files": ["file1.txt", "file2.txt"]}],
+          |"branches":["master"] }"""
+          .stripMargin))
+
+    val rdd = sc.parallelize(sampleProjectJson)
+
+    val df = rdd.toDF("project", "json")
+      .transformCommitterInfo
+
+    df.count should be(1)
+    df.schema.fields.map(_.name) should contain("branches")
+    val collected = df.collect
+
+    collected.head should be(
+      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false,
+        wrap(Array("master")),null,null
+      )
+    )
+
+  }
+  "transformCommitterInfo" should "recognize issues in input" in {
+    import sql.implicits._
+    val sampleProjectJson = Seq(
+      ("p1",
+        """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1,
+          |"num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0,
+          |"is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false,
+          |"files": ["file1.txt", "file2.txt"]}],
+          |"issues_codes":["c1"], "issues_links":["http://link/c1"] }"""
+          .stripMargin))
+
+
+    val rdd = sc.parallelize(sampleProjectJson)
+
+    val df = rdd.toDF("project", "json")
+      .transformCommitterInfo
+
+    df.count should be(1)
+    df.schema.fields.map(_.name) should contain("branches")
+    val collected = df.collect
+
+    collected.head should be(
+      Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false,
+        null, wrap(Array("c1")), wrap(Array("http://link/c1"))
+      )
+    )
+
   }
 
   "handleAliases" should "enrich the data with author from the alias DF" in {
