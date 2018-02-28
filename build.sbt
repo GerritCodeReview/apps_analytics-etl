@@ -7,7 +7,7 @@ git.useGitDescribe := true
 
 organization := "gerritforge"
 
-name := "GerritAnalytics"
+name := "gerrit-analytics-etl"
 
 scalaVersion := "2.11.8"
 
