@@ -18,9 +18,9 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField.{MILLI_OF_SECOND, NANO_OF_SECOND}
 import java.time.{ZoneId, ZonedDateTime}
 
-import com.gerritforge.analytics.SparkTestSupport
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations.{CommitInfo, UserActivitySummary}
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
+import com.gerritforge.analytics.support.{EventFixture, SparkTestSupport}
 import org.apache.spark.rdd.RDD
 import org.scalatest.{Inside, Matchers, WordSpec}
 
@@ -120,7 +120,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
       summaries.foreach { summary =>
         inside(summary) {
-          case UserActivitySummary(year, month, day, hour, name, email,_, _, _, _, _, _, _, _) =>
+          case UserActivitySummary(year, month, day, hour, name, email, _, _, _, _, _, _, _, _) =>
             year shouldBe 2018
             month shouldBe 1
             day shouldBe 10
@@ -164,7 +164,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
         ("stefano_alias", "stefano@galarraga-org.com", "")
       )).toDF("author", "email", "organization")
 
-      val expectedDate : ZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC")).`with`(MILLI_OF_SECOND, 0).`with`(NANO_OF_SECOND, 0)
+      val expectedDate: ZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC")).`with`(MILLI_OF_SECOND, 0).`with`(NANO_OF_SECOND, 0)
 
       val analyticsJobOutput =
         sc.parallelize(Seq(
@@ -202,58 +202,8 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
       events
         .removeEventsForCommits(sc.parallelize(Seq("RevToExclude1", "RevToExclude2", "RevToExclude3")))
-        .collect() should contain only (toKeep1.event, toKeep2.event )
+        .collect() should contain only(toKeep1.event, toKeep2.event)
     }
   }
-}
-
-trait EventFixture {
-
-  // Forcing early type failures
-  case class JsonEvent[T <: GerritJsonEvent](json: String) {
-    val event: T = EventParser.fromJson(json).get.asInstanceOf[T]
-  }
-
-  val refUpdated: JsonEvent[RefUpdatedEvent] = aRefUpdatedEvent(oldRev = "863b64002f2a9922deba69407804a44703c996e0", newRev = "d3131be8d7c920badd28b70d8c039682568c8de5")
-
-  val changeMerged: JsonEvent[ChangeMergedEvent] = aChangeMergedEvent("I5e6b5a3bbe8a29fb0393e4a28da536e0a198b755")
-
-  def aRefUpdatedEvent(oldRev: String, newRev: String, createdOn: Long = 1000l) = JsonEvent[RefUpdatedEvent](
-    s"""{"submitter":{"name":"Administrator","email":"admin@example.com","username":"admin"},
-       | "refUpdate":{"oldRev":"$oldRev",
-       | "newRev":"$newRev",
-       | "refName": "refs/heads/master","project":"subcut"},
-       |"type":"ref-updated","eventCreatedOn":$createdOn}""".stripMargin)
-
-  def aChangeMergedEvent(changeId: String, createdOnInSecs: Long = 1000l, newRev: String = "863b64002f2a9922deba69407804a44703c996e0",
-                         isMergeCommit: Boolean = false, insertions: Integer = 0, deletions: Integer = 0) = JsonEvent[ChangeMergedEvent](
-    s"""{
-       |"submitter":{"name":"Administrator","email":"admin@example.com","username":"admin"},
-       |"newRev":"$newRev",
-       |"patchSet":{
-       | "number":1,
-       | "revision":"$newRev",
-       | "parents": ${if (isMergeCommit) """["4a4e59272f1f88824d805c0f4233c1ee7331e986", "4a4e59272f1f88824d805c0f4233c1ee7331e987"]""" else """["4a4e59272f1f88824d805c0f4233c1ee7331e986"]"""},
-       | "ref":"refs/changes/01/1/1",
-       | "uploader":{"name":"Administrator","email":"admin@example.com","username":"admin"},
-       | "createdOn":1516530259,
-       | "author":{"name":"Stefano Galarraga","email":"galarragas@gmail.com","username":""},
-       | "isDraft":false,
-       | "kind":"REWORK",
-       | "sizeInsertions":$insertions,
-       | "sizeDeletions":$deletions
-       |},
-       |"change":{
-       | "project":"subcut","branch":"master","topic":"TestEvents","id":"$changeId","number":1,"subject":"Generating some changes to test events",
-       | "owner":{"name":"Administrator","email":"admin@example.com","username":"admin"},
-       | "url":"http://842860da5b33:8080/1","commitMessage":"Generating some changes to test events Change-Id: $changeId",
-       | "createdOn":1516530259,"status":"MERGED"
-       |},
-       |"project":{"name":"subcut"},
-       |"refName":"refs/heads/master",
-       |"changeKey":{"id":"$changeId"},
-       |"type":"change-merged",
-       |"eventCreatedOn": $createdOnInSecs
-       |}""".stripMargin)
 
 }
