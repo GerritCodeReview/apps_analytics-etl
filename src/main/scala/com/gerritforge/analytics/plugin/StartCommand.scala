@@ -41,7 +41,7 @@ class StartCommand @Inject()(implicit val gerritProjects: GerritProjectsSupport,
   var emailAlias: String = null
 
   override def run() {
-    implicit val config = GerritEndpointConfig(gerritConfig.getListenUrl(), prefix = Option(projectControl).map(_.getProject.getName), "", elasticIndex,
+    implicit val config = GerritEndpointConfig(gerritConfig.getListenUrl().get, prefix = Option(projectControl).map(_.getProject.getName), "", elasticIndex,
       beginDate, endDate, aggregate, emailAlias)
 
     implicit val spark: SparkSession = SparkSession.builder()
