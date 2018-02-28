@@ -14,7 +14,8 @@
 
 package com.gerritforge.analytics
 
-import java.io.{File, FileWriter}
+import java.io.{File, FileOutputStream, FileWriter, OutputStreamWriter}
+import java.nio.charset.StandardCharsets
 
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.model.{GerritProject, GerritProjectsSupport, ProjectContributionSource}
@@ -311,7 +312,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     val tmpFile = File.createTempFile(System.getProperty("java.io.tmpdir"),
       s"${getClass.getName}-${System.nanoTime()}")
 
-    val out = new FileWriter(tmpFile)
+    val out = new OutputStreamWriter(new FileOutputStream(tmpFile), StandardCharsets.UTF_8)
     contributorsJson.foreach(json => out.write(compact(render(json)) + '\n'))
     out.close
     tmpFile.toURI.toString
