@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "0db86fa8_1fdb75b3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "will add one, this is why I asked you to help me in review this change, since it is definitely not obvious for me how to deal with Kibana changes.",
+      "parentUuid": "6471fd8d_afff02b8",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1c86f23d_df4ddf93",
         "filename": "README.md",
         "patchSetId": 3
@@ -89,6 +107,30 @@
     },
     {
       "key": {
+        "uuid": "9452e767_820148c4",
+        "filename": "README.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "will remove the reference tomorrow with a different change.",
+      "parentUuid": "ee058b8c_bea6b738",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 24
+      },
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "98a79245_7c0bb49c",
         "filename": "build.sbt",
         "patchSetId": 3
@@ -103,6 +145,24 @@
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96719617_c76034be",
+        "filename": "build.sbt",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "don\u0027t have any particular preference, I just wanted to avoid writing over and over something like the nullable java Boolean lifting to Option[Boolean] and scalaz seemed to be one of the standard solutions to that. If you have an example of this in cats probably this would be more lightweight than in scalaz, but I wasnt lucky in finding it on cats sources..\nAnyway I think that will submit a change without depending on external libs since we just need a 3 line implicit class.",
+      "parentUuid": "98a79245_7c0bb49c",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -158,6 +218,24 @@
     },
     {
       "key": {
+        "uuid": "6e36c843_e0df02d6",
+        "filename": "dashboard-importer/kibana-config/000_config.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "It seems that all the json files must be submitted to Kibana importer using a specific order. @Fabio did use the AA_ BB_ CC_ DD_ redundant ordering metaphor (I did mention it in the original change proposing the import), but this is not correctly conveying an ordered structure. This change needs to add some intermediate json file. Numbers are better than double letters in ensuring a correct ordering. \nI\u0027m not an expert in Kibana Elasticsearch importer, so I need advice from you on how to add a new file. I find that using AA1_something.json would be immensely awkward. Created the new change 163330 with this proposal",
+      "parentUuid": "a46fa0d0_b652857c",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "257335e2_d4252a8e",
         "filename": "dashboard-importer/kibana-config/002_dashboard_projects.json",
         "patchSetId": 3
@@ -172,6 +250,24 @@
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6fa1142_13d8dc83",
+        "filename": "dashboard-importer/kibana-config/002_dashboard_projects.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "mmmm thanks for noticing this. Will fix  this.",
+      "parentUuid": "257335e2_d4252a8e",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -198,6 +294,30 @@
     },
     {
       "key": {
+        "uuid": "9d593833_cac17cf1",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "ok done in  a separate change. see 163291",
+      "parentUuid": "c1dae053_32710a77",
+      "range": {
+        "startLine": 40,
+        "startChar": 12,
+        "endLine": 40,
+        "endChar": 22
+      },
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1d9a135b_c4286fb2",
         "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
         "patchSetId": 3
@@ -212,6 +332,24 @@
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b169e428_f48b2ad3",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "when you specify \u003cboolean\u003e.option(\"true\") scalaz does implicitly convert to None if boolean is null or Option[\"true\"] if it is specified and not false. see https://stackoverflow.com/questions/19690531/scala-boolean-to-option for details. Unsure how this can be done with cats",
+      "parentUuid": "1d9a135b_c4286fb2",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -250,6 +388,24 @@
     },
     {
       "key": {
+        "uuid": "94689687_d9e9e30f",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "Will do in a separate chang, after merging the 163291 and 163330.",
+      "parentUuid": "f4c9eb7a_fb06cb1c",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "74b997cd_1c1bfa37",
         "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
         "patchSetId": 3
@@ -261,6 +417,24 @@
       "writtenOn": "2018-02-26T10:35:20Z",
       "side": 1,
       "message": "Question for my benefit :P Why do we beed a mutable data structure here?",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0f3f4850_3c2e09e7",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-01T00:34:32Z",
+      "side": 1,
+      "message": "to be able to do such kind of assertion we must have mutable.WrappedArrays. In the change I will submit tomorrow will set a function to do this in a more readable way.",
+      "parentUuid": "74b997cd_1c1bfa37",
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
