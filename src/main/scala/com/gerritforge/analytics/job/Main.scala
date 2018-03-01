@@ -64,7 +64,7 @@ object Main extends App with Job with LazyLogging {
     } text "output directory"
     opt[String]('e', "elasticIndex") optional() action { (x, c) =>
       c.copy(elasticIndex = Some(x))
-    } text "output directory"
+    } text "index name"
     opt[LocalDate]('s', "since") optional() action { (x, c) =>
       c.copy(since = Some(x))
     } text "begin date "
