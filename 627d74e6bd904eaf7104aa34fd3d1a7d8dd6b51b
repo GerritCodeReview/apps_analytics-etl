@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa18d3d4_0b3b77dd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-01T23:42:22Z",
+      "side": 1,
+      "message": "It should be fine to use numbers but you will have to change the way we order the files to import in \"docker-entrypoint.sh\". At the moment we do an \"ls -v /*.json\" which wouldn\u0027t work with numbers, for example:\n\n\u003e ls -v\n1.json  10.json 2.json 20.json\n\nI used letters because I didn\u0027t have to add any logic in the ordering....I have been a bit lazy :P",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 11,
+        "endChar": 57
+      },
+      "revId": "627d74e6bd904eaf7104aa34fd3d1a7d8dd6b51b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
