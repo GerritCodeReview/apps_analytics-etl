@@ -202,6 +202,24 @@
     },
     {
       "key": {
+        "uuid": "353b81c3_c0117ee3",
+        "filename": "build.sbt",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:28:11Z",
+      "side": 1,
+      "message": "Ok! cool",
+      "parentUuid": "9669ada7_9c9f0d72",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9b71d69_0f100754",
         "filename": "dashboard-importer/kibana-config/000_config.json",
         "patchSetId": 3
@@ -302,6 +320,24 @@
       "side": 1,
       "message": "In such case why don\u0027t simply use A0 B0 instead of AA BB? What about ZZ? it cant\u0027 be extended since it is on the lower side. Ordering it is intuitely expressed by numbering you said the first the second the third, not the A, B or C. If I can accept to use A-Z as first character, it is very awkward to me using double letter (!) because of the triangular limitation (ZZ doesnt accept successor, while YY accepts only YZ as additional before going to ZZ.\nWhat if you need to insert an additional item after YZ?",
       "parentUuid": "694a32af_ad2149d6",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87657e42_64a759a4",
+        "filename": "dashboard-importer/kibana-config/000_config.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:28:11Z",
+      "side": 1,
+      "message": "Yep, I agree double letters is not the best solution...it was just the minimum effort one that come in my mind when I did it. As I said in 163330 I have been a bit lazy on this :P",
+      "parentUuid": "c9348283_e4b75738",
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
@@ -478,6 +514,30 @@
       "side": 1,
       "message": "No, the problem here is that we have a boolean from java which can be\ntrue, false, or null\nthe way I put this adds the string true only if original parameter was specified (and this can be only true since it was Optional[Unit] from scopt).\nThe very first version of this scopt I did exactly what you are suggesting: just having a boolean flag, but Stefano did ask for a simple --extract-branches without parameters instead of --extract-branches\u003dtrue as I did at first. I originally did a simple if else, but Luca pointed me to this use case made by Optional extension that we can do with a simple class. I will show it better in next change.\nIf you have a better way to set it up this behaviour, we can obviously set it up. :)",
       "parentUuid": "daa6926e_ab83ccb3",
+      "range": {
+        "startLine": 40,
+        "startChar": 26,
+        "endLine": 40,
+        "endChar": 57
+      },
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1097ff0d_fa70eb80",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:28:11Z",
+      "side": 1,
+      "message": "Ok fair enough. I missed the previous comment :P",
+      "parentUuid": "3ff7ffaf_3ac08408",
       "range": {
         "startLine": 40,
         "startChar": 26,
