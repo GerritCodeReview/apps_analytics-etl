@@ -166,6 +166,24 @@
     },
     {
       "key": {
+        "uuid": "fdc8eb14_275b5a95",
+        "filename": "build.sbt",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:00:17Z",
+      "side": 1,
+      "message": "I didn\u0027t manage to find the equivalent in cats :( Anyway scalaz does the job.",
+      "parentUuid": "96719617_c76034be",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b9b71d69_0f100754",
         "filename": "dashboard-importer/kibana-config/000_config.json",
         "patchSetId": 3
@@ -233,6 +251,24 @@
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "694a32af_ad2149d6",
+        "filename": "dashboard-importer/kibana-config/000_config.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:00:17Z",
+      "side": 1,
+      "message": "I used double letters because I thought that if we wanted to add files in between one another we could have done something like:\n\nAA\nAB \u003c- new file\nBB\n\nSee my comment in 163330 about ordering with numbers.",
+      "parentUuid": "6e36c843_e0df02d6",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     },
     {
       "key": {
@@ -350,6 +386,47 @@
       "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5603fed_75b9625c",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:00:17Z",
+      "side": 1,
+      "message": "True...sorry I missed it :/",
+      "parentUuid": "b169e428_f48b2ad3",
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "daa6926e_ab83ccb3",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:00:17Z",
+      "side": 1,
+      "message": "Can we just pass the boolean ? We are defaulting it anyway if not defined.",
+      "range": {
+        "startLine": 40,
+        "startChar": 26,
+        "endLine": 40,
+        "endChar": 57
+      },
+      "revId": "984e7d46a92cf0e45ef5806e7d04eb5a36b199e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     },
     {
       "key": {
