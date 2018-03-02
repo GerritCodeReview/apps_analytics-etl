@@ -70,6 +70,30 @@
       "revId": "627d74e6bd904eaf7104aa34fd3d1a7d8dd6b51b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c98891d_9d159d1e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-03-02T00:47:42Z",
+      "side": 1,
+      "message": "Number is totally fine, I was just pointing out in the example to make sure not to use single ones otherwise you might mess up the ordering if you don\u0027t change \"docker-entrypoint.sh\". Triples of numbers would do it....I remember you were proposing it initially...not sure why I ended up not changing it :/ \n\nThe order in Kibana is just needed among classes of json, i.e.: \n1) config\n2) index pattern\n3) visualisations\n4) dashboards",
+      "parentUuid": "fa415898_f257a71b",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 11,
+        "endChar": 57
+      },
+      "revId": "627d74e6bd904eaf7104aa34fd3d1a7d8dd6b51b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
