@@ -22,6 +22,30 @@
       "revId": "627d74e6bd904eaf7104aa34fd3d1a7d8dd6b51b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fa415898_f257a71b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1023193
+      },
+      "writtenOn": "2018-03-02T00:31:30Z",
+      "side": 1,
+      "message": "That can be easily solved using 010 020 030 040 etc as I was proposing in the original change. But then I realized that we really don\u0027t need a real perfect ordering among all the json, we just want to be sure that classes of json are being executed before others, the visualizations can be put in any order, this is why I proposed to put all of them with the prefix 3_\nActually if I understood correctly there is just one or two json needing to be executed before the visualizations 1_ 2_ 3_\nAnyway I\u0027m not rigid on that. I just can\u0027t accept the triangularization of AA BB CC if really we want to go with letters as first we can just say\nA_ B_ C_ (why duplicating them?)\nand so A1_ or AA_ if you really need to go on with letters... \nYou are an expert in Kibana and can tell me if you REALLY need to have a fixed order or if you just need classes of json to be scripted before other classes. \nBTW: we did discuss this some months ago, and you told me that you just proposed the letters but numbers could have done as well...\nTo me AA_fsadfasf BB_dfasfsadf was quite difficult to read, since I tried to understand a meaning in the acronym, which isn\u0027t there.\nIf the use of double letters are so intuitive with the rest of the world, I will be happy as well.",
+      "parentUuid": "aa18d3d4_0b3b77dd",
+      "range": {
+        "startLine": 10,
+        "startChar": 38,
+        "endLine": 11,
+        "endChar": 57
+      },
+      "revId": "627d74e6bd904eaf7104aa34fd3d1a7d8dd6b51b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
