@@ -14,46 +14,15 @@
 
 package com.gerritforge.analytics.engine
 
-import java.io.{BufferedReader, IOException, InputStreamReader}
-import java.net.URL
-import java.nio.charset.StandardCharsets
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 
 import com.gerritforge.analytics.model._
-import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 
-import scala.collection.JavaConverters._
-
 object GerritAnalyticsTransformations {
 
-  implicit class PimpedGerritProjectRDD(val rdd: RDD[GerritProject]) extends AnyVal {
-
-    def enrichWithSource(projectToContributorsAnalyticsUrlFactory: String => String): RDD[ProjectContributionSource] = {
-      rdd.map { project =>
-        ProjectContributionSource(project.name, projectToContributorsAnalyticsUrlFactory(project.id))
-      }
-    }
-  }
-
-  def getLinesFromURL(sourceURL: String): Iterator[String] = {
-    val is = new URL(sourceURL).openConnection.getInputStream
-    new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-      .lines.iterator().asScala
-      .filterNot(_.trim.isEmpty)
-  }
-
-  def getProjectJsonContributorsArray(project: String, sourceURL: String): Array[(String, String)] = {
-    try {
-      getLinesFromURL(sourceURL)
-        .map(s => (project, s))
-        .toArray
-    } catch {
-      case e: IOException => Array()
-    }
-  }
 
   def getAliasDF(emailAliases: Option[String])(implicit spark: SparkSession): Option[DataFrame] = {
     emailAliases.map { path =>
@@ -168,15 +137,6 @@ object GerritAnalyticsTransformations {
   private def emailToDomainUdf = udf(emailToDomain(_: String))
 
 
-  implicit class PimpedRDDProjectContributionSource(val projectsAndUrls: RDD[ProjectContributionSource]) extends AnyVal {
-
-    def fetchRawContributors(implicit spark: SparkSession): RDD[(String, String)] = {
-      projectsAndUrls.flatMap {
-        p => getProjectJsonContributorsArray(p.name, p.contributorsUrl)
-      }
-    }
-  }
-
   import org.apache.spark.sql.functions.udf
 
   val longDateToISOUdf = udf(longDateToISO(_: Number))
@@ -186,15 +146,5 @@ object GerritAnalyticsTransformations {
       LocalDateTime.ofEpochSecond(in.longValue() / 1000L, 0, ZoneOffset.UTC),
       ZoneOffset.UTC, ZoneId.of("Z")
     ) format DateTimeFormatter.ISO_OFFSET_DATE_TIME
-
-  def getContributorStatsFromAnalyticsPlugin(projects: RDD[GerritProject], projectToContributorsAnalyticsUrlFactory: String => String)(implicit spark: SparkSession) = {
-    import spark.sqlContext.implicits._ // toDF
-
-    projects
-      .enrichWithSource(projectToContributorsAnalyticsUrlFactory)
-      .fetchRawContributors
-      .toDF("project", "json")
-      .transformCommitterInfo
-  }
 
 }

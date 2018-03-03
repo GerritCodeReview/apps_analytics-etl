@@ -17,6 +17,8 @@ bin/spark-submit \
     --events file:///tmp/gerrit-events-export.json
     --writeNotProcessedEventsTo file:///tmp/failed-events
     -e gerrit/analytics
+    --gerrit_api_username user
+    --gerrit_api_password pass
 ```
 
 Should ElasticSearch need authentication (i.e.: if X-Pack is enabled), credentials can be
