@@ -26,11 +26,13 @@ case class GerritEndpointConfig(baseUrl: String = "",
                                 aggregate: Option[String] = None,
                                 emailAlias: Option[String] = None,
                                 eventsPath: Option[String] = None,
-                                eventsFailureOutputPath: Option[String] = None
+                                eventsFailureOutputPath: Option[String] = None,
+                                maybeUsername: Option[String] = None,
+                                maybePassword: Option[String] = None
                                ) {
 
-  val gerritProjectsUrl: String = s"${baseUrl}/projects/" + prefix.fold("")("?p=" + _)
 
+  // TODO: Should move this somewhere else?
   def queryOpt(opt: (String, Option[String])): Option[String] = {
     opt match {
       case (name: String, value: Option[String]) => value.map(name + "=" + _)
@@ -42,6 +44,6 @@ case class GerritEndpointConfig(baseUrl: String = "",
   val queryString = Seq("since" -> since.map(format.format), "until" -> until.map(format.format), "aggregate" -> aggregate)
     .flatMap(queryOpt).mkString("?", "&", "")
 
-  def contributorsUrl(projectName: String) =
-    s"$baseUrl/projects/$projectName/analytics~contributors$queryString"
+  def contributorsUrl(projectName: String): String =
+    s"/projects/$projectName/analytics~contributors$queryString"
 }
