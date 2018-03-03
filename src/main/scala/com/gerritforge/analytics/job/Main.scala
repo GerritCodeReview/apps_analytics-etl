@@ -27,7 +27,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import scopt.Read.reads
 import scopt.{OptionParser, Read}
 
-import scala.io.{Codec, Source}
+import scala.io.Codec
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
@@ -126,7 +126,7 @@ trait Job { self: LazyLogging =>
         }
       }.getOrElse(AggregationStrategy.aggregateByEmail)
 
-    val projects = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(config.gerritProjectsUrl))
+    val projects = GerritProjectsSupport.parseJsonProjectListResponse(config.getProjectsSource)
 
     logger.info(s"Loaded a list of ${projects.size} projects ${if(projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")}")
 
