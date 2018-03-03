@@ -80,7 +80,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
       summaries should have size 1
 
       inside(summaries.head) {
-        case UserActivitySummary(year, month, day, hour, name, email, num_commits, _, _, added_lines, deleted_lines, commits, last_commit_date, is_merge) =>
+        case UserActivitySummary(year, month, day, hour, name, email, num_commits, _, _, added_lines, deleted_lines, commits, _, _, _, last_commit_date, is_merge) =>
           year shouldBe 2018
           month shouldBe 1
           day shouldBe 10
@@ -120,7 +120,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
       summaries.foreach { summary =>
         inside(summary) {
-          case UserActivitySummary(year, month, day, hour, name, email,_, _, _, _, _, _, _, _) =>
+          case UserActivitySummary(year, month, day, hour, name, email,_, _, _, _,_, _, _, _, _, _, _) =>
             year shouldBe 2018
             month shouldBe 1
             day shouldBe 10
@@ -132,7 +132,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
       summaries.foreach { summary =>
         inside(summary) {
-          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, last_commit_date, false) =>
+          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, _, _, _, last_commit_date, false) =>
             num_commits shouldBe 3
             last_commit_date shouldBe 1005000l
             commits should contain only(
@@ -141,7 +141,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
               CommitInfo("rev5", 1005000l, false)
             )
 
-          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, last_commit_date, true) =>
+          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, _, _, _, last_commit_date, true) =>
             num_commits shouldBe 2
             last_commit_date shouldBe 1003000l
             commits should contain only(
@@ -168,7 +168,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
       val analyticsJobOutput =
         sc.parallelize(Seq(
-          "project1" -> UserActivitySummary(2018, 1, 20, 10, "Stefano", "stefano@galarraga-org.com", 1, 2, 1, 10, 4, Array(CommitInfo("sha1", expectedDate.toInstant.toEpochMilli, false)),
+          "project1" -> UserActivitySummary(2018, 1, 20, 10, "Stefano", "stefano@galarraga-org.com", 1, 2, 1, 10, 4, Array(CommitInfo("sha1", expectedDate.toInstant.toEpochMilli, false)), Array(), Array(), Array(),
             expectedDate.toInstant.toEpochMilli, false)
         ))
           .asEtlDataFrame(sql)

@@ -82,6 +82,9 @@ object GerritAnalyticsTransformations {
                                  added_lines: Integer,
                                  deleted_lines: Integer,
                                  commits: Array[CommitInfo],
+                                 branches: Array[String],
+                                 issues_codes: Array[String],
+                                 issues_links: Array[String],
                                  last_commit_date: Long,
                                  is_merge: Boolean)
 
@@ -113,7 +116,10 @@ object GerritAnalyticsTransformations {
           "json.num_files as num_files", "json.num_distinct_files as num_distinct_files",
           "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
           "json.num_commits as num_commits", "json.last_commit_date as last_commit_date",
-          "json.is_merge as is_merge", "json.commits as commits"
+          "json.is_merge as is_merge", "json.commits as commits",
+          "json.branches as branches",
+          "json.issues_codes as issues_codes",
+          "json.issues_links as issues_links"
         )
     }
 

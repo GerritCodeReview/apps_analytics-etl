@@ -142,6 +142,9 @@ object GerritEventsTransformations extends LazyLogging {
         added_lines = 0,
         deleted_lines = 0,
         commits = Array.empty,
+        branches = Array.empty,
+        issues_codes = Array.empty,
+        issues_links = Array.empty,
         last_commit_date = 0l,
         is_merge = false)
 
@@ -170,9 +173,10 @@ object GerritEventsTransformations extends LazyLogging {
 
     self.map { case (project, summary) =>
       (project, summary.name, summary.email, summary.year, summary.month, summary.day, summary.hour, summary.num_files, summary.num_distinct_files,
-        summary.added_lines, summary.deleted_lines, Option(summary.num_commits), Option(summary.last_commit_date), Option(summary.is_merge), summary.commits)
+        summary.added_lines, summary.deleted_lines, Option(summary.num_commits), Option(summary.last_commit_date), Option(summary.is_merge), summary.commits,
+      summary.branches, summary.issues_codes, summary.issues_links)
     }.toDF("project", "author", "email", "year", "month", "day", "hour", "num_files", "num_distinct_files",
-      "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "commits")
+      "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "commits", "branches", "issues_codes", "issues_links")
   }
 
   def getContributorStatsFromGerritEvents(events: RDD[GerritRefHasNewRevisionEvent],

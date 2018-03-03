@@ -17,6 +17,12 @@ package com.gerritforge.analytics.model
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneId}
 
+object Enricher {
+  implicit class RichBoolean(val b: Boolean) extends AnyVal {
+    final def option[A](a: => A): Option[A] = if (b) Some(a) else None
+  }
+}
+
 case class GerritEndpointConfig(baseUrl: String = "",
                                 prefix: Option[String] = None,
                                 outputDir: String = s"file://${System.getProperty("java.io.tmpdir")}/analytics-${System.nanoTime()}",
@@ -24,6 +30,8 @@ case class GerritEndpointConfig(baseUrl: String = "",
                                 since: Option[LocalDate] = None,
                                 until: Option[LocalDate] = None,
                                 aggregate: Option[String] = None,
+                                extractBranches: Boolean = false,
+                                extractIssues: Boolean = false,
                                 emailAlias: Option[String] = None,
                                 eventsPath: Option[String] = None,
                                 eventsFailureOutputPath: Option[String] = None
@@ -39,7 +47,12 @@ case class GerritEndpointConfig(baseUrl: String = "",
 
   @transient
   private lazy val format = DateTimeFormatter.ofPattern("yyyy-MM-dd").withZone(ZoneId.of("UTC"))
-  val queryString = Seq("since" -> since.map(format.format), "until" -> until.map(format.format), "aggregate" -> aggregate)
+
+  import Enricher.RichBoolean
+
+  val queryString = Seq("since" -> since.map(format.format), "until" -> until.map(format.format), "aggregate" -> aggregate,
+    "extract-branches" -> extractBranches.option("true"),
+    "extract-issues" -> extractIssues.option("true"))
     .flatMap(queryOpt).mkString("?", "&", "")
 
   def contributorsUrl(projectName: String) =

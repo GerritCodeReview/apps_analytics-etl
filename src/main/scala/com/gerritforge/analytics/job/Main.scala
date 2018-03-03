@@ -84,6 +84,12 @@ object Main extends App with Job with LazyLogging {
     opt[String]("writeNotProcessedEventsTo") optional() action{ (failedEventsPath, config) =>
       config.copy(eventsFailureOutputPath = Some(failedEventsPath))
     } text "location where to write a TSV file containing the events we couldn't process with a description fo the reason why"
+    opt[Unit]('r',"extract-branches") optional() action { (_, c) =>
+      c.copy(extractBranches = true)
+    } text "extract branches"
+    opt[Unit]('i',"extract-issues") optional() action { (_, c) =>
+      c.copy(extractIssues = true)
+    } text "extract issues"
   }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {

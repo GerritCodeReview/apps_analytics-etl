@@ -32,7 +32,8 @@ case class TransformedColumns
  year: Option[Int], month: Option[Int], day: Option[Int], hour: Option[Int],
  num_files: Int, num_distinct_files: Int, added_lines: Int, deleted_lines: Int,
  num_commits: Int, last_commit_date: Long, is_merge: Boolean,
- commits: Array[CommitInfo])
+ commits: Array[CommitInfo], branches: Array[String], issues_codes: Array[String],
+ issues_links: Array[String])
 
 class GerritAnalyticsTransformationsSpec extends WordSpec with Matchers
   with SparkTestSupport with Inside {
@@ -134,7 +135,7 @@ class GerritAnalyticsTransformationsSpec extends WordSpec with Matchers
       val collected = df.as[TransformedColumns].collect
 
       inside(collected.head) {
-        case TransformedColumns(project, author, email, year, month, day, hour, num_files, num_distinct_files, added_lines, deleted_lines, num_commits, last_commit_date, is_merge, commits) =>
+        case TransformedColumns(project, author, email, year, month, day, hour, num_files, num_distinct_files, added_lines, deleted_lines, num_commits, last_commit_date, is_merge, commits, _, _, _) =>
           project should be("p1")
           email should be("a@mail.com")
           author should be("a")
@@ -157,7 +158,7 @@ class GerritAnalyticsTransformationsSpec extends WordSpec with Matchers
       val rdd = sc.parallelize(Seq(
         // last commit is missing hour,day,month,year to check optionality
         ("p3",
-        """{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"is_merge": true,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file1.txt", "file2.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}]}"""))
+          """{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"is_merge": true,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file1.txt", "file2.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}]}"""))
       )
 
       val df = rdd.toDF("project", "json")
@@ -167,7 +168,7 @@ class GerritAnalyticsTransformationsSpec extends WordSpec with Matchers
       val collected = df.as[TransformedColumns].collect
 
       inside(collected.head) {
-        case TransformedColumns(project, author, email, year, month, day, hour, num_files, num_distinct_files, added_lines, deleted_lines, num_commits, last_commit_date, is_merge, commits) =>
+        case TransformedColumns(project, author, email, year, month, day, hour, num_files, num_distinct_files, added_lines, deleted_lines, num_commits, last_commit_date, is_merge, commits, _, _, _) =>
           email should be("c@mail.com")
           author should be("c")
           year should be(None)
@@ -179,6 +180,63 @@ class GerritAnalyticsTransformationsSpec extends WordSpec with Matchers
           deleted_lines should be(1)
           last_commit_date should be(1600000000000L)
           is_merge should be(true)
+      }
+    }
+
+    "recognize branches in input" in {
+      import sql.implicits._
+
+      val rdd = sc.parallelize(Seq(
+        ("p1",
+          """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1,
+            |"num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0,
+            |"is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false,
+            |"files": ["file1.txt", "file2.txt"]}],
+            |"branches":["master"] }"""
+            .stripMargin)))
+
+      val df = rdd.toDF("project", "json")
+        .transformCommitterInfo
+
+      df.count should be(1)
+      df.schema.fields.map(_.name) should contain("branches")
+      val collected = df.as[TransformedColumns].collect
+
+      inside(collected.head) {
+        case TransformedColumns(_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, branches, _, _) =>
+          branches.size should be(1)
+          branches.head should be("master")
+      }
+    }
+
+
+    "recognize issues in input" in {
+      import sql.implicits._
+      val sampleProjectJson = Seq(
+        ("p1",
+          """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1,
+            |"num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0,
+            |"is_merge": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false,
+            |"files": ["file1.txt", "file2.txt"]}],
+            |"issues_codes":["c1"], "issues_links":["http://link/c1"] }"""
+            .stripMargin))
+
+
+      val rdd = sc.parallelize(sampleProjectJson)
+
+      val df = rdd.toDF("project", "json")
+        .transformCommitterInfo
+
+      df.count should be(1)
+      df.schema.fields.map(_.name) should contain allOf("issues_codes", "issues_links")
+      val collected = df.as[TransformedColumns].collect
+
+      inside(collected.head) {
+        case TransformedColumns(_, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, issues_codes, issues_links) =>
+          issues_codes.size should be(1)
+          issues_codes.head should be("c1")
+          issues_links.size should be(1)
+          issues_links.head should be("http://link/c1")
       }
     }
   }
@@ -365,7 +423,6 @@ class GerritAnalyticsTransformationsSpec extends WordSpec with Matchers
 
     }
   }
-
 
   private def newSource(contributorsJson: JObject*): String = {
     val tmpFile = File.createTempFile(System.getProperty("java.io.tmpdir"),
