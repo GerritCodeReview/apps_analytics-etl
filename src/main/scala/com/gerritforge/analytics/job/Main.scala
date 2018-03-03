@@ -27,7 +27,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import scopt.Read.reads
 import scopt.{OptionParser, Read}
 
-import scala.io.{Codec, Source}
+import scala.io.Codec
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
@@ -59,6 +59,12 @@ object Main extends App with Job with LazyLogging {
     opt[String]('p', "prefix") optional() action { (p, c) =>
       c.copy(prefix = Some(p))
     } text "projects prefix"
+    opt[String]('n', "username") optional() action { (u, c) =>
+      c.copy(username = Some(u))
+    } text "username"
+    opt[String]('a', "password") optional() action { (a, c) =>
+      c.copy(password = Some(a))
+    } text "password"
     opt[String]('o', "out") optional() action { (x, c) =>
       c.copy(outputDir = x)
     } text "output directory"
@@ -126,7 +132,7 @@ trait Job { self: LazyLogging =>
         }
       }.getOrElse(AggregationStrategy.aggregateByEmail)
 
-    val projects = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(config.gerritProjectsUrl))
+    val projects = GerritProjectsSupport.parseJsonProjectListResponse(config.getProjectsSource)
 
     logger.info(s"Loaded a list of ${projects.size} projects ${if(projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")}")
 
