@@ -26,10 +26,14 @@ case class GerritEndpointConfig(baseUrl: String = "",
                                 aggregate: Option[String] = None,
                                 emailAlias: Option[String] = None,
                                 eventsPath: Option[String] = None,
-                                eventsFailureOutputPath: Option[String] = None
+                                eventsFailureOutputPath: Option[String] = None,
+                                credentials: Option[GerritCredentials] = None
                                ) {
 
-  val gerritProjectsUrl: String = s"${baseUrl}/projects/" + prefix.fold("")("?p=" + _)
+  private val projectsSegment = "/projects/" + prefix.fold("")("?p=" + _)
+  //Gerrit REST API requires a '/a' prefix when Authentication is needed
+  //More details here: https://gerrit-review.googlesource.com/Documentation/rest-api.html#authentication
+  val gerritProjectsUrl: String = credentials.fold(baseUrl)(_ => s"${baseUrl}/a") + projectsSegment
 
   def queryOpt(opt: (String, Option[String])): Option[String] = {
     opt match {
@@ -45,3 +49,5 @@ case class GerritEndpointConfig(baseUrl: String = "",
   def contributorsUrl(projectName: String) =
     s"$baseUrl/projects/$projectName/analytics~contributors$queryString"
 }
+
+case class GerritCredentials(username: String, password: String)

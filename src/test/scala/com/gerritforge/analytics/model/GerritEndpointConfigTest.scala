@@ -29,4 +29,14 @@ class GerritEndpointConfigTest extends FlatSpec with Matchers {
     conf.gerritProjectsUrl shouldBe s"testBaseUrl/projects/"
   }
 
+  it should "contain authorisation prefix when credentials are available" in {
+    val conf = GerritEndpointConfig(baseUrl = "testBaseUrl", credentials = Some(GerritCredentials("user","pwd")))
+    conf.gerritProjectsUrl shouldBe s"testBaseUrl/a/projects/"
+  }
+
+  it should "not contain authorisation prefix when credentials are not available" in {
+    val conf = GerritEndpointConfig(baseUrl = "testBaseUrl", credentials = None)
+    conf.gerritProjectsUrl shouldBe s"testBaseUrl/projects/"
+  }
+
 }
