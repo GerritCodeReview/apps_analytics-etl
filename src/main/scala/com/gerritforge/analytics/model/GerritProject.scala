@@ -18,7 +18,9 @@ import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
 
+
 case class GerritProject(id: String, name: String)
+
 
 object GerritProjectsSupport {
 

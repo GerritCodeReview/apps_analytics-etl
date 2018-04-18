@@ -30,6 +30,7 @@ import scala.io.Source
 
 class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with SparkTestSupport with Inside {
 
+
   "GerritProjects" should "parse JSON into a GerritProject objects" in {
 
     val projects = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromString(
@@ -94,7 +95,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
       .collect
 
     rawContributors should have size (1)
-    rawContributors.head._2 should be ("""{"foo2":"bar2\u0100"}""")
+    rawContributors.head._2 should be("""{"foo2":"bar2\u0100"}""")
   }
 
   "transformCommitterInfo" should "transform a DataFrame with project and json to a workable DF with separated columns" in {

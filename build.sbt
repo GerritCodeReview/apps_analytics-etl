@@ -13,10 +13,12 @@ scalaVersion := "2.11.8"
 
 val sparkVersion = "2.1.1"
 
+val sparkDependencyScope = "provided"
+
 libraryDependencies ++= Seq(
-  "org.apache.spark" %% "spark-core" % sparkVersion % "provided"
+  "org.apache.spark" %% "spark-core" % sparkVersion % sparkDependencyScope
     exclude("org.spark-project.spark", "unused"),
-  "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
+  "org.apache.spark" %% "spark-sql" % sparkVersion % sparkDependencyScope,
   "org.elasticsearch" %% "elasticsearch-spark-20" % "5.0.2"
     excludeAll ExclusionRule(organization = "org.apache.spark"),
   // json4s still needed by GerritProjects
