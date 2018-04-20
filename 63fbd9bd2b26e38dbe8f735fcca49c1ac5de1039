@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "6010df01_766f3b4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-20T11:10:45Z",
+      "side": 1,
+      "message": "The style-guide for commit messages is:\nhttps://chris.beams.io/posts/git-commit/\n\nThe jira-id needs to be put as commit footer after the Change-Id in a new line.\n\nExample:\nJira-Id: GERICS-629",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 131
+      },
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2ef130e6_46cc4467",
         "filename": "src/main/scala/com/gerritforge/analytics/common/ops/AnalyticsTimeOps.scala",
         "patchSetId": 1
@@ -19,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "4c05163b_66e18e18",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/gerritChanges.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-20T11:10:45Z",
+      "side": 1,
+      "message": "All of these are already available in the Gerrit Extensions API: does it make sense to redefine them?\n\nSee: https://mvnrepository.com/artifact/com.google.gerrit/gerrit-extension-api",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd4075ee_fd86d0fe",
         "filename": "src/main/scala/com/gerritforge/analytics/model/gerritChanges.scala",
         "patchSetId": 1
@@ -30,6 +70,23 @@
       "writtenOn": "2018-04-20T10:59:33Z",
       "side": 1,
       "message": "can you add the override just for completeness?",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "255faff3_65f4869c",
+        "filename": "src/main/scala/com/gerritforge/analytics/services/GerritCoreApiFetchService.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-04-20T11:10:45Z",
+      "side": 1,
+      "message": "Have you looked at the Gerrit Java APIs?\nhttps://github.com/uwolfer/gerrit-rest-java-client",
       "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
