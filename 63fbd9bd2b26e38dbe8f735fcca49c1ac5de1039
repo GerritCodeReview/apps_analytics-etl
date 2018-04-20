@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ef130e6_46cc4467",
+        "filename": "src/main/scala/com/gerritforge/analytics/common/ops/AnalyticsTimeOps.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-20T10:59:33Z",
+      "side": 1,
+      "message": "could you use a Value class for efficiency (https://docs.scala-lang.org/overviews/core/value-classes.html)? would be val localDateTime and should extend AnyVal",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd4075ee_fd86d0fe",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/gerritChanges.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-20T10:59:33Z",
+      "side": 1,
+      "message": "can you add the override just for completeness?",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9e85888f_1bc7b885",
+        "filename": "src/main/scala/com/gerritforge/analytics/services/GerritCoreApiFetchService.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-20T10:59:33Z",
+      "side": 1,
+      "message": "you can put everything in the same string interpolation string instead of mixing interpolation and concatenation",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
