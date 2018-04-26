@@ -59,6 +59,24 @@
     },
     {
       "key": {
+        "uuid": "1e23f9be_ae3fc40a",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/gerritChanges.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-04-26T19:23:56Z",
+      "side": 1,
+      "message": "Thanks Luca, I was not aware of these extensions, my bad. Will check if it makes sense to simply use that extension",
+      "parentUuid": "4c05163b_66e18e18",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "fd4075ee_fd86d0fe",
         "filename": "src/main/scala/com/gerritforge/analytics/model/gerritChanges.scala",
         "patchSetId": 1
@@ -70,6 +88,24 @@
       "writtenOn": "2018-04-20T10:59:33Z",
       "side": 1,
       "message": "can you add the override just for completeness?",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a77dd004_eba1b18f",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/gerritChanges.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-04-26T19:23:56Z",
+      "side": 1,
+      "message": "Yeap, doing it",
+      "parentUuid": "fd4075ee_fd86d0fe",
       "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
@@ -104,6 +140,24 @@
       "writtenOn": "2018-04-20T10:59:33Z",
       "side": 1,
       "message": "you can put everything in the same string interpolation string instead of mixing interpolation and concatenation",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87e00bdc_e5b4e5fc",
+        "filename": "src/main/scala/com/gerritforge/analytics/services/GerritCoreApiFetchService.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-04-26T19:23:56Z",
+      "side": 1,
+      "message": "Yeap",
+      "parentUuid": "9e85888f_1bc7b885",
       "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
