@@ -161,6 +161,41 @@
       "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9c078bcb_7ca996ca",
+        "filename": "src/main/scala/com/gerritforge/analytics/services/GerritCoreApiFetchService.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-27T21:44:07Z",
+      "side": 1,
+      "message": "the base URL is still out..",
+      "parentUuid": "87e00bdc_e5b4e5fc",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "71b9950c_9f984568",
+        "filename": "src/test/scala/com/gerritforge/analytics/extractors/JsonExtractorsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-27T21:44:07Z",
+      "side": 1,
+      "message": "If the work is not complete you should mark the PR as WIP or finish the tests.\n\nI suggest to use the `pending` scalatest keyword instead of leaving tests empty",
+      "revId": "63fbd9bd2b26e38dbe8f735fcca49c1ac5de1039",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
