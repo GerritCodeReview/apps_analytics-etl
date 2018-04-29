@@ -17,6 +17,9 @@ bin/spark-submit \
     --events file:///tmp/gerrit-events-export.json
     --writeNotProcessedEventsTo file:///tmp/failed-events
     -e gerrit/analytics
+    --runApiBatchImport true
+    --gerrit_api_username blah
+    --gerrit_api_password blah
 ```
 
 Should ElasticSearch need authentication (i.e.: if X-Pack is enabled), credentials can be
@@ -38,6 +41,10 @@ passed through the *spark.es.net.http.auth.pass* and *spark.es.net.http.auth.use
 - --writeNotProcessedEventsTo location where to write a TSV file containing the events we couldn't process
     with a description fo the reason why
 
+- --runApiBatchImport is an optional parameter. If true, it will just ingest the data from gerrit API and
+    not process the event files
+- --gerrit_api_username is an optional parameter. username to connect to the gerrit API
+- --gerrit_api_password is an optional parameter. password to connect to the gerrit API
 
   CSVs with 3 columns are expected in input.
 
