@@ -18,9 +18,9 @@ import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoField.{MILLI_OF_SECOND, NANO_OF_SECOND}
 import java.time.{ZoneId, ZonedDateTime}
 
-import com.gerritforge.analytics.SparkTestSupport
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations.{CommitInfo, UserActivitySummary}
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
+import com.gerritforge.analytics.support.SparkTestSupport
 import org.apache.spark.rdd.RDD
 import org.scalatest.{Inside, Matchers, WordSpec}
 

@@ -18,16 +18,21 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneId}
 
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
-import com.gerritforge.analytics.engine.events.{AggregationStrategy, EventParser, GerritJsonEvent}
-import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjectsSupport}
+import com.gerritforge.analytics.engine.events._
+import com.gerritforge.analytics.engine.{ChangesAnalyticsProcessor, ChangesReportGenerator, GerritAnalyticsTransformations}
+import com.gerritforge.analytics.model._
+import com.gerritforge.analytics.services.GerritApiChangesService
+import com.gerritforge.analytics.support.api.GerritApiAuth
 import com.typesafe.scalalogging.LazyLogging
+import com.urswolfer.gerrit.client.rest.GerritRestApi
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 import scopt.Read.reads
 import scopt.{OptionParser, Read}
 
 import scala.io.{Codec, Source}
+import scala.reflect.ClassTag
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
@@ -67,10 +72,10 @@ object Main extends App with Job with LazyLogging {
     } text "index name"
     opt[LocalDate]('s', "since") optional() action { (x, c) =>
       c.copy(since = Some(x))
-    } text "begin date "
+    } text "since date "
     opt[LocalDate]('u', "until") optional() action { (x, c) =>
       c.copy(until = Some(x))
-    } text "since date"
+    } text "until date"
     opt[String]('g', "aggregate") optional() action { (x, c) =>
       c.copy(aggregate = Some(x))
     } text "aggregate email/email_hour/email_day/email_month/email_year"
@@ -81,9 +86,22 @@ object Main extends App with Job with LazyLogging {
     opt[String]("events") optional() action { (eventsPath, config) =>
       config.copy(eventsPath = Some(eventsPath))
     } text "location where to load the Gerrit Events"
-    opt[String]("writeNotProcessedEventsTo") optional() action{ (failedEventsPath, config) =>
+    opt[String]("writeNotProcessedEventsTo") optional() action { (failedEventsPath, config) =>
       config.copy(eventsFailureOutputPath = Some(failedEventsPath))
     } text "location where to write a TSV file containing the events we couldn't process with a description fo the reason why"
+
+
+    opt[Boolean]("runApiBatchImport") optional() action { (apiImport, config) =>
+      config.copy(runApiBatchImport = Some(apiImport))
+    } text "Imports as a batch all the changes from Gerrit server"
+
+    opt[String]("gerrit_api_username") optional() action { (credentials, config) =>
+      config.copy(gerritApiUserName = Some(credentials))
+    } text "Gerrit API username"
+
+    opt[String]("gerrit_api_password") optional() action { (credentials, config) =>
+      config.copy(gerritApiPassword = Some(credentials))
+    } text "Gerrit API password"
   }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
@@ -96,68 +114,123 @@ object Main extends App with Job with LazyLogging {
 
       logger.info(s"Starting analytics app with config $config")
 
-      val dataFrame = buildProjectStats().cache() //This dataframe is written twice
+      config.runApiBatchImport match {
+        case Some(true) =>
+          logger.info("Gets all changes content from API - (Batch Import Mode)")
+          val changesStats: (Dataset[GenericTopChangesReport], Dataset[TopRiskyChangesReport]) = buildChangesStats()
 
-      logger.info(s"ES content created, saving it to '${config.outputDir}'")
-      dataFrame.write.json(config.outputDir)
+          logger.info("Spliting changes into New / Merged / Draft")
 
-      saveES(dataFrame)
+          logger.info("Storeing changes into ES - (Batch Mode)")
+          val changeESKeyCfg = Map("es.mapping.id" -> "change_id")
+          saveDatasetES(changesStats._1, "gerrit_generic-top-changes/analytics", changeESKeyCfg)
+          saveDatasetES(changesStats._2, "gerrit_risky-changes/analytics", changeESKeyCfg)
+
+        case _ =>
+          val dataFrame = buildProjectStats().cache() //This dataframe is written twice
+          logger.info(s"ES content created, saving it to '${config.outputDir}'")
+          dataFrame.write.json(config.outputDir)
+          saveES(dataFrame)
+      }
 
     case None => // invalid configuration usage has been displayed
   }
 }
 
-trait Job { self: LazyLogging =>
+trait Job {
+  self: LazyLogging =>
   implicit val codec = Codec.ISO8859
 
+
+  def buildChangesStats()(implicit config: GerritEndpointConfig, spark: SparkSession): (Dataset[GenericTopChangesReport], Dataset[TopRiskyChangesReport]) = {
+
+
+    val gerritApi: GerritRestApi = GerritApiAuth.getGerritApi(config.baseUrl, config.gerritApiUserName, config.gerritApiPassword)
+
+    val mergedChangesWithComments = GerritApiChangesService(gerritApi).fetchChangesWithComments(Merged, 0, List())
+    val newChangesWithComments = GerritApiChangesService(gerritApi).fetchChangesWithComments(New, 0, List())
+    val draftChangesWithComments = GerritApiChangesService(gerritApi).fetchChangesWithComments(Draft, 0, List())
+
+    val mergedChangeInformationWithComments: Dataset[ChangeInformation] = ChangesAnalyticsProcessor.convertToAnalyticsDataModel(mergedChangesWithComments)(spark)
+    val newChangeInformationWithComments: Dataset[ChangeInformation] = ChangesAnalyticsProcessor.convertToAnalyticsDataModel(newChangesWithComments)(spark)
+    val drafChangeInformationWithComments: Dataset[ChangeInformation] = ChangesAnalyticsProcessor.convertToAnalyticsDataModel(draftChangesWithComments)(spark)
+
+    val totalChanges: Dataset[ChangeInformation] = (mergedChangeInformationWithComments union newChangeInformationWithComments union drafChangeInformationWithComments).cache
+
+    import ChangesReportGenerator.implicits._
+
+    val genericTopChangesReport: Dataset[GenericTopChangesReport] =
+      totalChanges.generateGenericTopChangesReport
+
+    val topRiskyChangesReport: Dataset[TopRiskyChangesReport] =
+      totalChanges.generateRiskyChangesReport
+
+    (genericTopChangesReport, topRiskyChangesReport)
+  }
+
   def buildProjectStats()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
-    import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
-    import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
+
+    import GerritAnalyticsTransformations._
+    import GerritEventsTransformations._
 
     implicit val sc: SparkContext = spark.sparkContext
 
     val aggregationStrategy: AggregationStrategy =
-      config.aggregate.flatMap { agg =>
-        AggregationStrategy.byName(agg) match {
-          case Success(strategy) => Some(strategy)
-          case Failure(e) =>
-            logger.warn(s"Invalid aggregation strategy '$agg", e)
-            None
-        }
+      config.aggregate.flatMap {
+        agg =>
+          AggregationStrategy.byName(agg) match {
+            case Success(strategy) => Some(strategy)
+            case Failure(e) =>
+              logger.warn(s"Invalid aggregation strategy '$agg", e)
+              None
+          }
       }.getOrElse(AggregationStrategy.aggregateByEmail)
 
-    val projects = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(config.gerritProjectsUrl))
+    val projects: Seq[GerritProject] = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(config.gerritProjectsUrl))
 
-    logger.info(s"Loaded a list of ${projects.size} projects ${if(projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")}")
+    logger.info(s"Loaded a list of ${
+      projects.size
+    } projects ${
+      if (projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")
+    }")
 
     val aliasesDF = getAliasDF(config.emailAlias)
 
-    val events = loadEvents
+    val events: RDD[Either[NotParsableJsonEvent, GerritJsonEvent]] = loadEvents
 
-    val failedEvents: RDD[NotParsableJsonEvent] = events.collect { case Left(eventFailureDescription) => eventFailureDescription }
+    val failedEvents: RDD[NotParsableJsonEvent] = events.collect {
+      case Left(eventFailureDescription) => eventFailureDescription
+    }
 
-    if(!failedEvents.isEmpty()) {
-      config.eventsFailureOutputPath.foreach { failurePath =>
-        logger.info(s"Events failures will be stored at '$failurePath'")
+    if (!failedEvents.isEmpty()) {
+      config.eventsFailureOutputPath.foreach {
+        failurePath =>
+          logger.info(s"Events failures will be stored at '$failurePath'")
 
-        import spark.implicits._
-        failedEvents.toDF().write.option("sep", "\t").option("header", true).csv(failurePath)
+          import spark.implicits._
+
+          failedEvents.toDF().write.option("sep", "\t").option("header", true).csv(failurePath)
       }
     }
 
     //We might want to use the time of the events as information to feed to the collection of data from the repository
-    val repositoryAlteringEvents = events.collect { case Right(event) => event }.repositoryWithNewRevisionEvents
+    val repositoryAlteringEvents: RDD[GerritRefHasNewRevisionEvent] = events.collect {
+      case Right(event) => event
+    }.repositoryWithNewRevisionEvents
 
-    val firstEventDateMaybe: Option[LocalDate] = if(repositoryAlteringEvents.isEmpty()) None else Some(repositoryAlteringEvents.earliestEventTime.toLocalDate)
+    val firstEventDateMaybe: Option[LocalDate] = if (repositoryAlteringEvents.isEmpty()) None else Some(repositoryAlteringEvents.earliestEventTime.toLocalDate)
 
-    val configWithOverriddenUntil = firstEventDateMaybe.fold(config) { firstEventDate =>
-      val lastAggregationDate = firstEventDate.plusMonths(1)
-      if(lastAggregationDate.isBefore(LocalDate.now())) {
-        logger.info(s"Overriding 'until' date '${config.until}' with '$lastAggregationDate' since events ara available until $firstEventDate")
-        config.copy(until = Some(lastAggregationDate))
-      } else {
-        config
-      }
+    val configWithOverriddenUntil: GerritEndpointConfig = firstEventDateMaybe.fold(config) {
+      firstEventDate =>
+        val lastAggregationDate = firstEventDate.plusMonths(1)
+        if (lastAggregationDate.isBefore(LocalDate.now())) {
+          logger.info(s"Overriding 'until' date '${
+            config.until
+          }' with '$lastAggregationDate' since events ara available until $firstEventDate")
+          config.copy(until = Some(lastAggregationDate))
+        } else {
+          config
+        }
     }
 
     val statsFromAnalyticsPlugin =
@@ -167,29 +240,49 @@ trait Job { self: LazyLogging =>
 
     require(statsFromAnalyticsPlugin.schema == statsFromEvents.schema,
       s""" Schemas from the stats collected from events and from the analytics datasets differs!!
-        | From analytics plugin: ${statsFromAnalyticsPlugin.schema}
-        | From gerrit events: ${statsFromEvents.schema}
+         | From analytics plugin: ${
+        statsFromAnalyticsPlugin.schema
+      }
+         | From gerrit events: ${
+        statsFromEvents.schema
+      }
       """.stripMargin)
 
     (statsFromAnalyticsPlugin union statsFromEvents).dashboardStats(aliasesDF)
   }
 
-  def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent,GerritJsonEvent]] = { // toDF
+  def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent, GerritJsonEvent]] = { // toDF
     import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
 
-    config.eventsPath.fold(spark.sparkContext.emptyRDD[Either[NotParsableJsonEvent,GerritJsonEvent]]) { eventsPath =>
-      spark
-        .read.textFile(eventsPath).rdd
-        .parseEvents(EventParser)
+    config.eventsPath.fold(spark.sparkContext.emptyRDD[Either[NotParsableJsonEvent, GerritJsonEvent]]) {
+      eventsPath =>
+        spark
+          .read.textFile(eventsPath).rdd
+          .parseEvents(EventParser)
     }
   }
 
-  def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
-    import org.elasticsearch.spark.sql._
-    config.elasticIndex.foreach { esIndex =>
-      logger.info(s"ES content created, saving it to elastic search instance at '${config.elasticIndex}'")
+  def saveDatasetES[T <: Product : ClassTag](data: Dataset[T], indexName: String, config: Map[String, String]): Unit = {
 
-      df.saveToEs(esIndex)
+    import org.elasticsearch.spark.sql._
+
+    logger.info(s"ES content created, saving it to elastic search instance at '${
+      indexName
+    }'")
+    data.saveToEs(indexName, config)
+  }
+
+  def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
+
+    import org.elasticsearch.spark.sql._
+
+    config.elasticIndex.foreach {
+      esIndex =>
+        logger.info(s"ES content created, saving it to elastic search instance at '${
+          config.elasticIndex
+        }'")
+
+        df.saveToEs(esIndex)
     }
 
   }

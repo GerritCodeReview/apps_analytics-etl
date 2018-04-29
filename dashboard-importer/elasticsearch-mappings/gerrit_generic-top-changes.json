@@ -1,0 +1,76 @@
+{
+  "gerrit_generic-top-changes" : {
+    "mappings" : {
+      "analytics" : {
+        "properties" : {
+          "change_create_ts" : {
+            "type" : "long"
+          },
+          "change_id" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "change_last_update_ts" : {
+            "type" : "long"
+          },
+          "change_owner" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "change_status" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "change_subject" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "last_commit_ts" : {
+            "type" : "long"
+          },
+          "number_of_comments" : {
+            "type" : "long"
+          },
+          "number_of_commits" : {
+            "type" : "long"
+          },
+          "number_of_files_modidifed" : {
+            "type" : "long"
+          },
+          "number_of_lines_deleted" : {
+            "type" : "long"
+          },
+          "number_of_lines_inserted" : {
+            "type" : "long"
+          },
+          "number_of_unresolved_comments" : {
+            "type" : "long"
+          },
+          "submitted_ts" : {
+            "type" : "long"
+          }
+        }
+      }
+    }
+  }
+}

@@ -26,7 +26,10 @@ case class GerritEndpointConfig(baseUrl: String = "",
                                 aggregate: Option[String] = None,
                                 emailAlias: Option[String] = None,
                                 eventsPath: Option[String] = None,
-                                eventsFailureOutputPath: Option[String] = None
+                                eventsFailureOutputPath: Option[String] = None,
+                                runApiBatchImport: Option[Boolean] = None,
+                                gerritApiUserName: Option[String] = None,
+                                gerritApiPassword: Option[String] = None
                                ) {
 
   val gerritProjectsUrl: String = s"${baseUrl}/projects/" + prefix.fold("")("?p=" + _)

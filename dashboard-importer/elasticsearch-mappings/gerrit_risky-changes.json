@@ -1,0 +1,49 @@
+{
+  "gerrit_risky-changes" : {
+    "mappings" : {
+      "analytics" : {
+        "properties" : {
+          "change_id" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "change_owner_id" : {
+            "type" : "long"
+          },
+          "change_status" : {
+            "type" : "text",
+            "fields" : {
+              "keyword" : {
+                "type" : "keyword",
+                "ignore_above" : 256
+              }
+            }
+          },
+          "number_of_comments" : {
+            "type" : "long"
+          },
+          "number_of_files_modidifed" : {
+            "type" : "long"
+          },
+          "number_of_lines_deleted" : {
+            "type" : "long"
+          },
+          "number_of_lines_inserted" : {
+            "type" : "long"
+          },
+          "risk_rank" : {
+            "type" : "long"
+          },
+          "total_num_lines_modified" : {
+            "type" : "long"
+          }
+        }
+      }
+    }
+  }
+}

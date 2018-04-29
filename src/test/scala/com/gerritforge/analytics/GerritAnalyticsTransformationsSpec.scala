@@ -19,6 +19,7 @@ import java.nio.charset.StandardCharsets
 
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.model.{GerritProject, GerritProjectsSupport, ProjectContributionSource}
+import com.gerritforge.analytics.support.SparkTestSupport
 import org.apache.spark.sql.Row
 import org.json4s.JsonDSL._
 import org.json4s._
@@ -29,6 +30,7 @@ import scala.collection.mutable
 import scala.io.Source
 
 class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with SparkTestSupport with Inside {
+
 
   "GerritProjects" should "parse JSON into a GerritProject objects" in {
 
@@ -94,7 +96,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
       .collect
 
     rawContributors should have size (1)
-    rawContributors.head._2 should be ("""{"foo2":"bar2\u0100"}""")
+    rawContributors.head._2 should be("""{"foo2":"bar2\u0100"}""")
   }
 
   "transformCommitterInfo" should "transform a DataFrame with project and json to a workable DF with separated columns" in {

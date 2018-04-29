@@ -1,0 +1,14 @@
+{
+  "_id": "1bf11380-4977-11e8-a64c-9194429142bc",
+  "_type": "visualization",
+  "_source": {
+    "title": "Top Risky Changes",
+    "visState": "{\"title\":\"Top Risky Changes\",\"type\":\"table\",\"params\":{\"perPage\":10,\"showPartialRows\":false,\"showMeticsAtAllLevels\":false,\"sort\":{\"columnIndex\":null,\"direction\":null},\"showTotal\":false,\"totalFunc\":\"sum\"},\"aggs\":[{\"id\":\"1\",\"enabled\":true,\"type\":\"sum\",\"schema\":\"metric\",\"params\":{\"field\":\"risk_rank\",\"customLabel\":\"Risk Rank\"}},{\"id\":\"2\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"change_id.keyword\",\"size\":5,\"order\":\"asc\",\"orderBy\":\"_term\",\"customLabel\":\"Change Id\"}},{\"id\":\"3\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"change_owner_id\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Owner Id\"}},{\"id\":\"4\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"change_status.keyword\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Change Status\"}},{\"id\":\"5\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"total_num_lines_modified\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Number of Lines Modified\"}},{\"id\":\"6\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"number_of_files_modidifed\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Number of Files Modified\"}},{\"id\":\"7\",\"enabled\":true,\"type\":\"terms\",\"schema\":\"bucket\",\"params\":{\"field\":\"number_of_comments\",\"size\":5,\"order\":\"desc\",\"orderBy\":\"1\",\"customLabel\":\"Number of Comments\"}}],\"listeners\":{}}",
+    "uiStateJSON": "{\"vis\":{\"params\":{\"sort\":{\"columnIndex\":null,\"direction\":null}}}}",
+    "description": "",
+    "version": 1,
+    "kibanaSavedObjectMeta": {
+      "searchSourceJSON": "{\"index\":\"gerrit_risky-changes\",\"query\":{\"match_all\":{}},\"filter\":[]}"
+    }
+  }
+}
