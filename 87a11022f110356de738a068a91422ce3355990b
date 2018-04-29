@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "af01185b_7215b51e",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/changeAnalyticsProcessor.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-29T07:03:13Z",
+      "side": 1,
+      "message": "did you checked with some integration test if the fact that you imported the implicits out of the method is causing this class to be serialised (should fail because it is not marked as Serializable)?",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "2ea699c2_3782b6d1",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-29T07:03:13Z",
+      "side": 1,
+      "message": "I think you should extract the GerritApiChangesService as a parameter to allow this method to be unit tested without having to interact with the GerritAPI, also you are building the API object thrice",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d35fcb3e_368af2a4",
+        "filename": "src/main/scala/com/gerritforge/analytics/services/GerritApiChangesService.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-29T07:03:13Z",
+      "side": 1,
+      "message": "Using the case class just to inherit the constructor is a bit of a stretch, in this way you are exposing the gerritApi member as a field and also causing the generation of equals-hashcode and the copy methods that in this case are not really necessary.",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7e0bedf2_32c574b5",
+        "filename": "src/test/scala/com/gerritforge/analytics/support/DefaultValuesSupport.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-04-29T07:03:13Z",
+      "side": 1,
+      "message": "As a suggestion, I would rather call this GerritFixture and rename all  methods in: anAccountInfo(...) aGitPerson, anApprovalInfo",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
