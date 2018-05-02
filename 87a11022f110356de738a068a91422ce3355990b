@@ -2,6 +2,385 @@
   "comments": [
     {
       "key": {
+        "uuid": "745644be_1f18c274",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "The style-guide for commit messages is:\nhttps://chris.beams.io/posts/git-commit/",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d0d28c59_a7d63169",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Use imperative form",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 4
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bdbbc909_5eb5d7b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "If you need to say \u0027and\u0027 it means that this commit does two things :-)\nRule of thumb in Gerrit is: one commit \u003d one change \u003d one thing \u003d one minimal useful feature",
+      "range": {
+        "startLine": 7,
+        "startChar": 40,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8d3aba3e_854118d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "1st thing",
+      "range": {
+        "startLine": 9,
+        "startChar": 2,
+        "endLine": 9,
+        "endChar": 58
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "24f37fb5_98bf8bce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "2nd thing",
+      "range": {
+        "startLine": 11,
+        "startChar": 2,
+        "endLine": 11,
+        "endChar": 56
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "815ad58c_23a7bea5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Really? They are sent as events as well in JSON form, how can they not be serializable?\nHave you reproduced the problem and fired a bug on Gerrit?",
+      "range": {
+        "startLine": 12,
+        "startChar": 38,
+        "endLine": 12,
+        "endChar": 78
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9801443c_e750f0c6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "This is a separate issue and has already another open change: can you contribute your patch to it?",
+      "range": {
+        "startLine": 14,
+        "startChar": 7,
+        "endLine": 14,
+        "endChar": 71
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6ec09f00_c2d2363d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Interesting: so basically the index itself has already some pre-processing logic and evaluation baked into it?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 18
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a978bfa_99baffd8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "This is a separate change: does it make sense just to have one \"change per status\" dashboard?",
+      "range": {
+        "startLine": 21,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 48
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a44384_1cade2b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Separate change?",
+      "range": {
+        "startLine": 29,
+        "startChar": 4,
+        "endLine": 29,
+        "endChar": 75
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eee2b76f_8c75b477",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Issues are now on Monorail, change it to:\n\nFeature: Issue 8833",
+      "range": {
+        "startLine": 31,
+        "startChar": 0,
+        "endLine": 31,
+        "endChar": 28
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "54189bed_7dafa5f2",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "user?",
+      "range": {
+        "startLine": 21,
+        "startChar": 26,
+        "endLine": 21,
+        "endChar": 30
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d5e6ccf_7ed04cbb",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "pass?",
+      "range": {
+        "startLine": 22,
+        "startChar": 26,
+        "endLine": 22,
+        "endChar": 30
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "80b9791a_993da72c",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "make it consistent with the other options and just flag it as (*optional*)",
+      "range": {
+        "startLine": 44,
+        "startChar": 22,
+        "endLine": 44,
+        "endChar": 46
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c73a36c7_b9a7212b",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "What\u0027s the default?",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "373df917_cd172319",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Same as before",
+      "range": {
+        "startLine": 46,
+        "startChar": 24,
+        "endLine": 46,
+        "endChar": 49
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "48550ff3_20a28cb9",
+        "filename": "README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Same as before",
+      "range": {
+        "startLine": 47,
+        "startChar": 24,
+        "endLine": 47,
+        "endChar": 48
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "af01185b_7215b51e",
         "filename": "src/main/scala/com/gerritforge/analytics/engine/changeAnalyticsProcessor.scala",
         "patchSetId": 1
@@ -13,6 +392,121 @@
       "writtenOn": "2018-04-29T07:03:13Z",
       "side": 1,
       "message": "did you checked with some integration test if the fact that you imported the implicits out of the method is causing this class to be serialised (should fail because it is not marked as Serializable)?",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "49876ff4_551f12d3",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Are those related to this change?",
+      "range": {
+        "startLine": 75,
+        "startChar": 0,
+        "endLine": 78,
+        "endChar": 23
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff8ac10d_16cba99f",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "username?",
+      "range": {
+        "startLine": 98,
+        "startChar": 60,
+        "endLine": 98,
+        "endChar": 71
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98182af1_bcb581bd",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "password?",
+      "range": {
+        "startLine": 102,
+        "startChar": 60,
+        "endLine": 102,
+        "endChar": 71
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0ec78b4a_ffa12b07",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Splitting",
+      "range": {
+        "startLine": 122,
+        "startChar": 23,
+        "endLine": 122,
+        "endChar": 31
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "43dbebdb_4c0d35bc",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Storing",
+      "range": {
+        "startLine": 124,
+        "startChar": 23,
+        "endLine": 124,
+        "endChar": 31
+      },
       "revId": "87a11022f110356de738a068a91422ce3355990b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
@@ -36,6 +530,46 @@
     },
     {
       "key": {
+        "uuid": "3672136f_6ff4fc52",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritProject.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Unneeded changes",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5a6c038c_7fcfe4ba",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/gerritChanges.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d35fcb3e_368af2a4",
         "filename": "src/main/scala/com/gerritforge/analytics/services/GerritApiChangesService.scala",
         "patchSetId": 1
@@ -47,6 +581,334 @@
       "writtenOn": "2018-04-29T07:03:13Z",
       "side": 1,
       "message": "Using the case class just to inherit the constructor is a bit of a stretch, in this way you are exposing the gerritApi member as a field and also causing the generation of equals-hashcode and the copy methods that in this case are not really necessary.",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8dec54c5_d624cc97",
+        "filename": "src/main/scala/com/gerritforge/analytics/services/GerritApiChangesService.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Agreed, just make it a regular class.",
+      "parentUuid": "d35fcb3e_368af2a4",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8d0b2ac_18c45c23",
+        "filename": "src/main/scala/com/gerritforge/analytics/support/api/GerritApiAuth.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "maybePassword",
+      "range": {
+        "startLine": 22,
+        "startChar": 82,
+        "endLine": 22,
+        "endChar": 104
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "47c5ccbc_87c90e32",
+        "filename": "src/main/scala/com/gerritforge/analytics/support/api/GerritApiAuth.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "maybeUsername",
+      "range": {
+        "startLine": 22,
+        "startChar": 42,
+        "endLine": 22,
+        "endChar": 64
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "44a6d9b3_1af7e767",
+        "filename": "src/main/scala/com/gerritforge/analytics/support/api/GerritApiAuth.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "This doesn\u0027t sound functional at all :-) Why not using a for() comprehension?",
+      "range": {
+        "startLine": 28,
+        "startChar": 41,
+        "endLine": 31,
+        "endChar": 0
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "07cf602a_7568e430",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Is this change related?",
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "96fd5e27_b0cf3fd8",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangeAnalyticsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "We use FlatSpec everywhere: is there any reason why WordSpec must be used here?",
+      "range": {
+        "startLine": 30,
+        "startChar": 34,
+        "endLine": 30,
+        "endChar": 42
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5abc2199_ab642e7c",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangeAnalyticsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Changes have not comments should an empty list ... can you rephrase in correct English?",
+      "range": {
+        "startLine": 34,
+        "startChar": 6,
+        "endLine": 34,
+        "endChar": 21
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "820590c4_322a717c",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangeAnalyticsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "That\u0027s a lot of logic :-O remember that tests are not tested :-)\n\nCan we just assert something on the filesCommented?",
+      "range": {
+        "startLine": 45,
+        "startChar": 9,
+        "endLine": 46,
+        "endChar": 70
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1a68d01f_11c66621",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangeAnalyticsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "return",
+      "range": {
+        "startLine": 50,
+        "startChar": 9,
+        "endLine": 50,
+        "endChar": 16
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c74cb551_cc58d4a5",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangeAnalyticsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Again a lot of untested logic here :-(",
+      "range": {
+        "startLine": 70,
+        "startChar": 0,
+        "endLine": 73,
+        "endChar": 40
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b1319b6_4bebb463",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangeAnalyticsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Why don\u0027t you create a ScalaTest matcher for this?",
+      "range": {
+        "startLine": 89,
+        "startChar": 8,
+        "endLine": 89,
+        "endChar": 31
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "14b89764_8f4e9ce6",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangeAnalyticsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "where is this defined?",
+      "range": {
+        "startLine": 138,
+        "startChar": 8,
+        "endLine": 138,
+        "endChar": 33
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "56caf9f2_cce043bd",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangesReportGeneratorSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "69f58068_34c29476",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/ChangesReportGeneratorSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Any reason why the FlatSpec isn\u0027t good?",
+      "range": {
+        "startLine": 24,
+        "startChar": 41,
+        "endLine": 24,
+        "endChar": 49
+      },
+      "revId": "87a11022f110356de738a068a91422ce3355990b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "584e5d57_1aa22d9c",
+        "filename": "src/test/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformationsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-02T08:16:05Z",
+      "side": 1,
+      "message": "Is this change related?",
       "revId": "87a11022f110356de738a068a91422ce3355990b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
