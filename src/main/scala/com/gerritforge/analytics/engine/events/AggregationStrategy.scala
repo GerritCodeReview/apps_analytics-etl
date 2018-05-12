@@ -14,8 +14,10 @@
 
 package com.gerritforge.analytics.engine.events
 
-import java.text.{DateFormat, SimpleDateFormat}
-import java.time.{LocalDateTime, ZoneOffset}
+import java.text.DateFormat
+import java.time.LocalDateTime
+
+import com.gerritforge.analytics.support.ops.AnalyticsTimeOps.{AnalyticsDateTimeFormater, CommonTimeOperations}
 
 import scala.util.Try
 
@@ -25,7 +27,7 @@ sealed trait AggregationStrategy extends Serializable {
   case class DateTimeParts(year: Integer, month: Integer, day: Integer, hour: Integer)
 
   def decomposeTimeOfAggregatedEvent(event: GerritJsonEvent): DateTimeParts = {
-    val date = LocalDateTime.ofEpochSecond(event.eventCreatedOn, 0, ZoneOffset.UTC)
+    val date: LocalDateTime = CommonTimeOperations.utcDateTimeFromEpoch(event.eventCreatedOn)
     DateTimeParts(date.getYear, date.getMonthValue, date.getDayOfMonth, date.getHour)
   }
 }
@@ -58,27 +60,28 @@ object AggregationStrategy {
   }
 
   object aggregateByEmailAndHour extends EmailAndTimeBasedAggregation {
-    val dateFormat = new SimpleDateFormat("yyyyMMddHH")
+    val dateFormat = AnalyticsDateTimeFormater.yyyyMMddHH
   }
 
   object aggregateByEmailAndDay extends EmailAndTimeBasedAggregation {
-    val dateFormat = new SimpleDateFormat("yyyyMMdd")
+    val dateFormat = AnalyticsDateTimeFormater.yyyyMMdd
 
     override def decomposeTimeOfAggregatedEvent(event: GerritJsonEvent): DateTimeParts =
       super.decomposeTimeOfAggregatedEvent(event).copy(hour = 0)
   }
 
   object aggregateByEmailAndMonth extends EmailAndTimeBasedAggregation {
-    val dateFormat = new SimpleDateFormat("yyyyMM")
+    val dateFormat = AnalyticsDateTimeFormater.yyyyMM
 
     override def decomposeTimeOfAggregatedEvent(event: GerritJsonEvent): DateTimeParts =
       super.decomposeTimeOfAggregatedEvent(event).copy(day = 0, hour = 0)
   }
 
   object aggregateByEmailAndYear extends EmailAndTimeBasedAggregation {
-    val dateFormat = new SimpleDateFormat("yyyy")
+    val dateFormat = AnalyticsDateTimeFormater.yyyy
 
     override def decomposeTimeOfAggregatedEvent(event: GerritJsonEvent): DateTimeParts =
       super.decomposeTimeOfAggregatedEvent(event).copy(month = 0, day = 0, hour = 0)
   }
+
 }
