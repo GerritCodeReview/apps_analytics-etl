@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "03dabbcf_3888186e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-12T21:21:28Z",
+      "side": 1,
+      "message": "Should be in the footer, just before Change-Id, and in the form:\n\nBug: Issue 8833",
+      "range": {
+        "startLine": 13,
+        "startChar": 0,
+        "endLine": 13,
+        "endChar": 20
+      },
+      "revId": "e3176d45ae4ef756729cdaa4328da31724fb98ce",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f56ccfe_6af079d5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-12T21:21:28Z",
+      "side": 1,
+      "message": "empty line",
+      "revId": "e3176d45ae4ef756729cdaa4328da31724fb98ce",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
