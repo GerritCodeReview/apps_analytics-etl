@@ -17,7 +17,7 @@ package com.gerritforge.analytics.model
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneId}
 
-case class GerritEndpointConfig(baseUrl: String = "",
+case class GerritEndpointConfig(baseUrl: Option[String] = None,
                                 prefix: Option[String] = None,
                                 outputDir: String = s"file://${System.getProperty("java.io.tmpdir")}/analytics-${System.nanoTime()}",
                                 elasticIndex: Option[String] = None,
@@ -29,7 +29,7 @@ case class GerritEndpointConfig(baseUrl: String = "",
                                 eventsFailureOutputPath: Option[String] = None
                                ) {
 
-  val gerritProjectsUrl: String = s"${baseUrl}/projects/" + prefix.fold("")("?p=" + _)
+  val gerritProjectsUrl: Option[String] = baseUrl.map { url => s"${url}/projects/" + prefix.fold("")("?p=" + _) }
 
   def queryOpt(opt: (String, Option[String])): Option[String] = {
     opt match {
@@ -42,6 +42,6 @@ case class GerritEndpointConfig(baseUrl: String = "",
   val queryString = Seq("since" -> since.map(format.format), "until" -> until.map(format.format), "aggregate" -> aggregate)
     .flatMap(queryOpt).mkString("?", "&", "")
 
-  def contributorsUrl(projectName: String) =
-    s"$baseUrl/projects/$projectName/analytics~contributors$queryString"
+  def contributorsUrl(projectName: String): Option[String] =
+    baseUrl.map { url => s"$url/projects/$projectName/analytics~contributors$queryString" }
 }

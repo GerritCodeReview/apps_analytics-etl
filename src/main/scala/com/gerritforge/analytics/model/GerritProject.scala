@@ -14,11 +14,25 @@
 
 package com.gerritforge.analytics.model
 
+import com.google.gerrit.extensions.api.GerritApi
+import com.google.inject.Inject
 import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
+import scala.util.Try
 
 case class GerritProject(id: String, name: String)
+
+class GerritProjectsSupport @Inject()(gerritApi: GerritApi) {
+
+  def getProject(projectName: String): Try[GerritProject] = {
+    val projectApi = gerritApi.projects().name(projectName)
+    Try {
+      val project = projectApi.get()
+      GerritProject(project.id, project.name)
+    }
+  }
+}
 
 object GerritProjectsSupport {
 
@@ -37,4 +51,4 @@ object GerritProjectsSupport {
   }
 }
 
-case class ProjectContributionSource(name: String, contributorsUrl: String)
+case class ProjectContributionSource(name: String, contributorsUrl: Option[String])
