@@ -54,7 +54,7 @@ object Main extends App with Job with LazyLogging {
   private val cliOptionParser: OptionParser[GerritEndpointConfig] = new scopt.OptionParser[GerritEndpointConfig]("scopt") {
     head("scopt", "3.x")
     opt[String]('u', "url") optional() action { (x, c) =>
-      c.copy(baseUrl = x)
+      c.copy(baseUrl = Some(x))
     } text "gerrit url"
     opt[String]('p', "prefix") optional() action { (p, c) =>
       c.copy(prefix = Some(p))
@@ -126,7 +126,7 @@ trait Job { self: LazyLogging =>
         }
       }.getOrElse(AggregationStrategy.aggregateByEmail)
 
-    val projects = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(config.gerritProjectsUrl))
+    val projects = config.gerritProjectsUrl.toSeq.flatMap { url => GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(url)) }
 
     logger.info(s"Loaded a list of ${projects.size} projects ${if(projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")}")
 
