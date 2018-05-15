@@ -18,9 +18,7 @@ import java.time.LocalDate
 
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
 import com.gerritforge.analytics.engine.events.{AggregationStrategy, EventParser, GerritJsonEvent}
-import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProjectsSupport}
-import com.gerritforge.analytics.support.ops.AnalyticsTimeOps
-import com.gerritforge.analytics.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
+import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
@@ -32,7 +30,7 @@ import scala.io.{Codec, Source}
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-object Main extends App with Job with LazyLogging {
+object Main extends App with Job with LazyLogging with FetchRemoteProjects {
 
   private val fileExists: String => Either[String, Unit] = { path =>
     if (!new java.io.File(path).exists) {
@@ -56,7 +54,7 @@ object Main extends App with Job with LazyLogging {
   private val cliOptionParser: OptionParser[GerritEndpointConfig] = new scopt.OptionParser[GerritEndpointConfig]("scopt") {
     head("scopt", "3.x")
     opt[String]('u', "url") optional() action { (x, c) =>
-      c.copy(baseUrl = x)
+      c.copy(baseUrl = Some(x))
     } text "gerrit url"
     opt[String]('p', "prefix") optional() action { (p, c) =>
       c.copy(prefix = Some(p))
@@ -109,8 +107,7 @@ object Main extends App with Job with LazyLogging {
   }
 }
 
-trait Job {
-  self: LazyLogging =>
+trait Job { self: LazyLogging with FetchProjects =>
   implicit val codec = Codec.ISO8859
 
   def buildProjectStats()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
@@ -129,7 +126,7 @@ trait Job {
         }
       }.getOrElse(AggregationStrategy.aggregateByEmail)
 
-    val projects = GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(config.gerritProjectsUrl))
+    val projects = fetchProjects(config)
 
     logger.info(s"Loaded a list of ${projects.size} projects ${if (projects.size > 20) projects.take(20).mkString("[", ",", ", ...]") else projects.mkString("[", ",", "]")}")
 
@@ -168,13 +165,17 @@ trait Job {
 
     val statsFromEvents = getContributorStatsFromGerritEvents(repositoryAlteringEvents, statsFromAnalyticsPlugin.commitSet.rdd, aggregationStrategy)
 
-    require(statsFromAnalyticsPlugin.schema == statsFromEvents.schema,
-      s""" Schemas from the stats collected from events and from the analytics datasets differs!!
-         | From analytics plugin: ${statsFromAnalyticsPlugin.schema}
-         | From gerrit events: ${statsFromEvents.schema}
+    if (statsFromEvents.head(1).isEmpty) {
+      statsFromAnalyticsPlugin
+    } else {
+      require(statsFromAnalyticsPlugin.schema == statsFromEvents.schema,
+        s""" Schemas from the stats collected from events and from the analytics datasets differs!!
+           | From analytics plugin: ${statsFromAnalyticsPlugin.schema}
+           | From gerrit events: ${statsFromEvents.schema}
       """.stripMargin)
 
-    (statsFromAnalyticsPlugin union statsFromEvents).dashboardStats(aliasesDF)
+      (statsFromAnalyticsPlugin union statsFromEvents)
+    }.dashboardStats(aliasesDF)
   }
 
   def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent, GerritJsonEvent]] = { // toDF
@@ -195,6 +196,17 @@ trait Job {
       df.saveToEs(esIndex)
     }
 
+  }
+}
+
+trait FetchProjects {
+  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject]
+}
+
+trait FetchRemoteProjects extends FetchProjects {
+
+  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
+    config.gerritProjectsUrl.toSeq.flatMap { url => GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(url)) }
   }
 }
 

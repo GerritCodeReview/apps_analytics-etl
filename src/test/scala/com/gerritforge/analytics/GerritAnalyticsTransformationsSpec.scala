@@ -53,14 +53,14 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     val projectRdd = sc.parallelize(Seq(GerritProject("project-id", "project-name")))
 
     val projectWithSource = projectRdd
-      .enrichWithSource(projectId => s"http://somewhere.com/$projectId")
+      .enrichWithSource(projectId => Some(s"http://somewhere.com/$projectId"))
       .collect
 
     projectWithSource should have size 1
     inside(projectWithSource.head) {
       case ProjectContributionSource(projectName, url) => {
         projectName should be("project-name")
-        url shouldBe "http://somewhere.com/project-id"
+        url should contain("http://somewhere.com/project-id")
       }
     }
   }
@@ -308,13 +308,13 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
 
   }
 
-  private def newSource(contributorsJson: JObject*): String = {
+  private def newSource(contributorsJson: JObject*): Option[String] = {
     val tmpFile = File.createTempFile(System.getProperty("java.io.tmpdir"),
       s"${getClass.getName}-${System.nanoTime()}")
 
     val out = new OutputStreamWriter(new FileOutputStream(tmpFile), StandardCharsets.UTF_8)
     contributorsJson.foreach(json => out.write(compact(render(json)) + '\n'))
     out.close
-    tmpFile.toURI.toString
+    Some(tmpFile.toURI.toString)
   }
 }

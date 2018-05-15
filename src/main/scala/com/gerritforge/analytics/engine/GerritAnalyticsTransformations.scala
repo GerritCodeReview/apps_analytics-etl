@@ -31,7 +31,7 @@ object GerritAnalyticsTransformations {
 
   implicit class PimpedGerritProjectRDD(val rdd: RDD[GerritProject]) extends AnyVal {
 
-    def enrichWithSource(projectToContributorsAnalyticsUrlFactory: String => String): RDD[ProjectContributionSource] = {
+    def enrichWithSource(projectToContributorsAnalyticsUrlFactory: String => Option[String]): RDD[ProjectContributionSource] = {
       rdd.map { project =>
         ProjectContributionSource(project.name, projectToContributorsAnalyticsUrlFactory(project.id))
       }
@@ -45,7 +45,11 @@ object GerritAnalyticsTransformations {
       .filterNot(_.trim.isEmpty)
   }
 
-  def getProjectJsonContributorsArray(project: String, sourceURL: String): Array[(String, String)] = {
+  def getProjectJsonContributorsArray(project: String, sourceURL: Option[String]): Array[(String, String)] = {
+    sourceURL.toArray.flatMap(getProjectJsonContributorsArrayFromUrl(project, _))
+  }
+
+  def getProjectJsonContributorsArrayFromUrl(project: String, sourceURL: String): Array[(String, String)] = {
     try {
       getLinesFromURL(sourceURL)
         .map(s => (project, s))
@@ -187,7 +191,7 @@ object GerritAnalyticsTransformations {
       ZoneOffset.UTC, ZoneId.of("Z")
     ) format DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
-  def getContributorStatsFromAnalyticsPlugin(projects: RDD[GerritProject], projectToContributorsAnalyticsUrlFactory: String => String)(implicit spark: SparkSession) = {
+  def getContributorStatsFromAnalyticsPlugin(projects: RDD[GerritProject], projectToContributorsAnalyticsUrlFactory: String => Option[String])(implicit spark: SparkSession) = {
     import spark.sqlContext.implicits._ // toDF
 
     projects
