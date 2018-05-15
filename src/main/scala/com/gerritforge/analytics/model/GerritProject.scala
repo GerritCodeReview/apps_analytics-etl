@@ -14,11 +14,18 @@
 
 package com.gerritforge.analytics.model
 
+import com.google.gerrit.extensions.api.GerritApi
+import com.google.inject.Inject
 import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
 
 case class GerritProject(id: String, name: String)
+
+class GerritProjectsSupport @Inject() (gerritApi: GerritApi) {
+
+  def getProjectList(prefix: Option[String]): Seq[GerritProject] = ???
+}
 
 object GerritProjectsSupport {
 

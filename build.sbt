@@ -13,6 +13,10 @@ scalaVersion := "2.11.8"
 
 val sparkVersion = "2.1.1"
 
+val gerritApiVersion = "2.13.7"
+
+val pluginName = "analytics-etl"
+
 libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion % "provided"
     exclude("org.spark-project.spark", "unused"),
@@ -21,6 +25,7 @@ libraryDependencies ++= Seq(
     excludeAll ExclusionRule(organization = "org.apache.spark"),
   // json4s still needed by GerritProjects
   "org.json4s" %% "json4s-native" % "3.2.11",
+  "com.google.gerrit" % "gerrit-plugin-api" % gerritApiVersion % Provided withSources(),
 
   "com.typesafe.scala-logging" %% "scala-logging" % "3.7.2",
 
@@ -56,3 +61,12 @@ imageNames in docker := Seq(
 )
 
 buildOptions in docker := BuildOptions(cache = false)
+
+packageOptions in(Compile, packageBin) += Package.ManifestAttributes(
+  ("Gerrit-ApiType", "plugin"),
+  ("Gerrit-PluginName", pluginName),
+  ("Gerrit-Module", "com.gerritforge.analytics.plugin.Module"),
+  ("Gerrit-SshModule", "com.gerritforge.analytics.plugin.SshModule"),
+  ("Implementation-Title", "Analytics ETL plugin"),
+  ("Implementation-URL", "https://gerrit.googlesource.com/plugins/analytics-etl")
+)
