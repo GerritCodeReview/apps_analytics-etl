@@ -67,4 +67,14 @@ package AnalyticsTimeOps {
 
   }
 
+  trait DateConversions {
+    val NO_TIMESTAMP = new Timestamp(0L)
+
+    implicit def timestampToLocalDate(timestamp: Timestamp): Option[LocalDate] = timestamp match {
+      case NO_TIMESTAMP => None
+      case ts => Some(ts.toLocalDateTime.toLocalDate)
+    }
+
+    implicit def nullableStringToOption(nullableString: String): Option[String] = Option(nullableString)
+  }
 }
