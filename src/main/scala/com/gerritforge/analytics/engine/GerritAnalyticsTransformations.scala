@@ -139,11 +139,6 @@ object GerritAnalyticsTransformations {
         .getOrElse(df)
     }
 
-
-    def convertDates(columnName: String)(implicit spark: SparkSession): DataFrame = {
-      df.withColumn(columnName, longDateToISOUdf(col(columnName)))
-    }
-
     def dropCommits(implicit spark: SparkSession): DataFrame = {
       df.drop("commits")
     }
@@ -159,7 +154,6 @@ object GerritAnalyticsTransformations {
       df
         .addOrganization()
         .handleAliases(aliasesDFMaybe)
-        .convertDates("last_commit_date")
         .dropCommits
     }
   }

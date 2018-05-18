@@ -164,21 +164,20 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
         ("stefano_alias", "stefano@galarraga-org.com", "")
       )).toDF("author", "email", "organization")
 
-      val expectedDate : ZonedDateTime = ZonedDateTime.now(ZoneId.of("UTC")).`with`(MILLI_OF_SECOND, 0).`with`(NANO_OF_SECOND, 0)
+      val expectedDate = System.currentTimeMillis
 
       val analyticsJobOutput =
         sc.parallelize(Seq(
-          "project1" -> UserActivitySummary(2018, 1, 20, 10, "Stefano", "stefano@galarraga-org.com", 1, 2, 1, 10, 4, Array(CommitInfo("sha1", expectedDate.toInstant.toEpochMilli, false)),
-            expectedDate.toInstant.toEpochMilli, false)
+          "project1" -> UserActivitySummary(2018, 1, 20, 10, "Stefano", "stefano@galarraga-org.com", 1, 2, 1, 10, 4, Array(CommitInfo("sha1", expectedDate, false)),
+            expectedDate, false)
         ))
           .asEtlDataFrame(sql)
           .addOrganization()
           .handleAliases(Some(aliasDF))
-          .convertDates("last_commit_date")
           .dropCommits
 
       val expected = sc.parallelize(Seq(
-        ("project1", "stefano_alias", "stefano@galarraga-org.com", 2018, 1, 20, 10, 2, 1, 10, 4, 1, expectedDate.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME), false, "galarraga-org")
+        ("project1", "stefano_alias", "stefano@galarraga-org.com", 2018, 1, 20, 10, 2, 1, 10, 4, 1, expectedDate, false, "galarraga-org")
       )).toDF("project", "author", "email", "year", "month", "day", "hour", "num_files", "num_distinct_files",
         "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "organization")
 

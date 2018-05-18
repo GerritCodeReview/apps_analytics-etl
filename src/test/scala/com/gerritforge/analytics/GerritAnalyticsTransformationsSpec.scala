@@ -202,13 +202,14 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
 
   it should "return correct columns when alias DF is not defined" in {
     import spark.implicits._
-    val inputSampleDF = sc.parallelize(Seq(
-      ("author_name", "email@mail.com", "an_organization")
-    )).toDF("author", "email", "organization")
+    val expectedTuple = ("author_name", "email@mail.com", "an_organization")
+    val inputSampleDF = sc.parallelize(Seq(expectedTuple)).toDF("author", "email", "organization")
+    val expectedRow = Row.fromTuple(expectedTuple)
 
     val df = inputSampleDF.handleAliases(None)
 
     df.schema.fields.map(_.name) should contain allOf("author", "email", "organization")
+    df.collect().head should be(expectedRow)
   }
 
   it should "lowercase aliased organizations" in {
@@ -265,27 +266,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     )
   }
 
-  "convertDates" should "process specific column from Long to ISO date" in {
-    // some notable dates converted in UnixMillisecs and ISO format
-    val DATES = Map(
-      0L -> "1970-01-01T00:00:00Z",
-      1500000000000L -> "2017-07-14T02:40:00Z",
-      1600000000000L -> "2020-09-13T12:26:40Z")
-    import sql.implicits._
-    val df = sc.parallelize(Seq(
-      ("a", 0L, 1),
-      ("b", 1500000000000L, 2),
-      ("c", 1600000000000L, 3))).toDF("name", "date", "num")
-
-    val converted = df
-      .convertDates("date")
-
-    converted.collect should contain allOf(
-      Row("a", DATES(0), 1),
-      Row("b", DATES(1500000000000L), 2),
-      Row("c", DATES(1600000000000L), 3)
-    )
-  }
 
   "extractCommitsPerProject" should "generate a Dataset with the all the SHA of commits with associated project" in {
     import sql.implicits._
