@@ -26,7 +26,7 @@ class StartCommand @Inject()(implicit val gerritProjects: GerritProjectsSupport,
 
   @ArgOption(name = "--elasticIndex", aliases = Array("-e"),
     usage = "index name")
-  var elasticIndex: String = null
+  var elasticIndex: String = "gerrit/analytics"
 
   @ArgOption(name = "--since", aliases = Array("-s"), usage = "begin date")
   var beginDate: Timestamp = NO_TIMESTAMP
