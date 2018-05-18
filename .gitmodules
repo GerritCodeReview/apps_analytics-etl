@@ -1,0 +1,3 @@
+[submodule "dashboard-importer"]
+	path = dashboard-importer
+	url = https://github.com/GerritForge/analytics-dashboard-importer.git
