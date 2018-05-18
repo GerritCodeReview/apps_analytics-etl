@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2ae35523_4de0644f",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-18T21:36:24Z",
+      "side": 1,
+      "message": "where is this defined?",
+      "revId": "b2b16bdaa80d65308c9458b3a9e1fb8a52b430b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0a5cd3d4_2798d59f",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-18T21:36:24Z",
+      "side": 1,
+      "message": "Just use be()",
+      "range": {
+        "startLine": 213,
+        "startChar": 29,
+        "endLine": 213,
+        "endChar": 41
+      },
+      "revId": "b2b16bdaa80d65308c9458b3a9e1fb8a52b430b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
