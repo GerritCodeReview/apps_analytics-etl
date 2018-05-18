@@ -165,7 +165,7 @@ trait Job { self: LazyLogging with FetchProjects =>
 
     val statsFromEvents = getContributorStatsFromGerritEvents(repositoryAlteringEvents, statsFromAnalyticsPlugin.commitSet.rdd, aggregationStrategy)
 
-    if (statsFromEvents.head(1).isEmpty) {
+    val mergedEvents = if (statsFromEvents.head(1).isEmpty) {
       statsFromAnalyticsPlugin
     } else {
       require(statsFromAnalyticsPlugin.schema == statsFromEvents.schema,
@@ -175,7 +175,9 @@ trait Job { self: LazyLogging with FetchProjects =>
       """.stripMargin)
 
       (statsFromAnalyticsPlugin union statsFromEvents)
-    }.dashboardStats(aliasesDF)
+    }
+
+    mergedEvents.dashboardStats(aliasesDF)
   }
 
   def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent,GerritJsonEvent]] = { // toDF
