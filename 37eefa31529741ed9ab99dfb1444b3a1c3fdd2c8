@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a1db9de8_a00960b7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-05-21T13:26:36Z",
+      "side": 1,
+      "message": "This is a very cool feature. \nMy concern is the scalability issues we might encounter by running this directly on the Gerrit Server.\nIf the number of transformations grow as well the complexity, this feature needs some checks in place to decide to run it outside the gerrit server and instead run it in a scalable environment",
+      "revId": "37eefa31529741ed9ab99dfb1444b3a1c3fdd2c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0922867b_5b13f71c",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritProject.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-05-21T13:26:36Z",
+      "side": 1,
+      "message": "You\u0027re introducing the gerrit-plugin-api, we should make it uniform across the other API calls.\n\nThis change plants to do it as well, but still WIP: https://gerrit-review.googlesource.com/c/apps/analytics-etl/+/164690",
+      "revId": "37eefa31529741ed9ab99dfb1444b3a1c3fdd2c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "36e566f1_d169bad5",
+        "filename": "src/main/scala/com/gerritforge/analytics/plugin/StartCommand.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-05-21T13:26:36Z",
+      "side": 1,
+      "message": "There\u0027s already a package with the Date Time operations. We should put this there.\nhttps://gerrit-review.googlesource.com/c/apps/analytics-etl/+/178090",
+      "revId": "37eefa31529741ed9ab99dfb1444b3a1c3fdd2c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
