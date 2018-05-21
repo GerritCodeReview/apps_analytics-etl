@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "3cb88f5e_34ccdedc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-21T20:36:54Z",
+      "side": 1,
+      "message": "Yes, this is not designed at all for scalability. It is meant to be used as \"one-off\" for a single repository. Possibly some hard limits on the number of commits could be introduced as well :-)",
+      "parentUuid": "a1db9de8_a00960b7",
+      "revId": "37eefa31529741ed9ab99dfb1444b3a1c3fdd2c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0922867b_5b13f71c",
         "filename": "src/main/scala/com/gerritforge/analytics/model/GerritProject.scala",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "de61b9a0_79d227c8",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritProject.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-21T20:36:54Z",
+      "side": 1,
+      "message": "Yes, by including the plugin API we can reuse the Gerrit model and avoid re-defining over and over again :-)",
+      "parentUuid": "0922867b_5b13f71c",
+      "revId": "37eefa31529741ed9ab99dfb1444b3a1c3fdd2c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "36e566f1_d169bad5",
         "filename": "src/main/scala/com/gerritforge/analytics/plugin/StartCommand.scala",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2018-05-21T13:26:36Z",
       "side": 1,
       "message": "There\u0027s already a package with the Date Time operations. We should put this there.\nhttps://gerrit-review.googlesource.com/c/apps/analytics-etl/+/178090",
+      "revId": "37eefa31529741ed9ab99dfb1444b3a1c3fdd2c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bef0bcd2_586051a5",
+        "filename": "src/main/scala/com/gerritforge/analytics/plugin/StartCommand.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-05-21T20:36:54Z",
+      "side": 1,
+      "message": "Ah cool, let me look into that.",
+      "parentUuid": "36e566f1_d169bad5",
       "revId": "37eefa31529741ed9ab99dfb1444b3a1c3fdd2c8",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
