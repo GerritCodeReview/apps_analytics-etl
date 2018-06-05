@@ -21,7 +21,7 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % sparkVersion % "provided"
     exclude("org.spark-project.spark", "unused"),
   "org.apache.spark" %% "spark-sql" % sparkVersion % "provided",
-  "org.elasticsearch" %% "elasticsearch-spark-20" % "5.0.2"
+  "org.elasticsearch" %% "elasticsearch-spark-20" % "6.2.0"
     excludeAll ExclusionRule(organization = "org.apache.spark"),
   // json4s still needed by GerritProjects
   "org.json4s" %% "json4s-native" % "3.2.11",
