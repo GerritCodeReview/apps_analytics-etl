@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "0faa4015_b10e4bdf",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-06-20T21:37:26Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "2316397b_40169a0b",
+      "range": {
+        "startLine": 60,
+        "startChar": 28,
+        "endLine": 60,
+        "endChar": 38
+      },
+      "revId": "d8a038e58cac4b359b9b67d082f9012b13dd947d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05be6a82_80aaea3d",
         "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
         "patchSetId": 11
@@ -45,6 +69,30 @@
       "revId": "d8a038e58cac4b359b9b67d082f9012b13dd947d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebbdcf06_bed9360f",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-06-20T21:37:26Z",
+      "side": 1,
+      "message": "Makes sense. Will apply the changes",
+      "parentUuid": "05be6a82_80aaea3d",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 177,
+        "endChar": 76
+      },
+      "revId": "d8a038e58cac4b359b9b67d082f9012b13dd947d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
