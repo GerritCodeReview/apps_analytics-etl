@@ -1,0 +1,222 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2c41841e_3b74ae8f",
+        "filename": "README.md",
+        "patchSetId": 12
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "username?",
+      "range": {
+        "startLine": 21,
+        "startChar": 6,
+        "endLine": 21,
+        "endChar": 14
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9cda938b_976964ac",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "This breaks with multi-bytes encoding (e.g., UTF-8)",
+      "range": {
+        "startLine": 155,
+        "startChar": 30,
+        "endLine": 155,
+        "endChar": 72
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebe08014_b4e5ef03",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "URL is optional when you run the ETL inside Gerrit",
+      "range": {
+        "startLine": 61,
+        "startChar": 23,
+        "endLine": 61,
+        "endChar": 24
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1c34bfb9_e228302b",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "Is GerritServiceApi serializable?",
+      "range": {
+        "startLine": 177,
+        "startChar": 143,
+        "endLine": 177,
+        "endChar": 161
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fba120a4_44950af1",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "You do not need baseUrl at all when the ETL runs inside Gerrit.",
+      "range": {
+        "startLine": 23,
+        "startChar": 32,
+        "endLine": 23,
+        "endChar": 61
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fba5c4c7_19c3f1a3",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "Good catch :-) Should this be a separate change?",
+      "range": {
+        "startLine": 49,
+        "startChar": 22,
+        "endLine": 49,
+        "endChar": 31
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dc28f2a2_b85273d3",
+        "filename": "src/main/scala/com/gerritforge/analytics/support/api/GerritApiAuth.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "2018",
+      "range": {
+        "startLine": 1,
+        "startChar": 17,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b5ca214d_822427d6",
+        "filename": "src/main/scala/com/gerritforge/analytics/support/api/GerritServiceApi.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "Copyright missing",
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "87a84c8f_fe6d8386",
+        "filename": "src/main/scala/com/gerritforge/analytics/support/api/GerritServiceApi.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "Seems a bit overkill to use the Gerrit REST API client from Urs, just for using basic auth, isn\u0027t it?",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 134
+      },
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c6b0e68e_845aac9b",
+        "filename": "src/test/scala/com/gerritforge/analytics/model/GerritEndpointConfigTest.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "Good to have wiremock tests, however, I thought this change was purely for adding basic auth: shall we pull into a different change?",
+      "revId": "706ffe695a8367bc47f1b7e2afc9dfb8ee1f9126",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
