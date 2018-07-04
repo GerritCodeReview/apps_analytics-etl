@@ -49,6 +49,30 @@
     },
     {
       "key": {
+        "uuid": "c8b53099_adb8d81d",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "Actually need to stay optional, because the ETL can be executed inside Gerrit as well.",
+      "parentUuid": "0faa4015_b10e4bdf",
+      "range": {
+        "startLine": 60,
+        "startChar": 28,
+        "endLine": 60,
+        "endChar": 38
+      },
+      "revId": "d8a038e58cac4b359b9b67d082f9012b13dd947d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "05be6a82_80aaea3d",
         "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
         "patchSetId": 11
@@ -84,6 +108,30 @@
       "side": 1,
       "message": "Makes sense. Will apply the changes",
       "parentUuid": "05be6a82_80aaea3d",
+      "range": {
+        "startLine": 177,
+        "startChar": 4,
+        "endLine": 177,
+        "endChar": 76
+      },
+      "revId": "d8a038e58cac4b359b9b67d082f9012b13dd947d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "85fbd216_d5996fd3",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-04T22:09:15Z",
+      "side": 1,
+      "message": "Nope, leave it optional so that we can manage the case where it runs inside Gerrit.",
+      "parentUuid": "ebbdcf06_bed9360f",
       "range": {
         "startLine": 177,
         "startChar": 4,
