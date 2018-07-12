@@ -14,18 +14,17 @@
 
 package com.gerritforge.analytics.engine
 
-import java.io.{BufferedReader, IOException, InputStreamReader}
-import java.net.URL
-import java.nio.charset.StandardCharsets
+import java.io.IOException
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 
+import com.gerritforge.analytics.api.GerritConnectivity
 import com.gerritforge.analytics.model._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 
-import scala.collection.JavaConverters._
+import scala.io.BufferedSource
 
 object GerritAnalyticsTransformations {
 
@@ -38,20 +37,18 @@ object GerritAnalyticsTransformations {
     }
   }
 
-  def getLinesFromURL(sourceURL: String): Iterator[String] = {
-    val is = new URL(sourceURL).openConnection.getInputStream
-    new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
-      .lines.iterator().asScala
+  def getProjectJsonContributorsArray(project: String, sourceURL: Option[String], gerritApiConnection: GerritConnectivity): Array[(String, String)] = {
+    sourceURL.toArray.flatMap(getProjectJsonContributorsArrayFromUrl(project, _, gerritApiConnection))
+  }
+
+
+  def filterEmptyStrings(urlSource: BufferedSource): Iterator[String] =
+    urlSource.getLines()
       .filterNot(_.trim.isEmpty)
-  }
 
-  def getProjectJsonContributorsArray(project: String, sourceURL: Option[String]): Array[(String, String)] = {
-    sourceURL.toArray.flatMap(getProjectJsonContributorsArrayFromUrl(project, _))
-  }
-
-  def getProjectJsonContributorsArrayFromUrl(project: String, sourceURL: String): Array[(String, String)] = {
+  def getProjectJsonContributorsArrayFromUrl(project: String, sourceURL: String, gerritApiConnection: GerritConnectivity): Array[(String, String)] = {
     try {
-      getLinesFromURL(sourceURL)
+      filterEmptyStrings(gerritApiConnection.getContentFromApi(sourceURL))
         .map(s => (project, s))
         .toArray
     } catch {
@@ -97,7 +94,7 @@ object GerritAnalyticsTransformations {
     * Assumes the data frame contains the 'commits' column with an array of CommitInfo in it
     * and returns a DataSet[String] with the commits SHA1
     */
-  def extractCommits(df: DataFrame)(implicit spark: SparkSession) : Dataset[String] = {
+  def extractCommits(df: DataFrame)(implicit spark: SparkSession): Dataset[String] = {
     import spark.implicits._
 
     df
@@ -123,19 +120,19 @@ object GerritAnalyticsTransformations {
 
     def handleAliases(aliasesDF: Option[DataFrame])(implicit spark: SparkSession): DataFrame = {
       aliasesDF
-        .map{ eaDF =>
-                val renamedAliasesDF = eaDF
-                                        .withColumnRenamed("email", "email_alias")
-                                        .withColumnRenamed("author", "author_alias")
-                                        .withColumnRenamed("organization", "organization_alias")
+        .map { eaDF =>
+          val renamedAliasesDF = eaDF
+            .withColumnRenamed("email", "email_alias")
+            .withColumnRenamed("author", "author_alias")
+            .withColumnRenamed("organization", "organization_alias")
 
-                df.join(renamedAliasesDF, df("email") === renamedAliasesDF("email_alias"), "left_outer" )
-                  .withColumn("organization",
-                    when(renamedAliasesDF("organization_alias").notEqual(""), lower(renamedAliasesDF("organization_alias")))
-                      .otherwise(df("organization")))
-                  .withColumn("author", coalesce(renamedAliasesDF("author_alias"), df("author")))
-                  .drop("email_alias","author_alias", "organization_alias")
-            }
+          df.join(renamedAliasesDF, df("email") === renamedAliasesDF("email_alias"), "left_outer")
+            .withColumn("organization",
+              when(renamedAliasesDF("organization_alias").notEqual(""), lower(renamedAliasesDF("organization_alias")))
+                .otherwise(df("organization")))
+            .withColumn("author", coalesce(renamedAliasesDF("author_alias"), df("author")))
+            .drop("email_alias", "author_alias", "organization_alias")
+        }
         .getOrElse(df)
     }
 
@@ -146,11 +143,11 @@ object GerritAnalyticsTransformations {
     def addOrganization()(implicit spark: SparkSession): DataFrame =
       df.withColumn("organization", emailToDomainUdf(col("email")))
 
-    def commitSet(implicit spark: SparkSession) : Dataset[String] = {
+    def commitSet(implicit spark: SparkSession): Dataset[String] = {
       extractCommits(df)
     }
 
-    def dashboardStats(aliasesDFMaybe: Option[DataFrame])(implicit spark: SparkSession) : DataFrame = {
+    def dashboardStats(aliasesDFMaybe: Option[DataFrame])(implicit spark: SparkSession): DataFrame = {
       df
         .addOrganization()
         .handleAliases(aliasesDFMaybe)
@@ -168,9 +165,9 @@ object GerritAnalyticsTransformations {
 
   implicit class PimpedRDDProjectContributionSource(val projectsAndUrls: RDD[ProjectContributionSource]) extends AnyVal {
 
-    def fetchRawContributors(implicit spark: SparkSession): RDD[(String, String)] = {
+    def fetchRawContributors(gerritApiConnection: GerritConnectivity)(implicit spark: SparkSession): RDD[(String, String)] = {
       projectsAndUrls.flatMap {
-        p => getProjectJsonContributorsArray(p.name, p.contributorsUrl)
+        p => getProjectJsonContributorsArray(p.name, p.contributorsUrl, gerritApiConnection)
       }
     }
   }
@@ -185,12 +182,12 @@ object GerritAnalyticsTransformations {
       ZoneOffset.UTC, ZoneId.of("Z")
     ) format DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
-  def getContributorStatsFromAnalyticsPlugin(projects: RDD[GerritProject], projectToContributorsAnalyticsUrlFactory: String => Option[String])(implicit spark: SparkSession) = {
+  def getContributorStatsFromAnalyticsPlugin(projects: RDD[GerritProject], projectToContributorsAnalyticsUrlFactory: String => Option[String], gerritApiConnection: GerritConnectivity)(implicit spark: SparkSession) = {
     import spark.sqlContext.implicits._ // toDF
 
     projects
       .enrichWithSource(projectToContributorsAnalyticsUrlFactory)
-      .fetchRawContributors
+      .fetchRawContributors(gerritApiConnection)
       .toDF("project", "json")
       .transformCommitterInfo
   }
