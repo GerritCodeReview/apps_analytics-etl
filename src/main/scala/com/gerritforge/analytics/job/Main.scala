@@ -28,7 +28,7 @@ import org.apache.spark.sql.{DataFrame, SparkSession}
 import scopt.Read.reads
 import scopt.{OptionParser, Read}
 
-import scala.io.{Codec, Source}
+import scala.io.Codec
 import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
@@ -86,6 +86,15 @@ object Main extends App with Job with LazyLogging with FetchRemoteProjects {
     opt[String]("writeNotProcessedEventsTo") optional() action { (failedEventsPath, config) =>
       config.copy(eventsFailureOutputPath = Some(failedEventsPath))
     } text "location where to write a TSV file containing the events we couldn't process with a description fo the reason why"
+
+    opt[String]("username") optional() action { (input, c) =>
+      c.copy(username = Some(input))
+    } text "Gerrit API Username"
+
+    opt[String]("password") optional() action { (input, c) =>
+      c.copy(password = Some(input))
+    } text "Gerrit API Password"
+
   }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
@@ -109,7 +118,8 @@ object Main extends App with Job with LazyLogging with FetchRemoteProjects {
   }
 }
 
-trait Job { self: LazyLogging with FetchProjects =>
+trait Job {
+  self: LazyLogging with FetchProjects =>
   implicit val codec = Codec.ISO8859
 
   def buildProjectStats()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
@@ -163,7 +173,7 @@ trait Job { self: LazyLogging with FetchProjects =>
     }
 
     val statsFromAnalyticsPlugin =
-      getContributorStatsFromAnalyticsPlugin(spark.sparkContext.parallelize(projects), configWithOverriddenUntil.contributorsUrl)
+      getContributorStatsFromAnalyticsPlugin(spark.sparkContext.parallelize(projects), configWithOverriddenUntil.contributorsUrl, config.gerritApiConnection)
 
     val statsFromEvents = getContributorStatsFromGerritEvents(repositoryAlteringEvents, statsFromAnalyticsPlugin.commitSet.rdd, aggregationStrategy)
 
@@ -208,9 +218,7 @@ trait FetchProjects {
 }
 
 trait FetchRemoteProjects extends FetchProjects {
-
   def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
-    config.gerritProjectsUrl.toSeq.flatMap { url => GerritProjectsSupport.parseJsonProjectListResponse(Source.fromURL(url)) }
+    config.gerritProjectsUrl.toSeq.flatMap { url => GerritProjectsSupport.parseJsonProjectListResponse(config.gerritApiConnection.getContentFromApi(url)) }
   }
 }
-

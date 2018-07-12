@@ -17,6 +17,7 @@ package com.gerritforge.analytics.model
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
 
+import com.gerritforge.analytics.api.GerritConnectivity
 import com.gerritforge.analytics.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
 
 case class GerritEndpointConfig(baseUrl: Option[String] = None,
@@ -28,8 +29,13 @@ case class GerritEndpointConfig(baseUrl: Option[String] = None,
                                 aggregate: Option[String] = None,
                                 emailAlias: Option[String] = None,
                                 eventsPath: Option[String] = None,
-                                eventsFailureOutputPath: Option[String] = None
+                                eventsFailureOutputPath: Option[String] = None,
+                                username: Option[String] = None,
+                                password: Option[String] = None
                                ) {
+
+
+  val gerritApiConnection: GerritConnectivity = new GerritConnectivity(username, password)
 
   val gerritProjectsUrl: Option[String] = baseUrl.map { url => s"${url}/projects/" + prefix.fold("")("?p=" + _) }
 
