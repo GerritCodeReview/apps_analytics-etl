@@ -14,9 +14,10 @@
 
 package com.gerritforge.analytics
 
-import java.io.{File, FileOutputStream, FileWriter, OutputStreamWriter}
+import java.io.{ByteArrayInputStream, File, FileOutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
 
+import com.gerritforge.analytics.api.GerritConnectivity
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.model.{GerritProject, GerritProjectsSupport, ProjectContributionSource}
 import org.apache.spark.sql.Row
@@ -26,7 +27,7 @@ import org.json4s.jackson.JsonMethods.{compact, render}
 import org.scalatest.{FlatSpec, Inside, Matchers}
 
 import scala.collection.mutable
-import scala.io.Source
+import scala.io.{Codec, Source}
 
 class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with SparkTestSupport with Inside {
 
@@ -65,6 +66,22 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     }
   }
 
+  "filterEmptyStrings" should "Filter empty strings from BufferedSource" in {
+    val contentWithEmptyLines =
+      """LineOne
+        |
+        |LineTwo
+        |LineThree
+      """.stripMargin
+    val expectedResult = List("LineOne", "LineTwo", "LineThree")
+
+
+    val inputStream = new ByteArrayInputStream(contentWithEmptyLines.getBytes)
+    val contentWithoutEmptyLines = filterEmptyStrings(Source.fromInputStream(inputStream, Codec.UTF8.name))
+
+    contentWithoutEmptyLines.toList should contain only (expectedResult: _*)
+  }
+
   "fetchRawContributors" should "fetch file content from the initial list of project names and file names" in {
 
     val line1 = "foo" -> "bar"
@@ -76,7 +93,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     val projectSource2 = ProjectContributionSource("p2", newSource(line3b))
 
     val rawContributors = sc.parallelize(Seq(projectSource1, projectSource2))
-      .fetchRawContributors
+      .fetchRawContributors(new GerritConnectivity(None, None))(spark)
       .collect
 
     rawContributors should have size (4)
@@ -90,11 +107,11 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
 
   it should "fetch file content from the initial list of project names and file names with non-latin chars" in {
     val rawContributors = sc.parallelize(Seq(ProjectContributionSource("p1", newSource("foo2" -> "bar2\u0100"))))
-      .fetchRawContributors
+      .fetchRawContributors(new GerritConnectivity(None, None))
       .collect
 
     rawContributors should have size (1)
-    rawContributors.head._2 should be ("""{"foo2":"bar2\u0100"}""")
+    rawContributors.head._2 should be("""{"foo2":"bar2\u0100"}""")
   }
 
   "transformCommitterInfo" should "transform a DataFrame with project and json to a workable DF with separated columns" in {
