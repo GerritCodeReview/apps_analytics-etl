@@ -103,6 +103,30 @@
     },
     {
       "key": {
+        "uuid": "e9b4ceff_6403f978",
+        "filename": "src/main/scala/com/gerritforge/analytics/api/gerritApiConnectivity.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-16T22:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "53d4069c_43a4c270",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1ee7a97_9b261c56",
         "filename": "src/main/scala/com/gerritforge/analytics/engine/GerritAnalyticsTransformations.scala",
         "patchSetId": 6
