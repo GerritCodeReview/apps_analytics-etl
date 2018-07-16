@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9644122c_d82affb2",
+        "filename": "src/main/scala/com/gerritforge/analytics/api/gerritApiConnectivity.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-16T07:14:33Z",
+      "side": 1,
+      "message": "Is it a common pattern to have the Scala filename starting with a lowercase chars?",
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff558e45_f479c171",
+        "filename": "src/main/scala/com/gerritforge/analytics/api/gerritApiConnectivity.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-16T07:14:33Z",
+      "side": 1,
+      "message": "What\u0027s the point of catching the exception? Just for logging and swallowing its cause? Can you just get rid of the try/catch altogether instead?",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1ee7a97_9b261c56",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-16T07:14:33Z",
+      "side": 1,
+      "message": "How the empty string filtering is related to this change? I thought this was only about Basic Authentication isn\u0027t it?",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 24
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9286b67a_91f28371",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-16T07:14:33Z",
+      "side": 1,
+      "message": "Move into the fields of the case class, username and password are not used anywhere other than in the GerritConnectivity class.",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 90
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51e87660_623bd1dd",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-07-16T07:14:33Z",
+      "side": 1,
+      "message": "How is this related to the Basic Authentication feature?",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 3
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
