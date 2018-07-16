@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "1188a7f7_1997d7dd",
+        "filename": "src/main/scala/com/gerritforge/analytics/api/gerritApiConnectivity.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-07-16T20:12:21Z",
+      "side": 1,
+      "message": "Yes, if you have Multi-Unit files\nhttps://docs.scala-lang.org/style/files.html",
+      "parentUuid": "9644122c_d82affb2",
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ff558e45_f479c171",
         "filename": "src/main/scala/com/gerritforge/analytics/api/gerritApiConnectivity.scala",
         "patchSetId": 6
@@ -42,6 +60,30 @@
     },
     {
       "key": {
+        "uuid": "53d4069c_43a4c270",
+        "filename": "src/main/scala/com/gerritforge/analytics/api/gerritApiConnectivity.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-07-16T20:12:21Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ff558e45_f479c171",
+      "range": {
+        "startLine": 60,
+        "startChar": 4,
+        "endLine": 62,
+        "endChar": 5
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d1ee7a97_9b261c56",
         "filename": "src/main/scala/com/gerritforge/analytics/engine/GerritAnalyticsTransformations.scala",
         "patchSetId": 6
@@ -53,6 +95,30 @@
       "writtenOn": "2018-07-16T07:14:33Z",
       "side": 1,
       "message": "How the empty string filtering is related to this change? I thought this was only about Basic Authentication isn\u0027t it?",
+      "range": {
+        "startLine": 51,
+        "startChar": 6,
+        "endLine": 51,
+        "endChar": 24
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dfa8f93d_accb4844",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-07-16T20:12:21Z",
+      "side": 1,
+      "message": "Since I\u0027ve moved the API connectivity to the a single place, I had to dismantle the old `getLinesFromURL` that function was doing a filterNot(_.trim.isEmpty). I\u0027ve just renamed it and created a test for it\n\nOld function getLinesFromUrl:\ndef getLinesFromURL(sourceURL: String): Iterator[String] \u003d {\n    val is \u003d new URL(sourceURL).openConnection.getInputStream\n    new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))\n      .lines.iterator().asScala\n      .filterNot(_.trim.isEmpty)\n  }",
+      "parentUuid": "d1ee7a97_9b261c56",
       "range": {
         "startLine": 51,
         "startChar": 6,
@@ -88,6 +154,30 @@
     },
     {
       "key": {
+        "uuid": "e8694beb_06fb4ece",
+        "filename": "src/main/scala/com/gerritforge/analytics/model/GerritEndpointConfig.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-07-16T20:12:21Z",
+      "side": 1,
+      "message": "Sorry, not sure I understand what you want me to do here.\nusername and password are in GerritEndPointConfig as well because we use scopt to parse those input parameters",
+      "parentUuid": "9286b67a_91f28371",
+      "range": {
+        "startLine": 38,
+        "startChar": 2,
+        "endLine": 38,
+        "endChar": 90
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "51e87660_623bd1dd",
         "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
         "patchSetId": 6
@@ -99,6 +189,30 @@
       "writtenOn": "2018-07-16T07:14:33Z",
       "side": 1,
       "message": "How is this related to the Basic Authentication feature?",
+      "range": {
+        "startLine": 69,
+        "startChar": 0,
+        "endLine": 83,
+        "endChar": 3
+      },
+      "revId": "c08899e047a089e8a8ccd0ffba39f467a261788e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e62efc4f_124b7e88",
+        "filename": "src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-07-16T20:12:21Z",
+      "side": 1,
+      "message": "Since I had to change the old getLinesFromURL, I wrote this test to make sure the behaviour stayed the same",
+      "parentUuid": "51e87660_623bd1dd",
       "range": {
         "startLine": 69,
         "startChar": 0,
