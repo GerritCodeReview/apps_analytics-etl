@@ -17,7 +17,7 @@ package com.gerritforge.analytics.job
 import java.time.LocalDate
 
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
-import com.gerritforge.analytics.engine.events.{AggregationStrategy, EventParser, GerritJsonEvent}
+import com.gerritforge.analytics.engine.events._
 import com.gerritforge.analytics.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
 import com.gerritforge.analytics.support.ops.AnalyticsTimeOps
 import com.gerritforge.analytics.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
@@ -107,12 +107,16 @@ object Main extends App with Job with LazyLogging with FetchRemoteProjects {
 
       logger.info(s"Starting analytics app with config $config")
 
-      val dataFrame = buildProjectStats().cache() //This dataframe is written twice
+      val projectsAnalyticsDF = buildProjectStats().cache() //This dataframe is written twice
+      val auditsDF = buildAuditStats().cache()
 
-      logger.info(s"ES content created, saving it to '${config.outputDir}'")
-      dataFrame.write.json(config.outputDir)
+      logger.info(s"Projects Analytics content created, saving it to '${config.outputDir}'")
+      projectsAnalyticsDF.write.json(s"${config.outputDir}/$GerritAnalyticsType")
+      saveES(projectsAnalyticsDF, GerritAnalyticsType)
 
-      saveES(dataFrame)
+      logger.info(s"Audits Analytics content created, saving it to '${config.outputDir}'")
+      projectsAnalyticsDF.write.json(s"${config.outputDir}/$GerritAuditType")
+      saveES(auditsDF, GerritAuditType)
 
     case None => // invalid configuration usage has been displayed
   }
@@ -192,6 +196,31 @@ trait Job {
     mergedEvents.dashboardStats(aliasesDF)
   }
 
+  def buildAuditStats()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
+    import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
+    import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
+    implicit val sqlCtx = spark.sqlContext
+
+    implicit val sc: SparkContext = spark.sparkContext
+
+    val audits = loadAudits
+
+    val failedAudits: RDD[NotParsableJsonEvent] = audits.collect { case Left(eventFailureDescription) => eventFailureDescription }
+
+    if (!failedAudits.isEmpty()) {
+      config.auditsFailureOutputPath.foreach { failurePath =>
+        logger.info(s"Audits events failures will be stored at '$failurePath'")
+
+        import spark.implicits._
+        failedAudits.toDF().write.option("sep", "\t").option("header", true).csv(failurePath)
+      }
+    }
+
+    val successfulAdits: RDD[GerritJsonAudit] = audits.collect { case Right(audit) => audit }
+
+    successfulAdits.asEtlDataFrame
+  }
+
   def loadEvents(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent, GerritJsonEvent]] = { // toDF
     import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
 
@@ -202,16 +231,36 @@ trait Job {
     }
   }
 
-  def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
+  def loadAudits(implicit config: GerritEndpointConfig, spark: SparkSession): RDD[Either[NotParsableJsonEvent, GerritJsonAudit]] = { // toDF
+    import com.gerritforge.analytics.engine.events.GerritEventsTransformations._
+
+    config.auditsPath.fold(spark.sparkContext.emptyRDD[Either[NotParsableJsonEvent, GerritJsonAudit]]) { path =>
+      spark
+        .read.textFile(path).rdd
+        .parseAudits(AuditParser)
+    }
+  }
+
+  def saveES(df: DataFrame, indexType: GerritIndexType)(implicit config: GerritEndpointConfig) {
     import org.elasticsearch.spark.sql._
     config.elasticIndex.foreach { esIndex =>
       logger.info(s"ES content created, saving it to elastic search instance at '${config.elasticIndex}'")
 
-      df.saveToEs(esIndex)
+      df.saveToEs(s"esIndex/$indexType")
     }
 
   }
 }
+
+sealed trait GerritIndexType {
+  def indexType: String
+
+  override def toString = indexType
+}
+
+case object GerritAnalyticsType extends GerritIndexType { val indexType: String = "analytics" }
+
+case object GerritAuditType extends GerritIndexType { val indexType: String = "audit" }
 
 trait FetchProjects {
   def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject]

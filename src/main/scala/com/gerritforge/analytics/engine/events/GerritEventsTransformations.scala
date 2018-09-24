@@ -32,6 +32,10 @@ object GerritEventsTransformations extends LazyLogging {
     def parseEvents(implicit eventParser: GerritJsonEventParser): RDD[Either[NotParsableJsonEvent, GerritJsonEvent]] = {
       self.map(tryParseGerritTriggeredEvent)
     }
+
+    def parseAudits(implicit eventParser: GerritJsonAuditParser): RDD[Either[NotParsableJsonEvent, GerritJsonAudit]] = {
+      self.map(tryParseGerritAuditEvent)
+    }
   }
 
   implicit class PimpedGerritJsonEventRDD[T <: GerritJsonEvent](val self: RDD[T]) extends AnyVal {
@@ -88,6 +92,12 @@ object GerritEventsTransformations extends LazyLogging {
     }
   }
 
+  implicit class PimpedAuditRDD(val self: RDD[GerritJsonAudit]) extends AnyVal {
+    def asEtlDataFrame(implicit sqlContext: SQLContext): DataFrame = {
+      convertAuditAsDataFrame(self)
+    }
+  }
+
   def tryParseGerritTriggeredEvent(eventJson: String)(implicit eventParser: GerritJsonEventParser): Either[NotParsableJsonEvent, GerritJsonEvent] = {
     eventParser.fromJson(eventJson) match {
       case Success(event) => Right(event)
@@ -97,6 +107,15 @@ object GerritEventsTransformations extends LazyLogging {
     }
   }
 
+
+  def tryParseGerritAuditEvent(eventJson: String)(implicit eventParser: GerritJsonAuditParser): Either[NotParsableJsonEvent, GerritJsonAudit] = {
+    eventParser.fromJson(eventJson) match {
+      case Success(event) => Right(event)
+      case Failure(exception) =>
+        logger.warn(s"Unable to parse event '$eventJson'", exception)
+        Left(NotParsableJsonEvent(eventJson, exception.getMessage.replace("\n", " - ")))
+    }
+  }
 
   private def addCommitSummary(summaryTemplate: UserActivitySummary, changes: Iterable[ChangeMergedEvent]): UserActivitySummary = {
     // We assume all the changes are consistent on the is_merge filter
@@ -175,6 +194,15 @@ object GerritEventsTransformations extends LazyLogging {
       "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "commits")
   }
 
+  def convertAuditAsDataFrame(self: RDD[GerritJsonAudit])(implicit sqlContext: SQLContext): DataFrame = {
+    import sqlContext.implicits._
+
+    self.map {
+      case http: GerritExtendedHttpAuditEvent =>
+        (http.`type`, http.event.timeAtStart, http.event.httpMethod, http.event.what, http.event.httpStatus, http.event.result, http.event.elapsed)
+    }.toDF("type", "timestamp", "method", "path", "status", "body", "duration")
+  }
+
   def getContributorStatsFromGerritEvents(events: RDD[GerritRefHasNewRevisionEvent],
                                           commitsToExclude: RDD[String],
                                           aggregationStrategy: AggregationStrategy)(implicit spark: SparkSession) = {
@@ -185,5 +213,4 @@ object GerritEventsTransformations extends LazyLogging {
       .userActivitySummaryPerProject(aggregationStrategy, EventParser)
       .asEtlDataFrame
   }
-
 }

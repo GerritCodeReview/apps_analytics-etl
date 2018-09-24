@@ -30,6 +30,8 @@ case class GerritEndpointConfig(baseUrl: Option[String] = None,
                                 emailAlias: Option[String] = None,
                                 eventsPath: Option[String] = None,
                                 eventsFailureOutputPath: Option[String] = None,
+                                auditsPath: Option[String] = None,
+                                auditsFailureOutputPath: Option[String] = None,
                                 username: Option[String] = None,
                                 password: Option[String] = None
                                ) {

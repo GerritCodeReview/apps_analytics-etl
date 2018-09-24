@@ -24,7 +24,7 @@ import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotPa
 import org.apache.spark.rdd.RDD
 import org.scalatest.{Inside, Matchers, WordSpec}
 
-class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkTestSupport with Inside with EventFixture {
+class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkTestSupport with Inside with EventFixture with AuditFixture {
 
   "tryParseGerritTriggeredEvent" should {
 
@@ -46,6 +46,14 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
     }
   }
 
+  "tryParseGerritAuditEvent" should {
+    implicit val eventParser: GerritJsonAuditParser = AuditParser
+
+    "Parse a correctly formed audit event" in new AuditFixture {
+      GerritEventsTransformations.tryParseGerritAuditEvent(auditHttpGet.json) shouldBe Right(auditHttpGet.event)
+    }
+  }
+
   "PimpedJsonRDD" should {
     "Convert an RDD of JSON events into an RDD of events or unparsed json strings" in {
       val jsonRdd = sc.parallelize(Seq(refUpdated.json, changeMerged.json, "invalid json string"))
@@ -55,6 +63,17 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
       jsonRdd.parseEvents(EventParser).collect() should contain only(
         Right(refUpdated.event),
         Right(changeMerged.event),
+        Left(NotParsableJsonEvent("invalid json string", "unknown token i - Near: i"))
+      )
+    }
+
+    "Convert an RDD of JSON audit logs into an RDD of audits or unparsed json strings " in {
+      val jsonRdd = sc.parallelize(Seq(auditHttpGet.json, "invalid json string"))
+
+      import GerritEventsTransformations._
+
+      jsonRdd.parseAudits(AuditParser).collect() should contain only(
+        Right(auditHttpGet.event),
         Left(NotParsableJsonEvent("invalid json string", "unknown token i - Near: i"))
       )
     }
@@ -255,4 +274,37 @@ trait EventFixture {
        |"eventCreatedOn": $createdOnInSecs
        |}""".stripMargin)
 
+}
+
+trait AuditFixture {
+
+  // Forcing early type failures
+  case class JsonAudit[T <: GerritJsonAudit](json: String) {
+    val event: T = AuditParser.fromJson(json).get.asInstanceOf[T]
+  }
+
+  val auditHttpGet: JsonAudit[ExtendedHttpAuditEvent] = anHttpGet("GET", "/config/server/version")
+
+  def anHttpGet(httpMethod: String, path: String, httpStatus: Int = 200, httpBody: String = "") = JsonAudit[ExtendedHttpAuditEvent](
+    s"""{
+       |	"type": "ExtendedHttpAuditEvent",
+       |	"event": {
+       |		"http_method": "$httpMethod",
+       |		"http_status": $httpStatus,
+       |		"session_id": "000000000000000000000000000",
+       |		"who": {
+       |			"access_path": "REST_API",
+       |			"last_login_external_id_property_key": {}
+       |		},
+       |		"when": 1537785078433,
+       |		"what": "$path",
+       |		"params": {},
+       |		"result": "$httpBody",
+       |		"time_at_start": 1537785078433,
+       |		"elapsed": 1,
+       |		"uuid": {
+       |			"uuid": "audit:f08e4d95-148b-4541-b653-862a260533a8"
+       |		}
+       |	}
+       |}""".stripMargin)
 }

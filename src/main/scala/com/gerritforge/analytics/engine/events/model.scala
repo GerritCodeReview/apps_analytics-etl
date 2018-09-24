@@ -23,6 +23,9 @@ trait GerritJsonEventParser extends Serializable {
   def fromJson(json: String): Try[GerritJsonEvent]
 }
 
+trait GerritJsonAuditParser extends Serializable {
+  def fromJson(json: String): Try[GerritJsonAudit]
+}
 
 object EventParser extends GerritJsonEventParser with LazyLogging {
   val ChangeMergedEventType = "change-merged"
@@ -177,3 +180,66 @@ case class RefUpdatedEvent(
 
   def newRev: String = refUpdate.newRev
 }
+
+object AuditParser extends GerritJsonAuditParser with LazyLogging {
+
+
+  override def fromJson(json: String): Try[GerritJsonAudit] = {
+    import org.json4s._
+    import org.json4s.native.JsonMethods._
+
+    implicit val formats: DefaultFormats.type = DefaultFormats
+
+    val ExtendedHttpAuditEventType = "ExtendedHttpAuditEvent"
+
+    def tryParse[T](jvalue: JValue)(implicit formats: Formats, mf: scala.reflect.Manifest[T]): Try[T] = {
+      try {
+        Success(jvalue.extract[T])
+      } catch {
+        case e: MappingException =>
+          Failure(MappingException(s"Invalid event of type `${mf.runtimeClass.getName}`: ${e.getMessage}", e))
+      }
+    }
+
+    Try(parse(json).camelizeKeys).flatMap { parsedJson =>
+      parsedJson \ "type" match {
+        case JString(ExtendedHttpAuditEventType) =>
+          tryParse[ExtendedHttpAuditEvent](parsedJson)
+
+        case JNothing =>
+          Failure(new IllegalArgumentException("Invalid JSON object received, missing 'type' field"))
+
+        case JString(unsupportedType) =>
+          Failure(new IllegalArgumentException(s"Unsupported event type '$unsupportedType'"))
+
+        case unexpectedJsonType =>
+          Failure(new IllegalArgumentException(s"Invalid JSON format for field 'type' `${unexpectedJsonType.getClass.getName}`"))
+      }
+    }
+  }
+}
+
+sealed trait GerritJsonAudit {
+  def `type`: String
+}
+
+sealed trait GerritExtendedHttpAuditEvent extends GerritJsonAudit {
+  def event : HttpEvent
+}
+
+case class ExtendedHttpAuditEvent(override val `type`: String,
+                                  override val event : HttpEvent) extends GerritExtendedHttpAuditEvent
+
+case class HttpEvent(httpMethod: String,
+                     httpStatus: Int,
+                     sessionId: String,
+                     who: CurrentUser,
+                     what: String,
+                     result: String,
+                     timeAtStart: Long,
+                     elapsed: Long,
+                     uuid: AuditUuid)
+
+case class CurrentUser(accessPath: String)
+
+case class AuditUuid(uuid: String)
