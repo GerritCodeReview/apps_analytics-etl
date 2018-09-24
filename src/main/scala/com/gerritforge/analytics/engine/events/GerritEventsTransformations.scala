@@ -98,6 +98,15 @@ object GerritEventsTransformations extends LazyLogging {
   }
 
 
+  def tryParseGerritAuditEvent(eventJson: String)(implicit eventParser: GerritJsonAuditParser): Either[NotParsableJsonEvent, GerritJsonAudit] = {
+    eventParser.fromJson(eventJson) match {
+      case Success(event) => Right(event)
+      case Failure(exception) =>
+        logger.warn(s"Unable to parse event '$eventJson'", exception)
+        Left(NotParsableJsonEvent(eventJson, exception.getMessage.replace("\n", " - ")))
+    }
+  }
+
   private def addCommitSummary(summaryTemplate: UserActivitySummary, changes: Iterable[ChangeMergedEvent]): UserActivitySummary = {
     // We assume all the changes are consistent on the is_merge filter
     summaryTemplate.copy(
