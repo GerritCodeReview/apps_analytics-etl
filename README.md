@@ -7,18 +7,28 @@ plugin installed and [Apache Spark 2.11](https://spark.apache.org/downloads.html
 
 Job can be launched with the following parameters:
 
-```
+```bash
 bin/spark-submit \
     --conf spark.es.nodes=es.mycompany.com \
-    $JARS/SparkAnalytics-assembly.jar \
+    $JARS/analytics-etl.jar \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
-    --events file:///tmp/gerrit-events-export.json
-    --writeNotProcessedEventsTo file:///tmp/failed-events
-    -e gerrit/analytics
-    --username gerrit-api-username
+    --events file:///tmp/gerrit-events-export.json \
+    --writeNotProcessedEventsTo file:///tmp/failed-events \
+    -e gerrit/analytics \
+    --username gerrit-api-username \
     --password gerrit-api-password
+```
+
+You can also run this job in docker:
+
+```bash
+docker run -ti --rm \
+    -e ES_HOST="es.mycompany.com" \
+    -e GERRIT_URL="http://gerrit.mycompany.com" \
+    -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit/analytics" \
+    gerritforge/spark-gerrit-analytics-etl:latest
 ```
 
 Should ElasticSearch need authentication (i.e.: if X-Pack is enabled), credentials can be
@@ -67,11 +77,44 @@ passed through the *spark.es.net.http.auth.pass* and *spark.es.net.http.auth.use
 A docker compose file is provided to spin up an instance of Elastisearch with Kibana locally.
 Just run `docker-compose up`.
 
-Kibana will run on port `5601` and Elastisearch on port `9200`
-
 ### Caveats
 
-If Elastisearch dies with `exit code 137` you might have to give Docker more memory ([check this article for more details](https://github.com/moby/moby/issues/22211))
+* If Elastisearch dies with `exit code 137` you might have to give Docker more memory ([check this article for more details](https://github.com/moby/moby/issues/22211))
+
+* If you want to run the etl job from within docker you need to make elasticsearch and gerrit available to it.
+  You can do this by:
+
+    * spinning the container within the same network used by your elasticsearch container (`analytics-etl_ek` if you used the docker-compose provided by this repo)
+    * provide routing to the docker host machine (via `--add-host="gerrit:<your_host_ip_address>"`)
+
+  For example:
+
+  ```bash
+  HOST_IP=`ifconfig en0 | grep "inet " | awk '{print $2}'` \
+      docker run -ti --rm \
+           --add-host="gerrit:$HOST_IP" \
+          --network analytics-etl_ek \
+          -e ES_HOST="elasticsearch" \
+          -e GERRIT_URL="http://$HOST_IP:8080" \
+          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit/analytics" \
+          gerritforge/spark-gerrit-analytics-etl:latest
+  ```
+
+* If the dockerized spark job cannot connect to elasticsearch (also, running on docker) you might need to tell elasticsearch to publish
+the host to the cluster using the \_site\_ address.
+
+```
+elasticsearch:
+    ...
+    environment:
+       ...
+      - http.host=0.0.0.0
+      - network.host=_site_
+      - http.publish_host=_site_
+      ...
+```
+
+See [here](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-network.html#network-interface-values) for more info
 
 ## Distribute as Docker Container
 
@@ -80,4 +123,4 @@ use `sbt dockerBuildAndPush`.
 
 The build and distribution override the `latest` image tag too
 
-Remember to create an annotated tag for a relase. The tag is used to define the docker image tag too
+Remember to create an annotated tag for a release. The tag is used to define the docker image tag too

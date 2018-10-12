@@ -27,7 +27,10 @@ services:
     environment:
       - ES_JAVA_OPTS=-Xmx256m -Xms256m
       - http.host=0.0.0.0
-      - http.publish_host=127.0.0.1
+# Comment out for making containers reachable from dockerized spark job.
+# See README.md for more info:
+#      - network.host=_site_
+#      - http.publish_host=_site_
     networks:
       - ek
 
