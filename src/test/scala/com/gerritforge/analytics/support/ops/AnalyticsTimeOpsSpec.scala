@@ -14,7 +14,7 @@
 
 package com.gerritforge.analytics.support.ops
 
-import java.time.{LocalDate, LocalDateTime, ZoneOffset}
+import java.time._
 
 import com.gerritforge.analytics.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
 import org.scalatest.{FlatSpec, Matchers}
@@ -63,9 +63,7 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
 
     val epochValueUTC =
       LocalDateTime
-        .of(2018, 1, 1, 12, 0, 0, 0)
-        .atOffset(ZoneOffset.UTC)
-        .toInstant.toEpochMilli
+        .of(2018, 1, 1, 12, 0, 0, 0).atZone(ZoneId.systemDefault).toInstant.toEpochMilli
 
     val yyyyMMddHHStr = "2018010112"
     val yyyyMMddStr = "20180101"
