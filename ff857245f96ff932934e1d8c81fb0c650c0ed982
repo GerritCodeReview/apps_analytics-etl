@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "36fe0ee7_aeb53f42",
+        "filename": "src/test/scala/com/gerritforge/analytics/support/ops/AnalyticsTimeOpsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2018-10-15T20:48:45Z",
+      "side": 1,
+      "message": "Does this mean that Analytics-ELT uses the default timezone of the system for dates conversion?\n\nIf yes, the bug is in the code bacause the test already was asserting that the conversion should have happened in UTC, isn\u0027t it?\n\nYou have found a real bug I believe: why don\u0027t you fix the code instead of changing the test?",
+      "range": {
+        "startLine": 66,
+        "startChar": 37,
+        "endLine": 66,
+        "endChar": 66
+      },
+      "revId": "ff857245f96ff932934e1d8c81fb0c650c0ed982",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
