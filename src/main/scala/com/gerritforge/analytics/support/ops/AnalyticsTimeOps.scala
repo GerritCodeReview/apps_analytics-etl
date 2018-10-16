@@ -23,19 +23,25 @@ package AnalyticsTimeOps {
   import java.sql.Timestamp
   import java.text.SimpleDateFormat
   import java.time.{Instant, LocalDate, OffsetDateTime}
+  import java.util.TimeZone
 
   import scala.util.Try
-
 
   object AnalyticsDateTimeFormater {
 
     val yyyy_MM_dd_HHmmss_SSSSSSSSS: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS")
     val yyyy_MM_dd: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-    val yyyyMMddHH: SimpleDateFormat = new SimpleDateFormat("yyyyMMddHH")
-    val yyyyMMdd: SimpleDateFormat = new SimpleDateFormat("yyyyMMdd")
-    val yyyyMM: SimpleDateFormat = new SimpleDateFormat("yyyyMM")
-    val yyyy: SimpleDateFormat = new SimpleDateFormat("yyyy")
+    val yyyyMMddHH: SimpleDateFormat = buildSimpleDateFormatUTC("yyyyMMddHH")
+    val yyyyMMdd: SimpleDateFormat= buildSimpleDateFormatUTC("yyyyMMdd")
+    val yyyyMM: SimpleDateFormat = buildSimpleDateFormatUTC("yyyyMM")
+    val yyyy: SimpleDateFormat = buildSimpleDateFormatUTC("yyyy")
+
+    private def buildSimpleDateFormatUTC(pattern: String): SimpleDateFormat =  {
+      val simpleDateFormat = new SimpleDateFormat(pattern)
+      simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+      simpleDateFormat
+    }
   }
 
   object CommonTimeOperations {

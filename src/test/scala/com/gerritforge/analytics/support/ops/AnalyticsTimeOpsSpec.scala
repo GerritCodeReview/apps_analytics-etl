@@ -59,8 +59,7 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
   }
 
 
-  "Simple Date Formats" should "convert to the correct strings" in {
-
+  "Simple Date Formats" should "convert to the correct strings - yyyyMMddHH" in {
     val epochValueUTC =
       LocalDateTime
         .of(2018, 1, 1, 12, 0, 0, 0)
@@ -68,13 +67,39 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
         .toInstant.toEpochMilli
 
     val yyyyMMddHHStr = "2018010112"
-    val yyyyMMddStr = "20180101"
-    val yyyyMMStr = "201801"
-    val yyyyStr = "2018"
-
     AnalyticsDateTimeFormater.yyyyMMddHH.format(epochValueUTC) should equal(yyyyMMddHHStr)
+  }
+
+  it should "convert to the correct strings - yyyyMMdd" in {
+    val epochValueUTC =
+      LocalDateTime
+        .of(2018, 1, 1, 12, 0, 0, 0)
+        .atOffset(ZoneOffset.UTC)
+        .toInstant.toEpochMilli
+
+    val yyyyMMddStr = "20180101"
     AnalyticsDateTimeFormater.yyyyMMdd.format(epochValueUTC) should equal(yyyyMMddStr)
+  }
+
+  it should "convert to the correct strings - yyyyMM" in {
+    val epochValueUTC =
+      LocalDateTime
+        .of(2018, 1, 1, 12, 0, 0, 0)
+        .atOffset(ZoneOffset.UTC)
+        .toInstant.toEpochMilli
+
+    val yyyyMMStr = "201801"
     AnalyticsDateTimeFormater.yyyyMM.format(epochValueUTC) should equal(yyyyMMStr)
+  }
+
+  it should "convert to the correct strings - yyyy" in {
+    val epochValueUTC =
+      LocalDateTime
+        .of(2018, 1, 1, 12, 0, 0, 0)
+        .atOffset(ZoneOffset.UTC)
+        .toInstant.toEpochMilli
+
+    val yyyyStr = "2018"
     AnalyticsDateTimeFormater.yyyy.format(epochValueUTC) should equal(yyyyStr)
   }
 
