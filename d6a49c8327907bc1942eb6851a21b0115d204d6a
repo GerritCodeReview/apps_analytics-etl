@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "db7c6014_279f2b62",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-10-16T14:03:22Z",
+      "side": 1,
+      "message": "I believe there are more parameters to set in the ETL. Shall we add them as well in the script ?",
+      "range": {
+        "startLine": 21,
+        "startChar": 23,
+        "endLine": 21,
+        "endChar": 37
+      },
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
