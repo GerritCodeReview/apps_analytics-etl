@@ -33,6 +33,98 @@
       "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3473d689_c29ee5a6",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/events/model.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 245,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-10-16T12:16:59Z",
+      "side": 1,
+      "message": "Should this be a `java.util.UUID` ?",
+      "range": {
+        "startLine": 245,
+        "startChar": 27,
+        "endLine": 245,
+        "endChar": 33
+      },
+      "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b89ef144_969cab64",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-10-16T12:16:59Z",
+      "side": 1,
+      "message": "\"buildProjectStats\" does a very similar thing. Shall we factor this logic out and create a common method for the 2?",
+      "range": {
+        "startLine": 199,
+        "startChar": 6,
+        "endLine": 199,
+        "endChar": 21
+      },
+      "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "516eef4c_843eec29",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-10-16T12:16:59Z",
+      "side": 1,
+      "message": "This could be a map, isn\u0027t it ?",
+      "range": {
+        "startLine": 210,
+        "startChar": 9,
+        "endLine": 210,
+        "endChar": 29
+      },
+      "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c0c9a65e_2059ce5f",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-10-16T12:16:59Z",
+      "side": 1,
+      "message": "This will write the Analytics and the Audit on different indexes, right? Why do we need to do that? How will Kibana handle it?\n\nIf it is needed we will need to modify the mapping of the dashboard-importer:\nhttps://github.com/GerritForge/analytics-dashboard-importer/blob/master/kibana-config/1_gerrit.es.template.json#L7\nhttps://github.com/GerritForge/analytics-dashboard-importer/blob/master/kibana-config/1_config.kibana.data.json#L10",
+      "range": {
+        "startLine": 249,
+        "startChar": 20,
+        "endLine": 249,
+        "endChar": 38
+      },
+      "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
