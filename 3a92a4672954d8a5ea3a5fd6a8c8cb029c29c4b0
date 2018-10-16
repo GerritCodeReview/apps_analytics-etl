@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c1fed769_b5f01d48",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/events/GerritEventsTransformations.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-10-16T08:54:58Z",
+      "side": 1,
+      "message": "`convertAuditAsDataFrame` (and this is true also for `convertAsDataFrame`) are only used within the oneliner `asEtlDataFrame` method. What\u0027s the benefit of this additional layer of indirection?\n\nCouldn\u0027t we just have `convertAuditAsDataFrame`\u0027s body moved into asEtlDataFrame and `convertAuditAsDataFrame` deleted all together?\n\nIf you want to keep it, then perhaps `convertAuditAsDataFrame` could/should be private",
+      "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "baae0d24_f1c71414",
+        "filename": "src/main/scala/com/gerritforge/analytics/engine/events/model.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-10-16T08:54:58Z",
+      "side": 1,
+      "message": "minor: we could avoid this duplication by having a\n\nGerritJsonParser[T] extends Serializable {\n  def fromJson(json: String): Try[T]\n}\n\nthis would also enforce that every parser has a fromJson method",
+      "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
