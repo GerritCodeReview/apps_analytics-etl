@@ -50,7 +50,7 @@ docker := (docker dependsOn AssemblyKeys.assembly).value
 dockerfile in docker := {
   val artifact: File = assembly.value
   val artifactTargetPath = s"/app/${name.value}-assembly.jar"
-  val entryPointPath = s"/app/gerrit-analytics-etl.sh"
+  val entryPointBase = s"/app"
 
   new Dockerfile {
     from("openjdk:8-alpine")
@@ -62,10 +62,11 @@ dockerfile in docker := {
     env("SPARK_JAR_PATH", artifactTargetPath)
     env("SPARK_JAR_CLASS",mainClassPackage)
     runRaw("curl -sL \"http://www-eu.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz\" | tar -xz -C /usr/local")
-    copy(baseDirectory(_ / "scripts" / "gerrit-analytics-etl.sh").value, file(entryPointPath))
+    copy(baseDirectory(_ / "scripts" / "gerrit-analytics-etl.sh").value, file(s"$entryPointBase/gerrit-analytics-etl.sh"))
+    copy(baseDirectory(_ / "scripts" / "wait-for-elasticsearch.sh").value, file(s"$entryPointBase/wait-for-elasticsearch.sh"))
     add(artifact, artifactTargetPath)
     runRaw(s"chmod +x $artifactTargetPath")
-    cmd(s"/bin/sh", entryPointPath)
+    cmd(s"/bin/sh", s"$entryPointBase/gerrit-analytics-etl.sh")
   }
 }
 imageNames in docker := Seq(
