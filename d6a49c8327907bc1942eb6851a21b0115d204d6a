@@ -22,6 +22,29 @@
       "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3bd59bb4_799ed082",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-10-17T08:11:22Z",
+      "side": 1,
+      "message": "Since it is a development setup shall we set it up for dev purposes? For example we could set the DEVELOPMENT_BECOME_ANY_ACCOUNT as auth.",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 135
+      },
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
