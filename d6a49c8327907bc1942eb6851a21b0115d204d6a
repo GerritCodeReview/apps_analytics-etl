@@ -119,6 +119,72 @@
       "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "772f2bbb_fca5d4f1",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-10-17T10:20:54Z",
+      "side": 1,
+      "message": "Maybe I misunderstood your comment but it\u0027s the ETL that runs outside the docker that needs to talk with ES and the gerrit instance",
+      "parentUuid": "e5634f83_627a3f45",
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcba9131_4ebad634",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-10-17T10:20:54Z",
+      "side": 1,
+      "message": "Makes sense Fabio",
+      "parentUuid": "3bd59bb4_799ed082",
+      "range": {
+        "startLine": 76,
+        "startChar": 0,
+        "endLine": 76,
+        "endChar": 135
+      },
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "972f4b47_8c6cc1b3",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-10-17T10:20:54Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "1b90f8c5_518d8d4b",
+      "range": {
+        "startLine": 76,
+        "startChar": 33,
+        "endLine": 76,
+        "endChar": 42
+      },
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
