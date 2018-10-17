@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "d12c216c_2a605a14",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-10-17T08:19:42Z",
+      "side": 1,
+      "message": "I am a bit confused as what this script is meant to do.\n\nis it meant to just start up a functioning stack (gerrit/es/kibana)?\nOr is it meant to also import the data into ES (via the ETL)?\n\nIn the first case, then I don\u0027t think we need the aggregate-* clauses, in the latter, then we need to spin up the spark job too, one for each repo we want to import data for.\n\nPerhaps I got the wrong side of the stick here, if so, apologies, can you shed some light on this?",
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "db7c6014_279f2b62",
         "filename": "prepare-local-mode-environment.sh",
         "patchSetId": 5
@@ -25,6 +42,23 @@
     },
     {
       "key": {
+        "uuid": "6b4fe61f_70922785",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-10-17T08:19:42Z",
+      "side": 1,
+      "message": "I think you might be missing the cases for --aggregate-since and --aggregate-by here",
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "3bd59bb4_799ed082",
         "filename": "prepare-local-mode-environment.sh",
         "patchSetId": 5
@@ -42,6 +76,46 @@
         "endLine": 76,
         "endChar": 135
       },
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1b90f8c5_518d8d4b",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-10-17T08:19:42Z",
+      "side": 1,
+      "message": "I don\u0027t think we should hardcode 8080:8080 hear, we shoud get that from an argument or perhaps infer it from the canonical web url",
+      "range": {
+        "startLine": 76,
+        "startChar": 33,
+        "endLine": 76,
+        "endChar": 42
+      },
+      "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e5634f83_627a3f45",
+        "filename": "prepare-local-mode-environment.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-10-17T08:19:42Z",
+      "side": 1,
+      "message": "I don\u0027t think the gerrit docker container would be able to reach ES, as they don\u0027t belong to the same docker network",
       "revId": "d6a49c8327907bc1942eb6851a21b0115d204d6a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
