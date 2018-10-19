@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8c89bd1d_f255ced1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-10-19T10:16:53Z",
+      "side": 1,
+      "message": "I think you have linked the wrong comment. Is this the correct one? https://github.com/elastic/kibana/issues/6057#issuecomment-403789147",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 7
+      },
+      "revId": "29743c5ce4575fdfa7592ea5f7529f5013d7b934",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
