@@ -1,3 +1,11 @@
 [submodule "dashboard-importer"]
 	path = dashboard-importer
 	url = https://github.com/GerritForge/analytics-dashboard-importer.git
+[submodule "elasticsearch"]
+	path = elasticsearch
+	url = https://github.com/GerritForge/analytics-elasticsearch.git
+	branch = master
+[submodule "kibana"]
+	path = kibana
+	url = https://github.com/GerritForge/analytics-kibana.git
+	branch = master
