@@ -95,6 +95,10 @@ object Main extends App with Job with LazyLogging with FetchRemoteProjects {
       c.copy(password = Some(input))
     } text "Gerrit API Password"
 
+    opt[Boolean]('r', "extract-branches") optional() action { (input, c) =>
+      c.copy(extractBranches = Some(input))
+    } text "enables branches extraction for each commit"
+
   }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
@@ -165,7 +169,7 @@ trait Job {
     val configWithOverriddenUntil = firstEventDateMaybe.fold(config) { firstEventDate =>
       val lastAggregationDate = firstEventDate.plusMonths(1)
       if (lastAggregationDate.isBefore(LocalDate.now())) {
-        logger.info(s"Overriding 'until' date '${config.until}' with '$lastAggregationDate' since events ara available until $firstEventDate")
+        logger.info(s"Overriding 'until' date '${config.until}' with '$lastAggregationDate' since events are available until $firstEventDate")
         config.copy(until = Some(lastAggregationDate))
       } else {
         config

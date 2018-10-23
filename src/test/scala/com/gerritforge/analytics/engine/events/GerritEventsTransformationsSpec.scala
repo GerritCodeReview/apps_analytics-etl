@@ -14,10 +14,6 @@
 
 package com.gerritforge.analytics.engine.events
 
-import java.time.format.DateTimeFormatter
-import java.time.temporal.ChronoField.{MILLI_OF_SECOND, NANO_OF_SECOND}
-import java.time.{ZoneId, ZonedDateTime}
-
 import com.gerritforge.analytics.SparkTestSupport
 import com.gerritforge.analytics.engine.GerritAnalyticsTransformations.{CommitInfo, UserActivitySummary}
 import com.gerritforge.analytics.engine.events.GerritEventsTransformations.NotParsableJsonEvent
@@ -65,11 +61,11 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
     "Build one UserActivitySummary object if given a series of non-merge commits" in {
       val events: Seq[ChangeMergedEvent] = Seq(
-        aChangeMergedEvent("1", 1001l, newRev = "rev1", insertions = 2, deletions = 1),
-        aChangeMergedEvent("2", 1002l, newRev = "rev2", insertions = 3, deletions = 0),
-        aChangeMergedEvent("3", 1003l, newRev = "rev3", insertions = 1, deletions = 4),
-        aChangeMergedEvent("4", 1004l, newRev = "rev4", insertions = 0, deletions = 2),
-        aChangeMergedEvent("5", 1005l, newRev = "rev5", insertions = 1, deletions = 1)
+        aChangeMergedEvent("1", 1001l, newRev = "rev1", insertions = 2, deletions = 1, branch = "stable-1.14"),
+        aChangeMergedEvent("2", 1002l, newRev = "rev2", insertions = 3, deletions = 0, branch = "stable-1.14"),
+        aChangeMergedEvent("3", 1003l, newRev = "rev3", insertions = 1, deletions = 4, branch = "stable-1.14"),
+        aChangeMergedEvent("4", 1004l, newRev = "rev4", insertions = 0, deletions = 2, branch = "stable-1.14"),
+        aChangeMergedEvent("5", 1005l, newRev = "rev5", insertions = 1, deletions = 1, branch = "stable-1.14")
       ).map(_.event)
 
       val summaries: Iterable[UserActivitySummary] = GerritEventsTransformations.extractUserActivitySummary(
@@ -80,7 +76,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
       summaries should have size 1
 
       inside(summaries.head) {
-        case UserActivitySummary(year, month, day, hour, name, email, num_commits, _, _, added_lines, deleted_lines, commits, last_commit_date, is_merge) =>
+        case UserActivitySummary(year, month, day, hour, name, email, num_commits, _, _, added_lines, deleted_lines, commits, branches, last_commit_date, is_merge) =>
           year shouldBe 2018
           month shouldBe 1
           day shouldBe 10
@@ -99,6 +95,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
             CommitInfo("rev4", 1004000l, false),
             CommitInfo("rev5", 1005000l, false)
           )
+          branches should contain only "stable-1.14"
       }
     }
 
@@ -120,7 +117,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
       summaries.foreach { summary =>
         inside(summary) {
-          case UserActivitySummary(year, month, day, hour, name, email,_, _, _, _, _, _, _, _) =>
+          case UserActivitySummary(year, month, day, hour, name, email,_, _, _, _, _, _, _, _, _) =>
             year shouldBe 2018
             month shouldBe 1
             day shouldBe 10
@@ -132,7 +129,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
 
       summaries.foreach { summary =>
         inside(summary) {
-          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, last_commit_date, false) =>
+          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, _, last_commit_date, false) =>
             num_commits shouldBe 3
             last_commit_date shouldBe 1005000l
             commits should contain only(
@@ -141,7 +138,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
               CommitInfo("rev5", 1005000l, false)
             )
 
-          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, last_commit_date, true) =>
+          case UserActivitySummary(_, _, _, _, _, _, num_commits, _, _, _, _, commits, _, last_commit_date, true) =>
             num_commits shouldBe 2
             last_commit_date shouldBe 1003000l
             commits should contain only(
@@ -169,7 +166,7 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
       val analyticsJobOutput =
         sc.parallelize(Seq(
           "project1" -> UserActivitySummary(2018, 1, 20, 10, "Stefano", "stefano@galarraga-org.com", 1, 2, 1, 10, 4, Array(CommitInfo("sha1", expectedDate, false)),
-            expectedDate, false)
+            Array("master", "stable-2.14"), expectedDate, false)
         ))
           .asEtlDataFrame(sql)
           .addOrganization()
@@ -177,11 +174,13 @@ class GerritEventsTransformationsSpec extends WordSpec with Matchers with SparkT
           .dropCommits
 
       val expected = sc.parallelize(Seq(
-        ("project1", "stefano_alias", "stefano@galarraga-org.com", 2018, 1, 20, 10, 2, 1, 10, 4, 1, expectedDate, false, "galarraga-org")
+        ("project1", "stefano_alias", "stefano@galarraga-org.com", 2018, 1, 20, 10, 2, 1, 10, 4, 1, expectedDate, false, Array("master", "stable-2.14"), "galarraga-org")
       )).toDF("project", "author", "email", "year", "month", "day", "hour", "num_files", "num_distinct_files",
-        "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "organization")
+        "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "branches", "organization")
 
-      analyticsJobOutput.collect() should contain theSameElementsAs expected.collect()
+      val collected = analyticsJobOutput.collect()
+
+      collected should contain theSameElementsAs expected.collect()
     }
   }
 
@@ -225,7 +224,7 @@ trait EventFixture {
        |"type":"ref-updated","eventCreatedOn":$createdOn}""".stripMargin)
 
   def aChangeMergedEvent(changeId: String, createdOnInSecs: Long = 1000l, newRev: String = "863b64002f2a9922deba69407804a44703c996e0",
-                         isMergeCommit: Boolean = false, insertions: Integer = 0, deletions: Integer = 0) = JsonEvent[ChangeMergedEvent](
+                         isMergeCommit: Boolean = false, insertions: Integer = 0, deletions: Integer = 0, branch: String = "master") = JsonEvent[ChangeMergedEvent](
     s"""{
        |"submitter":{"name":"Administrator","email":"admin@example.com","username":"admin"},
        |"newRev":"$newRev",
@@ -243,13 +242,13 @@ trait EventFixture {
        | "sizeDeletions":$deletions
        |},
        |"change":{
-       | "project":"subcut","branch":"master","topic":"TestEvents","id":"$changeId","number":1,"subject":"Generating some changes to test events",
+       | "project":"subcut","branch":"$branch","topic":"TestEvents","id":"$changeId","number":1,"subject":"Generating some changes to test events",
        | "owner":{"name":"Administrator","email":"admin@example.com","username":"admin"},
        | "url":"http://842860da5b33:8080/1","commitMessage":"Generating some changes to test events Change-Id: $changeId",
        | "createdOn":1516530259,"status":"MERGED"
        |},
        |"project":{"name":"subcut"},
-       |"refName":"refs/heads/master",
+       |"refName":"refs/heads/$branch",
        |"changeKey":{"id":"$changeId"},
        |"type":"change-merged",
        |"eventCreatedOn": $createdOnInSecs

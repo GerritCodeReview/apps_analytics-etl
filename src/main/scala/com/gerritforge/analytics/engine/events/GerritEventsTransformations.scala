@@ -105,6 +105,7 @@ object GerritEventsTransformations extends LazyLogging {
       commits = changes.map(changeMerged =>
         CommitInfo(changeMerged.newRev, changeMerged.eventCreatedOn * 1000, changeMerged.patchSet.parents.size > 1)
       ).toArray,
+      branches = changes.map(changeMerged => changeMerged.change.branch).toArray,
       last_commit_date = changes.map(_.eventCreatedOn).max * 1000,
       added_lines = changes.map(_.patchSet.sizeInsertions).sum,
       deleted_lines = changes.map(_.patchSet.sizeDeletions).sum,
@@ -142,6 +143,7 @@ object GerritEventsTransformations extends LazyLogging {
         added_lines = 0,
         deleted_lines = 0,
         commits = Array.empty,
+        branches = Array.empty,
         last_commit_date = 0l,
         is_merge = false)
 
@@ -170,9 +172,9 @@ object GerritEventsTransformations extends LazyLogging {
 
     self.map { case (project, summary) =>
       (project, summary.name, summary.email, summary.year, summary.month, summary.day, summary.hour, summary.num_files, summary.num_distinct_files,
-        summary.added_lines, summary.deleted_lines, Option(summary.num_commits), Option(summary.last_commit_date), Option(summary.is_merge), summary.commits)
+        summary.added_lines, summary.deleted_lines, Option(summary.num_commits), Option(summary.last_commit_date), Option(summary.is_merge), summary.commits, summary.branches)
     }.toDF("project", "author", "email", "year", "month", "day", "hour", "num_files", "num_distinct_files",
-      "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "commits")
+      "added_lines", "deleted_lines", "num_commits", "last_commit_date", "is_merge", "commits", "branches")
   }
 
   def getContributorStatsFromGerritEvents(events: RDD[GerritRefHasNewRevisionEvent],

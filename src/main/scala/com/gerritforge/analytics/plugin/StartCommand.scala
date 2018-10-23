@@ -40,6 +40,9 @@ class StartCommand @Inject()(implicit val gerritProjects: GerritProjectsSupport,
   @ArgOption(name = "--email-aliases", aliases = Array("-a"), usage = "\"emails to author alias\" input data path")
   var emailAlias: String = null
 
+  @ArgOption(name = "--extract-branches", aliases = Array("-r"), usage = "enables branches extraction for each commit")
+  var extractBranches: Boolean = false
+
   override def run() {
     implicit val config = GerritEndpointConfig(gerritConfig.getListenUrl(), prefix = Option(projectControl).map(_.getProject.getName), "", elasticIndex,
       beginDate, endDate, aggregate, emailAlias)

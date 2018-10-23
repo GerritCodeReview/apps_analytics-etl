@@ -31,7 +31,8 @@ case class GerritEndpointConfig(baseUrl: Option[String] = None,
                                 eventsPath: Option[String] = None,
                                 eventsFailureOutputPath: Option[String] = None,
                                 username: Option[String] = None,
-                                password: Option[String] = None
+                                password: Option[String] = None,
+                                extractBranches: Option[Boolean] = None
                                ) {
 
 
@@ -47,8 +48,12 @@ case class GerritEndpointConfig(baseUrl: Option[String] = None,
 
   @transient
   private lazy val format: DateTimeFormatter = AnalyticsDateTimeFormater.yyyy_MM_dd.withZone(ZoneOffset.UTC)
-  val queryString = Seq("since" -> since.map(format.format), "until" -> until.map(format.format), "aggregate" -> aggregate)
-    .flatMap(queryOpt).mkString("?", "&", "")
+  val queryString = Seq(
+    "since" -> since.map(format.format),
+    "until" -> until.map(format.format),
+    "aggregate" -> aggregate,
+    "extract-branches" -> extractBranches.map(_.toString)
+  ).flatMap(queryOpt).mkString("?", "&", "")
 
   def contributorsUrl(projectName: String): Option[String] =
     baseUrl.map { url => s"$url/projects/$projectName/analytics~contributors$queryString" }
