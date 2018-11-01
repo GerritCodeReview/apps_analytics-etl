@@ -105,6 +105,29 @@
     },
     {
       "key": {
+        "uuid": "337e5354_8f4d66c5",
+        "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-01T09:21:27Z",
+      "side": 1,
+      "message": "superflous comment",
+      "range": {
+        "startLine": 234,
+        "startChar": 133,
+        "endLine": 234,
+        "endChar": 140
+      },
+      "revId": "3a92a4672954d8a5ea3a5fd6a8c8cb029c29c4b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c0c9a65e_2059ce5f",
         "filename": "src/main/scala/com/gerritforge/analytics/job/Main.scala",
         "patchSetId": 2
