@@ -18,7 +18,7 @@ val gerritApiVersion = "2.13.7"
 
 val pluginName = "analytics-etl"
 
-val mainClassPackage = "com.gerritforge.analytics.job.Main"
+val mainClassPackage = "com.gerritforge.analytics.gitcommits.job.Main"
 val dockerRepository = "spark-gerrit-analytics-etl"
 
 libraryDependencies ++= Seq(
@@ -87,8 +87,8 @@ buildOptions in docker := BuildOptions(cache = false)
 packageOptions in(Compile, packageBin) += Package.ManifestAttributes(
   ("Gerrit-ApiType", "plugin"),
   ("Gerrit-PluginName", pluginName),
-  ("Gerrit-Module", "com.gerritforge.analytics.plugin.Module"),
-  ("Gerrit-SshModule", "com.gerritforge.analytics.plugin.SshModule"),
+  ("Gerrit-Module", "com.gerritforge.analytics.gitcommits.plugin.Module"),
+  ("Gerrit-SshModule", "com.gerritforge.analytics.gitcommits.plugin.SshModule"),
   ("Implementation-Title", "Analytics ETL plugin"),
   ("Implementation-URL", "https://gerrit.googlesource.com/plugins/analytics-etl")
 )
