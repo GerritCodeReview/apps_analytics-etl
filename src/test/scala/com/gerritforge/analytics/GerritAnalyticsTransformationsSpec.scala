@@ -17,9 +17,9 @@ package com.gerritforge.analytics
 import java.io.{ByteArrayInputStream, File, FileOutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
 
-import com.gerritforge.analytics.api.GerritConnectivity
-import com.gerritforge.analytics.engine.GerritAnalyticsTransformations._
-import com.gerritforge.analytics.model.{GerritProject, GerritProjectsSupport, ProjectContributionSource}
+import com.gerritforge.analytics.gitcommits.api.GerritConnectivity
+import com.gerritforge.analytics.gitcommits.engine.GerritAnalyticsTransformations._
+import com.gerritforge.analytics.gitcommits.model.{GerritProject, GerritProjectsSupport, ProjectContributionSource}
 import org.apache.spark.sql.Row
 import org.json4s.JsonDSL._
 import org.json4s._
@@ -48,7 +48,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
     projects should contain only(GerritProject("All-Projects-id", "All-Projects-name"), GerritProject("Test-id", "Test-name"))
   }
 
-
   "enrichWithSource" should "enrich project RDD object with its source" in {
 
     val projectRdd = sc.parallelize(Seq(GerritProject("project-id", "project-name")))
@@ -74,7 +73,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
         |LineThree
       """.stripMargin
     val expectedResult = List("LineOne", "LineTwo", "LineThree")
-
 
     val inputStream = new ByteArrayInputStream(contentWithEmptyLines.getBytes)
     val contentWithoutEmptyLines = filterEmptyStrings(Source.fromInputStream(inputStream, Codec.UTF8.name))
@@ -179,7 +177,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
       ("aliased_author_with_organization", "aliased_email@aliased_organization.com", "aliased_organization"),
       ("aliased_author_empty_organization", "aliased_email@emtpy_organization.com", ""),
       ("aliased_author_null_organization", "aliased_email@null_organization.com", null)
-
     )).toDF("author", "email", "organization")
 
     val inputSampleDF = sc.parallelize(Seq(
@@ -196,8 +193,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
 
     val df = inputSampleDF.handleAliases(Some(aliasDF))
 
-    df.schema.fields.map(_.name) should contain allOf(
-      "author", "email", "organization")
+    df.schema.fields.map(_.name) should contain allOf ("author", "email", "organization")
 
     df.collect should contain theSameElementsAs expectedDF.collect
   }
@@ -214,18 +210,18 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
 
     val df = inputSampleDF.handleAliases(Some(aliasDF))
 
-    df.schema.fields.map(_.name) should contain allOf("author", "email", "organization")
+    df.schema.fields.map(_.name) should contain allOf ("author", "email", "organization")
   }
 
   it should "return correct columns when alias DF is not defined" in {
     import spark.implicits._
     val expectedTuple = ("author_name", "email@mail.com", "an_organization")
     val inputSampleDF = sc.parallelize(Seq(expectedTuple)).toDF("author", "email", "organization")
-    val expectedRow = Row.fromTuple(expectedTuple)
+    val expectedRow   = Row.fromTuple(expectedTuple)
 
     val df = inputSampleDF.handleAliases(None)
 
-    df.schema.fields.map(_.name) should contain allOf("author", "email", "organization")
+    df.schema.fields.map(_.name) should contain allOf ("author", "email", "organization")
     df.collect().head should be(expectedRow)
   }
 
@@ -262,7 +258,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
       "email@mail.companyname-couk.co.uk",
       "email@mail.companyname-com.com",
       "email@mail.companyname-info.info"
-
     )).toDF("email")
 
     val transformed = df.addOrganization()
@@ -282,7 +277,6 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
       Row("email@mail.companyname-info.info", "mail.companyname-info")
     )
   }
-
 
   "extractCommitsPerProject" should "generate a Dataset with the all the SHA of commits with associated project" in {
     import sql.implicits._
@@ -306,8 +300,7 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
   }
 
   private def newSource(contributorsJson: JObject*): Option[String] = {
-    val tmpFile = File.createTempFile(System.getProperty("java.io.tmpdir"),
-      s"${getClass.getName}-${System.nanoTime()}")
+    val tmpFile = File.createTempFile(System.getProperty("java.io.tmpdir"),s"${getClass.getName}-${System.nanoTime()}")
 
     val out = new OutputStreamWriter(new FileOutputStream(tmpFile), StandardCharsets.UTF_8)
     contributorsJson.foreach(json => out.write(compact(render(json)) + '\n'))

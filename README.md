@@ -9,6 +9,7 @@ Job can be launched with the following parameters:
 
 ```bash
 bin/spark-submit \
+    --class com.gerritforge.analytics.gitcommits.job \
     --conf spark.es.nodes=es.mycompany.com \
     $JARS/analytics-etl.jar \
     --since 2000-06-01 \
