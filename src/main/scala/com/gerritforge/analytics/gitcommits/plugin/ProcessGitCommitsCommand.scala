@@ -5,11 +5,7 @@ import java.time.LocalDate
 
 import com.gerritforge.analytics.gitcommits.engine.events.AggregationStrategy
 import com.gerritforge.analytics.gitcommits.job.{FetchProjects, Job}
-import com.gerritforge.analytics.gitcommits.model.{
-  GerritEndpointConfig,
-  GerritProject,
-  GerritProjectsSupport
-}
+import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
 import com.google.gerrit.server.project.ProjectControl
 import com.google.gerrit.sshd.{CommandMetaData, SshCommand}
 import com.google.inject.Inject
@@ -35,7 +31,7 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
   var projectControl: ProjectControl = null
 
   @ArgOption(name = "--elasticIndex", aliases = Array("-e"), usage = "index name")
-  var elasticIndex: String = "gerrit/analytics"
+  var elasticIndex: String = "gerrit"
 
   @ArgOption(name = "--since", aliases = Array("-s"), usage = "begin date")
   var beginDate: Timestamp = NO_TIMESTAMP
@@ -91,9 +87,9 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
       import org.elasticsearch.spark.sql._
       config.elasticIndex.foreach { esIndex =>
         stdout.println(
-          s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}'")
+          s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'")
         stdout.flush()
-        projectStats.saveToEs(esIndex)
+        projectStats.saveToEs(s"$esIndex/$indexType")
       }
 
       val elaspsedTs = (System.currentTimeMillis - startTs) / 1000L

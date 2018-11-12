@@ -17,7 +17,8 @@ bin/spark-submit \
     --url http://gerrit.mycompany.com \
     --events file:///tmp/gerrit-events-export.json \
     --writeNotProcessedEventsTo file:///tmp/failed-events \
-    -e gerrit/analytics \
+    -e gerrit
+     \
     --username gerrit-api-username \
     --password gerrit-api-password
 ```
@@ -28,7 +29,7 @@ You can also run this job in docker:
 docker run -ti --rm \
     -e ES_HOST="es.mycompany.com" \
     -e GERRIT_URL="http://gerrit.mycompany.com" \
-    -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit/analytics" \
+    -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit" \
     gerritforge/spark-gerrit-analytics-etl:latest
 ```
 
@@ -39,8 +40,7 @@ passed through the *spark.es.net.http.auth.pass* and *spark.es.net.http.auth.use
     see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
 - -u --url Gerrit server URL with the analytics plugins installed
 - -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
-- -e --elasticIndex specify as <index>/<type> to be loaded in Elastic Search
-    if not provided no ES export will be performed
+- -e --elasticIndex Elastic Search index name. If not provided no ES export will be performed
 - -o --out folder location for storing the output as JSON files
     if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
     the system temporary directory
@@ -97,7 +97,7 @@ Just run `docker-compose up`.
           --network analytics-etl_ek \
           -e ES_HOST="elasticsearch" \
           -e GERRIT_URL="http://$HOST_IP:8080" \
-          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit/analytics" \
+          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit" \
           gerritforge/spark-gerrit-analytics-etl:latest
   ```
 
