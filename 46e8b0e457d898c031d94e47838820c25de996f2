@@ -16,6 +16,24 @@
       "revId": "46e8b0e457d898c031d94e47838820c25de996f2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b59bdf0f_84a100fa",
+        "filename": "src/main/scala/com/gerritforge/analytics/gitcommits/api/gerritApiConnectivity.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-12T16:30:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b969f031_6eb2a04e",
+      "revId": "46e8b0e457d898c031d94e47838820c25de996f2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
