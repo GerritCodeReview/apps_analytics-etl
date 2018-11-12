@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "f1f7627b_e743b577",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-12T20:08:46Z",
+      "side": 1,
+      "message": "This will be true once we implement audit logs, but at the moment the index type is just hardcoded to \u0027gitcommits\u0027. Should we just say that in the commit message.",
+      "revId": "96d115f09ac31321537c8e05ed7aa8aac851256f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ccee05ec_10e5ae81",
         "filename": "src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
         "patchSetId": 1
@@ -22,6 +39,30 @@
       "revId": "96d115f09ac31321537c8e05ed7aa8aac851256f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "45ec60dc_6fabdaa3",
+        "filename": "src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-12T20:08:46Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ccee05ec_10e5ae81",
+      "range": {
+        "startLine": 140,
+        "startChar": 6,
+        "endLine": 140,
+        "endChar": 15
+      },
+      "revId": "96d115f09ac31321537c8e05ed7aa8aac851256f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
