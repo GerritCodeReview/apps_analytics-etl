@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ccee05ec_10e5ae81",
+        "filename": "src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-12T18:46:39Z",
+      "side": 1,
+      "message": "Not the best place where to place this. It was the handier one. We can find a better place for it when adding the audit log analytics.",
+      "range": {
+        "startLine": 140,
+        "startChar": 6,
+        "endLine": 140,
+        "endChar": 15
+      },
+      "revId": "96d115f09ac31321537c8e05ed7aa8aac851256f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
