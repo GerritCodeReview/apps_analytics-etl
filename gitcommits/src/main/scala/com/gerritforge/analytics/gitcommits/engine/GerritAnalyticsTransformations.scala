@@ -18,7 +18,7 @@ import java.io.IOException
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDateTime, ZoneId, ZoneOffset, ZonedDateTime}
 
-import com.gerritforge.analytics.gitcommits.api.GerritConnectivity
+import com.gerritforge.analytics.common.api.GerritConnectivity
 import com.gerritforge.analytics.gitcommits.model._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.functions.{udf, _}
