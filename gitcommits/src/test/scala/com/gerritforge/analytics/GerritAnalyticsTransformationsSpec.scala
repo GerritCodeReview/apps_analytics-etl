@@ -17,7 +17,7 @@ package com.gerritforge.analytics
 import java.io.{ByteArrayInputStream, File, FileOutputStream, OutputStreamWriter}
 import java.nio.charset.StandardCharsets
 
-import com.gerritforge.analytics.gitcommits.api.GerritConnectivity
+import com.gerritforge.analytics.common.api.GerritConnectivity
 import com.gerritforge.analytics.gitcommits.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.gitcommits.model.{GerritProject, GerritProjectsSupport, ProjectContributionSource}
 import org.apache.spark.sql.Row
