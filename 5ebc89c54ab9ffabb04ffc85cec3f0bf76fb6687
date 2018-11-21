@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "e788f426_f7ac4aa5",
+        "filename": "build.sbt",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-21T15:44:45Z",
+      "side": 0,
+      "message": "shall we put the build of this path inside baseDockerFile? so we ensure a consistent naming ?",
+      "range": {
+        "startLine": 52,
+        "startChar": 6,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "5ebc89c54ab9ffabb04ffc85cec3f0bf76fb6687",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}

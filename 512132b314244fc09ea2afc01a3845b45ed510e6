@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8e674fbb_227245ea",
+        "filename": "build.sbt",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-21T15:44:45Z",
+      "side": 1,
+      "message": "Shall we put this into baseDockerFile as well ? it is always the same",
+      "range": {
+        "startLine": 15,
+        "startChar": 10,
+        "endLine": 15,
+        "endChar": 18
+      },
+      "revId": "512132b314244fc09ea2afc01a3845b45ed510e6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8e586e2_9231709d",
+        "filename": "build.sbt",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-21T15:44:45Z",
+      "side": 1,
+      "message": "can this go in the dockerBaseFile as well ?",
+      "range": {
+        "startLine": 16,
+        "startChar": 10,
+        "endLine": 16,
+        "endChar": 24
+      },
+      "revId": "512132b314244fc09ea2afc01a3845b45ed510e6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
