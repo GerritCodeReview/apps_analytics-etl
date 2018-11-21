@@ -46,6 +46,30 @@
       "revId": "5ebc89c54ab9ffabb04ffc85cec3f0bf76fb6687",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f35563af_e7a11689",
+        "filename": "build.sbt",
+        "patchSetId": 1
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-21T16:40:28Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "2b69f745_c1290f93",
+      "range": {
+        "startLine": 52,
+        "startChar": 6,
+        "endLine": 52,
+        "endChar": 24
+      },
+      "revId": "5ebc89c54ab9ffabb04ffc85cec3f0bf76fb6687",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
