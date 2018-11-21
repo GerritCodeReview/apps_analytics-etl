@@ -9,7 +9,7 @@ test -z "$GERRIT_URL" && ( echo "GERRIT_URL is not set; exiting" ; exit 1 )
 
 # Optional
 ES_PORT="${ES_PORT:-9200}"
-SPARK_JAR_PATH="${SPARK_JAR_PATH:-/app/analytics-etl-assembly.jar}"
+SPARK_JAR_PATH="${SPARK_JAR_PATH:-/app/analytics-etl-gitcommits-assembly.jar}"
 SPARK_JAR_CLASS="${SPARK_JAR_CLASS:-com.gerritforge.analytics.gitcommits.job.Main}"
 
 echo "* Elastic Search Host: $ES_HOST:$ES_PORT"

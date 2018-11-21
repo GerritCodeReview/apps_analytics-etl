@@ -17,7 +17,7 @@ package com.gerritforge.analytics.gitcommits.model
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
 
-import com.gerritforge.analytics.gitcommits.api.GerritConnectivity
+import com.gerritforge.analytics.common.api.GerritConnectivity
 import com.gerritforge.analytics.gitcommits.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
 
 case class GerritEndpointConfig(
