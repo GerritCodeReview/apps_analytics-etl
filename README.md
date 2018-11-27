@@ -68,6 +68,7 @@ docker run -ti --rm \
     If not specified events will be ignored
 - --writeNotProcessedEventsTo location where to write a TSV file containing the events we couldn't process
     with a description fo the reason why
+- -k --ignore-ssl-cert allows to proceed even for server connections otherwise considered insecure.
 
 
   CSVs with 3 columns are expected in input.

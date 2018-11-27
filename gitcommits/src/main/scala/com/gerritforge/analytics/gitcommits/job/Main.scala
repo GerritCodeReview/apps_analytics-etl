@@ -105,6 +105,10 @@ object Main extends App with Job with LazyLogging with FetchRemoteProjects {
         c.copy(password = Some(input))
       } text "Gerrit API Password"
 
+      opt[Boolean]('k', "ignore-ssl-cert") optional () action { (input, c) =>
+        c.copy(ignoreSSLCert = Some(input))
+      } text "Ignore SSL certificate validation"
+
       opt[Boolean]('r', "extract-branches") optional () action { (input, c) =>
         c.copy(extractBranches = Some(input))
       } text "enables branches extraction for each commit"

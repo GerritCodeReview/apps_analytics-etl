@@ -49,6 +49,11 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
              usage = "\"emails to author alias\" input data path")
   var emailAlias: String = null
 
+  @ArgOption(name = "--ignore-ssl-cert",
+    aliases = Array("-k"),
+    usage = "Ignore SSL certificate validation")
+  var ignoreSSLCert: Boolean = false
+
   @ArgOption(name = "--extract-branches",
              aliases = Array("-r"),
              usage = "enables branches extraction for each commit")
@@ -63,7 +68,9 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
                                                beginDate,
                                                endDate,
                                                aggregate,
-                                               emailAlias)
+                                               emailAlias,
+                                               ignoreSSLCert=Some(ignoreSSLCert)
+    )
 
     implicit val spark: SparkSession = SparkSession
       .builder()
