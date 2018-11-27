@@ -17,6 +17,7 @@ package com.gerritforge.analytics.common.api
 import java.net.URL
 
 import com.typesafe.scalalogging.LazyLogging
+import javax.net.ssl.{HttpsURLConnection, SSLContext}
 import org.apache.commons.codec.binary.Base64
 
 import scala.io.{BufferedSource, Codec, Source}
@@ -34,9 +35,14 @@ sealed trait HttpBasicAuthentication {
     BASIC + " " + encodeCredentials(username, password)
 }
 
-class GerritConnectivity(maybeUsername: Option[String], maybePassword: Option[String]) extends HttpBasicAuthentication with Serializable with LazyLogging {
+class GerritConnectivity(maybeUsername: Option[String], maybePassword: Option[String], ignoreSSLCert: Option[Boolean] = None) extends HttpBasicAuthentication with Serializable with LazyLogging {
   private def createBasicSecuredConnection(url: String, username: String, password: String): BufferedSource = {
     try {
+
+      if(ignoreSSLCert.getOrElse(false)) {
+        trustAllSSLCerts()
+      }
+
       val unsecureURL = new URL(url)
       val endPointPath = unsecureURL.getFile
       val basicAuthURL = unsecureURL.toString.replace(endPointPath, s"/a$endPointPath")
@@ -54,6 +60,9 @@ class GerritConnectivity(maybeUsername: Option[String], maybePassword: Option[St
 
   private def createNonSecuredConnection(url: String): BufferedSource = {
     logger.info(s"Connecting to API $url")
+    if(ignoreSSLCert.getOrElse(false)) {
+      trustAllSSLCerts()
+    }
     Source.fromURL(url, Codec.UTF8.name)
   }
 
@@ -64,5 +73,13 @@ class GerritConnectivity(maybeUsername: Option[String], maybePassword: Option[St
         password <- maybePassword
       } yield (createBasicSecuredConnection(url, username, password))
       ).getOrElse(createNonSecuredConnection(url))
+  }
+
+  private def trustAllSSLCerts(): Unit = {
+    logger.warn("Trusting all SSL certificates")
+    val sslContext = SSLContext.getInstance("SSL")
+    sslContext.init(null, Array(TrustAll), new java.security.SecureRandom())
+    HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory)
+    HttpsURLConnection.setDefaultHostnameVerifier(VerifiesAllHostNames)
   }
 }
