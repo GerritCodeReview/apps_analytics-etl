@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "fdc158d1_8bce8217",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/gerritApiConnectivity.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-27T11:02:03Z",
+      "side": 1,
+      "message": "Why not just using a boolean and set it to false by default?",
+      "range": {
+        "startLine": 38,
+        "startChar": 87,
+        "endLine": 38,
+        "endChar": 100
+      },
+      "revId": "f0b85ce793406be026a8722f8d4b65ddda347573",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
