@@ -22,6 +22,30 @@
       "revId": "f0b85ce793406be026a8722f8d4b65ddda347573",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6a6e4025_2401e2f4",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/gerritApiConnectivity.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-27T11:05:17Z",
+      "side": 1,
+      "message": "Good point, let me amend that.",
+      "parentUuid": "fdc158d1_8bce8217",
+      "range": {
+        "startLine": 38,
+        "startChar": 87,
+        "endLine": 38,
+        "endChar": 100
+      },
+      "revId": "f0b85ce793406be026a8722f8d4b65ddda347573",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
