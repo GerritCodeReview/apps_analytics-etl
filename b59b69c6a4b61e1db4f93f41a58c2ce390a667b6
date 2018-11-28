@@ -96,6 +96,30 @@
     },
     {
       "key": {
+        "uuid": "debbe4d9_1ce73d74",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-28T10:41:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "31a3f4ed_c73ad91b",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 17
+      },
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a1f39962_035396ba",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
         "patchSetId": 1
@@ -143,6 +167,30 @@
     },
     {
       "key": {
+        "uuid": "761ad6cd_5616778b",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-28T10:41:49Z",
+      "side": 1,
+      "message": "What if we put it as an Option in the AuditEvent trait ?",
+      "parentUuid": "934853e7_7ce161ff",
+      "range": {
+        "startLine": 44,
+        "startChar": 6,
+        "endLine": 44,
+        "endChar": 9
+      },
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed74d0ad_36f8abab",
         "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
         "patchSetId": 1
@@ -172,6 +220,24 @@
       "side": 1,
       "message": "This tests (and documents) a SshAuditEvent that has failed authorization, and thus has `who` field set to None",
       "parentUuid": "ed74d0ad_36f8abab",
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f9fc751c_67cc6af9",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-28T10:41:49Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "9c961659_b14b9b4d",
       "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -210,6 +276,24 @@
       "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c3f4caae_0cf7d03c",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-28T10:41:49Z",
+      "side": 1,
+      "message": "True...you are right. I\u0027ve overlooked the fact it was a trait :/",
+      "parentUuid": "30dd0689_0adccb4c",
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
