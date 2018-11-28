@@ -215,6 +215,30 @@
     },
     {
       "key": {
+        "uuid": "4d163083_4215a884",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-28T10:54:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0d317e7d_48e49078",
+      "range": {
+        "startLine": 44,
+        "startChar": 6,
+        "endLine": 44,
+        "endChar": 9
+      },
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed74d0ad_36f8abab",
         "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
         "patchSetId": 1
