@@ -191,6 +191,30 @@
     },
     {
       "key": {
+        "uuid": "0d317e7d_48e49078",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-28T10:51:34Z",
+      "side": 1,
+      "message": "yeah I thought about it, but HTTP Audit events *always* have a \u0027who\u0027, so I thought it would be a better modelling for those events not to have this sat as an option.",
+      "parentUuid": "761ad6cd_5616778b",
+      "range": {
+        "startLine": 44,
+        "startChar": 6,
+        "endLine": 44,
+        "endChar": 9
+      },
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "ed74d0ad_36f8abab",
         "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
         "patchSetId": 1
