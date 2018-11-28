@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "5f661685_b71de1e3",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-28T10:35:06Z",
+      "side": 1,
+      "message": "Good point, I will add that to my next patch-set",
+      "parentUuid": "4d7074cf_a70ef7e6",
+      "range": {
+        "startLine": 26,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 23
+      },
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "c02c9058_07b64d3b",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
         "patchSetId": 1
@@ -36,6 +60,30 @@
       "writtenOn": "2018-11-27T18:31:01Z",
       "side": 1,
       "message": "In the event body we both have \u0027when\u0027 and `time_at_start`...do you know what is the difference between the two? Is it worth capturing both of them or no need to?",
+      "range": {
+        "startLine": 28,
+        "startChar": 6,
+        "endLine": 28,
+        "endChar": 17
+      },
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "31a3f4ed_c73ad91b",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-28T10:35:06Z",
+      "side": 1,
+      "message": "I think it is just redundant information.\nin all auditlog entries I checked, the two values never diverged.\nSo I thought it was safe to choose one and the most expressive was time_at_start.",
+      "parentUuid": "c02c9058_07b64d3b",
       "range": {
         "startLine": 28,
         "startChar": 6,
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "934853e7_7ce161ff",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-28T10:35:06Z",
+      "side": 1,
+      "message": "it\u0027s because SshAuditEvent might not have a \u0027who\u0027 (in fact it is an Option), this happens when the ssh command is not Authorised.",
+      "parentUuid": "a1f39962_035396ba",
+      "range": {
+        "startLine": 44,
+        "startChar": 6,
+        "endLine": 44,
+        "endChar": 9
+      },
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ed74d0ad_36f8abab",
         "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
         "patchSetId": 1
@@ -88,6 +160,24 @@
     },
     {
       "key": {
+        "uuid": "9c961659_b14b9b4d",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-28T10:35:06Z",
+      "side": 1,
+      "message": "This tests (and documents) a SshAuditEvent that has failed authorization, and thus has `who` field set to None",
+      "parentUuid": "ed74d0ad_36f8abab",
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "56cfbd1b_ab3224a3",
         "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
         "patchSetId": 1
@@ -99,6 +189,24 @@
       "writtenOn": "2018-11-27T18:31:01Z",
       "side": 1,
       "message": "We could add a test for `BaseHttpAuditEvent` to cover all the cases.",
+      "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "30dd0689_0adccb4c",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-11-28T10:35:06Z",
+      "side": 1,
+      "message": "I don\u0027t think we cannot test BaseHttpAuditEvent because it is just a trait and AuditEvent.fromJsonString only produces concretes instances of AuditEvent.",
+      "parentUuid": "56cfbd1b_ab3224a3",
       "revId": "b59b69c6a4b61e1db4f93f41a58c2ce390a667b6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
