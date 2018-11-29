@@ -3,98 +3,45 @@ import org.json4s.jackson.Serialization.write
 import org.json4s.native.JsonMethods._
 import org.json4s.{DefaultFormats, _}
 
-import scala.util.{Failure, Success, Try}
+import scala.util.{Success, Try}
 
-object AuditEvent {
 
-  implicit private val formats = DefaultFormats + AuditUUID.serializer + AccountId.serializer
-
-  def fromJsonString(json: String): Try[AuditEvent] = {
-    Try(parse(json)).flatMap { jsValueEvent =>
-      jsValueEvent \ "type" match {
-        case JString(eventType) if eventType == "HttpAuditEvent" =>
-          Success((jsValueEvent \ "event").camelizeKeys.extract[HttpAuditEvent])
-        case JString(eventType) if eventType == "ExtendedHttpAuditEvent" =>
-          Success((jsValueEvent \ "event").camelizeKeys.extract[ExtendedHttpAuditEvent])
-        case JString(eventType) if eventType == "SshAuditEvent" =>
-          Success((jsValueEvent \ "event").camelizeKeys.extract[SshAuditEvent])
-        case _ => Failure(new MappingException(s"Could not parse json into an audit event: $json"))
-      }
-    }
-  }
-
-  def toJsonString[T <: AuditEvent](auditEvent: T): String = {
-    compact(render(parse(write[T](auditEvent)).snakizeKeys))
-  }
-}
-
-sealed trait AuditEvent {
-  def sessionId: String
-  def timeAtStart: Long
-  def what: String
-  def elapsed: Int
-  def uuid: AuditUUID
-}
-
-final case class SshAuditEvent(
+case class AuditEvent(
   sessionId: String,
-  who: Option[CurrentUser],
+  who: Option[Int],
+  accessPath: Option[String],
   timeAtStart: Long,
+  httpMethod: Option[String],
   what: String,
   elapsed: Int,
-  uuid: AuditUUID
-) extends AuditEvent
+  uuid: String,
+  auditType: String
+) {
+  implicit private val formats = DefaultFormats
 
-sealed trait BaseHttpAuditEvent extends AuditEvent {
-  def httpMethod: String
-  def httpStatus: Int
-  def who: CurrentUser
+  def toJsonString: String = {
+    compact(render(parse(write[AuditEvent](this)).snakizeKeys))
+  }
+
 }
 
-final case class HttpAuditEvent(
-    httpMethod: String,
-    httpStatus: Int,
-    sessionId: String,
-    who: CurrentUser,
-    timeAtStart: Long,
-    what: String,
-    elapsed: Int,
-    uuid: AuditUUID
-) extends BaseHttpAuditEvent
+object AuditEvent {
+  implicit private val formats = DefaultFormats
 
-final case class ExtendedHttpAuditEvent(
-    httpMethod: String,
-    httpStatus: Int,
-    sessionId: String,
-    who: CurrentUser,
-    timeAtStart: Long,
-    what: String,
-    elapsed: Int,
-    uuid: AuditUUID
-) extends BaseHttpAuditEvent
+  def parseRaw(json: String): Try[AuditEvent] =  Try(parse(json)).flatMap { jsValueEvent =>
 
-final case class CurrentUser(
-  accessPath: String,
-  accountId: Option[AccountId]
-)
+    val auditType = (jsValueEvent \ "type").extract[String]
+    val who = (jsValueEvent \ "event" \ "who" \ "account_id" \ "id").extractOpt[Int]
+    val accessPath = (jsValueEvent \ "event" \ "who" \ "access_path").extractOpt[String]
+    val timeAtStart = (jsValueEvent \ "event" \ "time_at_start").extract[Long]
+    val httpMethod = (jsValueEvent \ "event" \ "http_method").extractOpt[String]
+    val what = (jsValueEvent \ "event" \ "what").extract[String]
+    val elapsed = (jsValueEvent \ "event" \ "elapsed").extract[Int]
+    val uuid = (jsValueEvent \ "event" \ "uuid" \ "uuid").extract[String]
+    val sessionId = (jsValueEvent \ "event" \ "session_id").extract[String]
 
-final case class AccountId(id: Int)
-object AccountId {
-  val serializer = new CustomSerializer[AccountId]( _ =>
-      (
-        { case JObject(JField("id", JInt(id)) :: Nil) => AccountId(id.intValue()) },
-        { case a: AccountId => JInt(a.id) }
-      )
-  )
-}
-
-final case class AuditUUID(uuid: String)
-
-object AuditUUID {
-  val serializer = new CustomSerializer[AuditUUID]( _ =>
-      (
-        { case JObject(JField("uuid", JString(uuid)) :: Nil) => AuditUUID(uuid) },
-        { case a: AuditUUID => JString(a.uuid) }
-      )
-  )
+    Success(
+      AuditEvent(sessionId, who, accessPath, timeAtStart, httpMethod, what, elapsed, uuid, auditType)
+    )
+  }
 }
