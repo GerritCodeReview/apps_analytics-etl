@@ -14,13 +14,13 @@
 
 package com.gerritforge.analytics.gitcommits.model
 
+import com.gerritforge.analytics.support.ops.GerritSourceOps._
 import com.google.gerrit.extensions.api.GerritApi
 import com.google.inject.Inject
 import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
 import scala.util.Try
-
 case class GerritProject(id: String, name: String)
 
 class GerritProjectsSupport @Inject()(gerritApi: GerritApi) {
@@ -36,11 +36,8 @@ class GerritProjectsSupport @Inject()(gerritApi: GerritApi) {
 
 object GerritProjectsSupport {
 
-  val GERRIT_PREFIX = ")]}'\n"
-  private val GERRIT_PREFIX_LEN = GERRIT_PREFIX.length
-
   def parseJsonProjectListResponse(jsonSource: Source): Seq[GerritProject] = {
-    parse(jsonSource.drop(GERRIT_PREFIX_LEN).mkString)
+    parse(jsonSource.dropGerritPrefix.mkString)
       .values
       .asInstanceOf[Map[String, Map[String, String]]]
       .mapValues(projectAttributes => projectAttributes("id"))
