@@ -12,21 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.gitcommits.support.ops
+package com.gerritforge.analytics.support.ops
 
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time._
 import java.time.format.DateTimeFormatter
-import java.time.{LocalDateTime, ZoneOffset}
+import java.util.TimeZone
 
-package AnalyticsTimeOps {
+import scala.util.Try
 
-  import java.sql.Timestamp
-  import java.text.SimpleDateFormat
-  import java.time.{Instant, LocalDate, OffsetDateTime}
-  import java.util.TimeZone
-
-  import scala.util.Try
-
-  object AnalyticsDateTimeFormater {
+  object AnalyticsDateTimeFormatter {
 
     val yyyy_MM_dd_HHmmss_SSSSSSSSS: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS")
     val yyyy_MM_dd: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -81,4 +77,3 @@ package AnalyticsTimeOps {
 
     implicit def nullableStringToOption(nullableString: String): Option[String] = Option(nullableString)
   }
-}
