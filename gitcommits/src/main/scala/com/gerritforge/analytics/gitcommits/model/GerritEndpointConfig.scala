@@ -18,8 +18,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
 
 import com.gerritforge.analytics.common.api.GerritConnectivity
-import com.gerritforge.analytics.gitcommits.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
-
+import com.gerritforge.analytics.support.ops.AnalyticsDateTimeFormatter
 case class GerritEndpointConfig(
     baseUrl: Option[String] = None,
     prefix: Option[String] = None,
@@ -51,7 +50,7 @@ case class GerritEndpointConfig(
 
   @transient
   private lazy val format: DateTimeFormatter =
-    AnalyticsDateTimeFormater.yyyy_MM_dd.withZone(ZoneOffset.UTC)
+    AnalyticsDateTimeFormatter.yyyy_MM_dd.withZone(ZoneOffset.UTC)
   val queryString = Seq(
     "since"            -> since.map(format.format),
     "until"            -> until.map(format.format),
