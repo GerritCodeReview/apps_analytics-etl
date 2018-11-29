@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "76d6595a_9079896b",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditEvent.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-29T11:49:19Z",
+      "side": 1,
+      "message": "This could be compacted",
+      "range": {
+        "startLine": 26,
+        "startChar": 6,
+        "endLine": 26,
+        "endChar": 18
+      },
+      "revId": "3f66d8220235874565567231a21672a0d20ac900",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fd6b6659_eb7efa1e",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/model/AuditEventSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-11-29T11:49:19Z",
+      "side": 1,
+      "message": "You could use the json4s DSL to build the expected object and in the test compare the 2 JSON objects: parse(AuditEvent.toJsonString(event)) shouldBe expectedJson",
+      "range": {
+        "startLine": 230,
+        "startChar": 4,
+        "endLine": 243,
+        "endChar": 0
+      },
+      "revId": "3f66d8220235874565567231a21672a0d20ac900",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
