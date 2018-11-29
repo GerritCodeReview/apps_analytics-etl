@@ -14,51 +14,31 @@
 
 package com.gerritforge.analytics.gitcommits.job
 
+
 import java.time.LocalDate
 
 import com.gerritforge.analytics.gitcommits.engine.events.GerritEventsTransformations.NotParsableJsonEvent
-import com.gerritforge.analytics.gitcommits.engine.events.{
-  AggregationStrategy,
-  EventParser,
-  GerritJsonEvent
-}
-import com.gerritforge.analytics.gitcommits.model.{
-  GerritEndpointConfig,
-  GerritProject,
-  GerritProjectsSupport
-}
-import com.gerritforge.analytics.gitcommits.support.ops.AnalyticsTimeOps
-import com.gerritforge.analytics.gitcommits.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
+import com.gerritforge.analytics.gitcommits.engine.events.{AggregationStrategy, EventParser, GerritJsonEvent}
+import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.spark.SparkApp
+import com.gerritforge.analytics.support.ops.ReadsOps._
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
-import scopt.Read.reads
-import scopt.{OptionParser, Read}
+import scopt.OptionParser
 
 import scala.io.Codec
-import scala.util.control.NonFatal
 import scala.util.{Failure, Success}
 
-object Main extends App with Job with LazyLogging with FetchRemoteProjects {
+object Main extends App with SparkApp with Job with LazyLogging with FetchRemoteProjects {
+  override val appName = "Gerrit GitCommits Analytics ETL"
 
   private val fileExists: String => Either[String, Unit] = { path =>
     if (!new java.io.File(path).exists) {
       Left(s"ERROR: Path '$path' doesn't exists!")
     } else {
       Right()
-    }
-  }
-
-  implicit val localDateRead: Read[LocalDate] = reads { dateStr =>
-    val cliDateFormat = AnalyticsDateTimeFormater.yyyy_MM_dd
-    try {
-      import AnalyticsTimeOps.implicits._
-      dateStr.parseStringToLocalDate(cliDateFormat).get
-    } catch {
-      case NonFatal(e) =>
-        throw new IllegalArgumentException(
-          s"Invalid date '$dateStr' expected format is '${cliDateFormat}'")
     }
   }
 
@@ -117,10 +97,6 @@ object Main extends App with Job with LazyLogging with FetchRemoteProjects {
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
-      implicit val spark: SparkSession = SparkSession
-        .builder()
-        .appName("Gerrit Analytics ETL")
-        .getOrCreate()
 
       implicit val _: GerritEndpointConfig = config
 

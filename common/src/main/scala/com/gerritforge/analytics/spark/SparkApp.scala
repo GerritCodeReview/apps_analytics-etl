@@ -3,27 +3,24 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+
 // http://www.apache.org/licenses/LICENSE-2.0
-//
+
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.common.api
+package com.gerritforge.analytics.spark
+import org.apache.spark.sql.SparkSession
 
-import java.security.cert.X509Certificate
+trait SparkApp {
 
-import javax.net.ssl._
+  def appName: String
 
-object TrustAll extends X509TrustManager {
-  override val getAcceptedIssuers: Array[X509Certificate] = Array.empty[X509Certificate]
-  override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-  override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-}
-
-object VerifiesAllHostNames extends HostnameVerifier {
-  override def verify(s: String, sslSession: SSLSession) = true
+  implicit lazy val spark: SparkSession = SparkSession
+    .builder()
+    .appName(appName)
+    .getOrCreate()
 }
