@@ -22,7 +22,7 @@ lazy val analyticsETLGitCommits = (project in file("gitcommits"))
         .cmd(s"/bin/sh", s"$entryPointBase/gerrit-analytics-etl-gitcommits.sh")
     }
   )
-  .dependsOn(common)
+  .dependsOn(common % "compile->compile;test->test")
 
 lazy val analyticsETLAuditLog = (project in file("auditlog"))
   .enablePlugins(GitVersioning)
@@ -37,7 +37,7 @@ lazy val analyticsETLAuditLog = (project in file("auditlog"))
       baseDockerfile(projectName="auditlog", artifact, artifactTargetPath=s"$entryPointBase/${name.value}-assembly.jar")
     }
   )
-  .dependsOn(common)
+  .dependsOn(common % "compile->compile;test->test")
 
 lazy val root = (project in file("."))
   .disablePlugins(AssemblyPlugin)

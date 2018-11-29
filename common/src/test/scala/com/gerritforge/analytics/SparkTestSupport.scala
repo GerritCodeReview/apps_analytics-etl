@@ -3,27 +3,31 @@
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+
 // http://www.apache.org/licenses/LICENSE-2.0
-//
+
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.common.api
+package com.gerritforge.analytics
 
-import java.security.cert.X509Certificate
+import org.apache.spark.SparkContext
+import org.apache.spark.sql.{SQLContext, SparkSession}
+import org.scalatest.{BeforeAndAfterAll, Suite}
 
-import javax.net.ssl._
+trait SparkTestSupport extends BeforeAndAfterAll { this: Suite =>
 
-object TrustAll extends X509TrustManager {
-  override val getAcceptedIssuers: Array[X509Certificate] = Array.empty[X509Certificate]
-  override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-  override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-}
+  implicit val spark : SparkSession = SparkSession.builder()
+    .master("local[4]")
+    .getOrCreate()
 
-object VerifiesAllHostNames extends HostnameVerifier {
-  override def verify(s: String, sslSession: SSLSession) = true
+  implicit lazy val sc: SparkContext = spark.sparkContext
+  implicit lazy val sql: SQLContext = spark.sqlContext
+
+  override protected def afterAll() = {
+    spark.close()
+  }
 }

@@ -13,12 +13,8 @@
 // limitations under the License.
 
 package com.gerritforge.analytics.gitcommits.engine.events
-
 import com.gerritforge.analytics.SparkTestSupport
-import com.gerritforge.analytics.gitcommits.engine.GerritAnalyticsTransformations.{
-  CommitInfo,
-  UserActivitySummary
-}
+import com.gerritforge.analytics.gitcommits.engine.GerritAnalyticsTransformations.{CommitInfo, UserActivitySummary}
 import com.gerritforge.analytics.gitcommits.engine.events.GerritEventsTransformations.NotParsableJsonEvent
 import org.apache.spark.rdd.RDD
 import org.scalatest.{Inside, Matchers, WordSpec}

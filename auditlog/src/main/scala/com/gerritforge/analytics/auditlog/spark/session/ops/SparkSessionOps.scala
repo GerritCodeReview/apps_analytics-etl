@@ -1,4 +1,4 @@
-// Copyright (C) 2017 GerritForge Ltd
+// Copyright (C) 2018 GerritForge Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,22 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics
+package com.gerritforge.analytics.auditlog.spark.session.ops
 
-import org.apache.spark.SparkContext
-import org.apache.spark.sql.{SQLContext, SparkSession}
-import org.scalatest.{BeforeAndAfterAll, Suite}
+import com.gerritforge.analytics.auditlog.model.AuditEvent
+import org.apache.spark.rdd.RDD
+import org.apache.spark.sql.SparkSession
 
-trait SparkTestSupport extends BeforeAndAfterAll { this: Suite =>
+object SparkSessionOps {
 
-  implicit val spark : SparkSession = SparkSession.builder()
-    .master("local[4]")
-    .getOrCreate()
-
-  implicit lazy val sc: SparkContext = spark.sparkContext
-  implicit lazy val sql: SQLContext = spark.sqlContext
-
-  override protected def afterAll() = {
-    spark.close()
+  implicit class PimpedSparkSession(spark: SparkSession) {
+    def getEventsFromPath(path: String): RDD[AuditEvent] =
+      spark
+        .read
+        .textFile(path)
+        .rdd
+        .flatMap(auditString => AuditEvent.parseRaw(auditString).toOption)
   }
 }

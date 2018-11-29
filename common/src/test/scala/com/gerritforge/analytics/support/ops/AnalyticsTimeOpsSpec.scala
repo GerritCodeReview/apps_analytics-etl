@@ -12,11 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.gitcommits.support.ops
+package com.gerritforge.analytics.support.ops
 
 import java.time.{LocalDate, LocalDateTime, ZoneOffset}
 
-import com.gerritforge.analytics.gitcommits.support.ops.AnalyticsTimeOps.AnalyticsDateTimeFormater
 import org.scalatest.{FlatSpec, Matchers}
 
 class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
@@ -30,9 +29,9 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
         .toEpochMilli
 
     val stringDate = "2018-01-01 12:00:00.000000000"
-    val dateFormat = AnalyticsDateTimeFormater.yyyy_MM_dd_HHmmss_SSSSSSSSS
+    val dateFormat = AnalyticsDateTimeFormatter.yyyy_MM_dd_HHmmss_SSSSSSSSS
 
-    import AnalyticsTimeOps.implicits._
+    import com.gerritforge.analytics.support.ops.implicits._
 
     stringDate.parseStringToUTCEpoch(dateFormat).get should equal(epochValueUTC)
   }
@@ -41,18 +40,18 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
       LocalDate.of(2018, 1, 1)
 
     val stringDate = "2018-01-01"
-    val dateFormat = AnalyticsDateTimeFormater.yyyy_MM_dd
+    val dateFormat = AnalyticsDateTimeFormatter.yyyy_MM_dd
 
-    import AnalyticsTimeOps.implicits._
+    import com.gerritforge.analytics.support.ops.implicits._
 
     stringDate.parseStringToLocalDate(dateFormat).get should equal(utcLocalDate)
   }
 
   "String parser - An incorrect string a given format" should "return None" in {
     val stringDate = "2018-01-01 12:00:00.000000000"
-    val dateFormat = AnalyticsDateTimeFormater.yyyy_MM_dd
+    val dateFormat = AnalyticsDateTimeFormatter.yyyy_MM_dd
 
-    import AnalyticsTimeOps.implicits._
+    import com.gerritforge.analytics.support.ops.implicits._
     stringDate.parseStringToUTCEpoch(dateFormat) should equal(None)
   }
 
@@ -64,7 +63,7 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
         .toInstant.toEpochMilli
 
     val yyyyMMddHHStr = "2018010112"
-    AnalyticsDateTimeFormater.yyyyMMddHH.format(epochValueUTC) should equal(yyyyMMddHHStr)
+    AnalyticsDateTimeFormatter.yyyyMMddHH.format(epochValueUTC) should equal(yyyyMMddHHStr)
   }
 
   it should "convert to the correct strings - yyyyMMdd" in {
@@ -75,7 +74,7 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
         .toInstant.toEpochMilli
 
     val yyyyMMddStr = "20180101"
-    AnalyticsDateTimeFormater.yyyyMMdd.format(epochValueUTC) should equal(yyyyMMddStr)
+    AnalyticsDateTimeFormatter.yyyyMMdd.format(epochValueUTC) should equal(yyyyMMddStr)
   }
 
   it should "convert to the correct strings - yyyyMM" in {
@@ -86,7 +85,7 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
         .toInstant.toEpochMilli
 
     val yyyyMMStr = "201801"
-    AnalyticsDateTimeFormater.yyyyMM.format(epochValueUTC) should equal(yyyyMMStr)
+    AnalyticsDateTimeFormatter.yyyyMM.format(epochValueUTC) should equal(yyyyMMStr)
   }
 
   it should "convert to the correct strings - yyyy" in {
@@ -97,7 +96,7 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
         .toInstant.toEpochMilli
 
     val yyyyStr = "2018"
-    AnalyticsDateTimeFormater.yyyy.format(epochValueUTC) should equal(yyyyStr)
+    AnalyticsDateTimeFormatter.yyyy.format(epochValueUTC) should equal(yyyyStr)
   }
 
   "UTC conversion" should "check date operations return always UTC" in {
@@ -108,7 +107,7 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
     val etcDateTime = dateTime.atOffset(ZoneOffset.ofHours(9))
     val utcDateTime = dateTime.atOffset(ZoneOffset.UTC)
 
-    import AnalyticsTimeOps.implicits._
+    import com.gerritforge.analytics.support.ops.implicits._
     dateTime.convertToUTCEpochMillis should equal(utcDateTime.toInstant.toEpochMilli)
     dateTime.convertToUTCEpochMillis should not equal (etcDateTime.toInstant.toEpochMilli)
 
