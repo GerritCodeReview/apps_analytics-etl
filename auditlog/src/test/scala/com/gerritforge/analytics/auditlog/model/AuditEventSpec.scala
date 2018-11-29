@@ -1,10 +1,12 @@
 package com.gerritforge.analytics.auditlog.model
 import org.json4s.MappingException
 import org.json4s.ParserUtil.ParseException
-import org.scalatest.{FlatSpec, Inside, Matchers}
 import org.scalatest.TryValues._
+import org.scalatest.{FlatSpec, Inside, Matchers}
 
 class AuditEventSpec extends FlatSpec with Matchers with Inside {
+
+  behavior of "fromJsonString"
 
   "parsing a string that is not json" should "result in a ParseException failure" in {
     val someJson = """this_is_not_a_valid_json"""
@@ -208,5 +210,91 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
         gotElapsed     shouldBe elapsed
         gotUUID.uuid   shouldBe auditUUID
     }
+  }
+
+  behavior of "toJsonString"
+
+  "an HttpAuditEvent" should "be serializable into json" in {
+
+    val httpMethod = "GET"
+    val httpStatus = 200
+    val sessionId = "someSessionId"
+    val who = CurrentUser(accessPath = "UNKNOWN", accountId = None)
+    val timeAtStart = 1000L
+    val what="https://review.gerrithub.io/Mirantis/tcp-qa/git-upload-pack"
+    val elapsed = 22
+    val uuid = AuditUUID("audit:5f10fea5-35d1-4252-b86f-99db7a9b549b")
+
+    val event = HttpAuditEvent(httpMethod, httpStatus, sessionId, who, timeAtStart, what, elapsed, uuid)
+
+    AuditEvent.toJsonString(event) shouldBe
+    s"""{
+       |  "http_method":"$httpMethod",
+       |  "http_status":$httpStatus,
+       |  "session_id":"$sessionId",
+       |  "who":{
+       |    "access_path":"${who.accessPath}"
+       |  },
+       |  "time_at_start":$timeAtStart,
+       |  "what":"$what",
+       |  "elapsed":$elapsed,
+       |  "uuid":"${uuid.uuid}"
+       |}""".stripMargin
+
+  }
+
+  "an ExtendedHttpAuditEvent" should "be serializable into json" in {
+
+    val httpMethod = "GET"
+    val httpStatus = 200
+    val sessionId = "someSessionId"
+    val accountId = 123
+    val who = CurrentUser(accessPath = "/config/server/info", accountId = Some(AccountId(accountId)))
+    val timeAtStart = 1000L
+    val what="/config/server/info"
+    val elapsed = 22
+    val uuid = AuditUUID("audit:5f10fea5-35d1-4252-b86f-99db7a9b549b")
+
+    val event = ExtendedHttpAuditEvent(httpMethod, httpStatus, sessionId, who, timeAtStart, what, elapsed, uuid)
+
+    AuditEvent.toJsonString(event) shouldBe
+      s"""{
+         |  "http_method":"$httpMethod",
+         |  "http_status":$httpStatus,
+         |  "session_id":"$sessionId",
+         |  "who":{
+         |    "access_path":"${who.accessPath}",
+         |    "account_id":$accountId
+         |  },
+         |  "time_at_start":$timeAtStart,
+         |  "what":"$what",
+         |  "elapsed":$elapsed,
+         |  "uuid":"${uuid.uuid}"
+         |}""".stripMargin
+  }
+
+  "an SshAuditEvent" should "be serializable into json" in {
+    val sessionId   = "2adc5bef"
+    val accountId   = 1009124
+    val accessPath  = "SSH_COMMAND"
+    val timeAtStart = 1542240322369L
+    val what        = "gerrit.stream-events.-s.patchset-created.-s.change-restored.-s.comment-added"
+    val elapsed     = 12
+    val auditUUID   = "audit:dd74e098-9260-4720-9143-38a0a0a5e500"
+
+    val event = SshAuditEvent(sessionId, Some(CurrentUser(accessPath, Some(AccountId(accountId)))), timeAtStart, what, elapsed, AuditUUID(auditUUID))
+
+    AuditEvent.toJsonString(event) shouldBe
+      s"""{
+         |  "session_id":"$sessionId",
+         |  "who":{
+         |    "access_path":"$accessPath",
+         |    "account_id":$accountId
+         |  },
+         |  "time_at_start":$timeAtStart,
+         |  "what":"$what",
+         |  "elapsed":$elapsed,
+         |  "uuid":"$auditUUID"
+         |}""".stripMargin
   }
 }
