@@ -17,7 +17,7 @@ package com.gerritforge.analytics.gitcommits.engine.events
 import java.text.DateFormat
 import java.time.LocalDateTime
 
-import com.gerritforge.analytics.gitcommits.support.ops.AnalyticsTimeOps.{AnalyticsDateTimeFormater, CommonTimeOperations}
+import com.gerritforge.analytics.support.ops.{AnalyticsDateTimeFormatter, CommonTimeOperations}
 
 import scala.util.Try
 
@@ -60,25 +60,25 @@ object AggregationStrategy {
   }
 
   object aggregateByEmailAndHour extends EmailAndTimeBasedAggregation {
-    val dateFormat = AnalyticsDateTimeFormater.yyyyMMddHH
+    val dateFormat = AnalyticsDateTimeFormatter.yyyyMMddHH
   }
 
   object aggregateByEmailAndDay extends EmailAndTimeBasedAggregation {
-    val dateFormat = AnalyticsDateTimeFormater.yyyyMMdd
+    val dateFormat = AnalyticsDateTimeFormatter.yyyyMMdd
 
     override def decomposeTimeOfAggregatedEvent(event: GerritJsonEvent): DateTimeParts =
       super.decomposeTimeOfAggregatedEvent(event).copy(hour = 0)
   }
 
   object aggregateByEmailAndMonth extends EmailAndTimeBasedAggregation {
-    val dateFormat = AnalyticsDateTimeFormater.yyyyMM
+    val dateFormat = AnalyticsDateTimeFormatter.yyyyMM
 
     override def decomposeTimeOfAggregatedEvent(event: GerritJsonEvent): DateTimeParts =
       super.decomposeTimeOfAggregatedEvent(event).copy(day = 0, hour = 0)
   }
 
   object aggregateByEmailAndYear extends EmailAndTimeBasedAggregation {
-    val dateFormat = AnalyticsDateTimeFormater.yyyy
+    val dateFormat = AnalyticsDateTimeFormatter.yyyy
 
     override def decomposeTimeOfAggregatedEvent(event: GerritJsonEvent): DateTimeParts =
       super.decomposeTimeOfAggregatedEvent(event).copy(month = 0, day = 0, hour = 0)
