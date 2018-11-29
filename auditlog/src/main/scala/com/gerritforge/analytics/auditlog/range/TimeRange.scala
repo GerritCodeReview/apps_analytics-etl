@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.common.api
+package com.gerritforge.analytics.auditlog.range
 
-import java.security.cert.X509Certificate
+import java.time.LocalDate
 
-import javax.net.ssl._
+import com.gerritforge.analytics.support.ops.implicits._
+import com.google.inject.Singleton
 
-object TrustAll extends X509TrustManager {
-  override val getAcceptedIssuers: Array[X509Certificate] = Array.empty[X509Certificate]
-  override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-  override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-}
+@Singleton
+case class TimeRange(since: Option[LocalDate], until: Option[LocalDate]) {
 
-object VerifiesAllHostNames extends HostnameVerifier {
-  override def verify(s: String, sslSession: SSLSession) = true
+  private val maybeSinceMs: Option[Long] = since.map(_.atStartOfDay().convertToUTCEpochMillis)
+  private val maybeUntilMs: Option[Long] = until.map(_.atStartOfDay().convertToUTCEpochMillis)
+
+  def isWithin(timeMs: Long): Boolean = maybeSinceMs.forall(_ <= timeMs) && maybeUntilMs.forall(_ >= timeMs)
 }

@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.common.api
+package com.gerritforge.analytics.auditlog.model
 
-import java.security.cert.X509Certificate
+import java.time.LocalDate
 
-import javax.net.ssl._
-
-object TrustAll extends X509TrustManager {
-  override val getAcceptedIssuers: Array[X509Certificate] = Array.empty[X509Certificate]
-  override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-  override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-}
-
-object VerifiesAllHostNames extends HostnameVerifier {
-  override def verify(s: String, sslSession: SSLSession) = true
-}
+case class AuditLogETLConfig(
+  gerritUrl: Option[String] = None,
+  gerritUsername: Option[String] = None,
+  gerritPassword: Option[String] = None,
+  ignoreSSLCert: Option[Boolean] = None,
+  elasticSearchIndex: Option[String] = None,
+  since: Option[LocalDate] = None,
+  until: Option[LocalDate] = None,
+  eventsPath: Option[String] = None,
+  eventsTimeAggregation: Option[String] = Some("hour")
+)

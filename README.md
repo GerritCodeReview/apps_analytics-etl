@@ -20,7 +20,7 @@ Here below an exhaustive list of all the spark jobs provided by this repo, along
 
 ## Git Commits
 
-Extracts and aggregate git commits data from Gerrit Projects.
+Extracts and aggregates git commits data from Gerrit Projects.
 
 Requires a [Gerrit 2.13.x](https://www.gerritcodereview.com/releases/README.md) or later
 with the [analytics](https://gerrit.googlesource.com/plugins/analytics/)
@@ -131,6 +131,58 @@ Remember to create an annotated tag for a release. The tag is used to define the
           -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit" \
           gerritforge/gerrit-analytics-etl-gitcommits:latest
   ```
+
+## Audit Logs
+
+Extract, aggregate and persist auditLog entries produced by Gerrit via the [audit-sl4j](https://gerrit.googlesource.com/plugins/audit-sl4j/) plugin.
+AuditLog entries are an immutable trace of what happened on Gerrit and this ETL can leverage that to answer questions such as:
+
+- How is GIT incoming traffic distributed?
+- Git/SSH vs. Git/HTTP traffic
+- Git receive-pack vs. upload-pack
+- Top#10 users of receive-pack
+
+and many others questions related to the usage of Gerrit.
+
+Job can be launched, for example, with the following parameters:
+
+```bash
+spark-submit \
+    --class com.gerritforge.analytics.auditlog.job.Main \
+    --conf spark.es.nodes=es.mycompany.com \
+    --conf spark.es.port=9200 \
+    --conf spark.es.index.auto.create=true \
+    $JARS/analytics-etl-auditlog.jar \
+        --gerritUrl https://gerrit.mycompany.com \
+        --elasticSearchIndex gerrit \
+        --eventsPath /path/to/auditlogs \
+        --ignoreSSLCert false \
+        --since 2000-06-01 \
+        --until 2020-12-01
+```
+
+## Parameters
+
+* -u, --gerritUrl             - gerrit server URL (Required)
+* --username                  - Gerrit API Username (Optional)
+* --password                  - Gerrit API Password (Optional)
+* -i, --elasticSearchIndex    - elasticSearch index to persist data into (Required)
+* -p, --eventsPath            - path to a directory (or a file) containing auditLogs events. Supports also _.gz_ files. (Required)
+* -a, --eventsTimeAggregation - Events of the same type, produced by the same user will be aggregated with this time granularity: 'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'
+* -k, --ignoreSSLCert         - Ignore SSL certificate validation (Optional) - Default: false
+* -s, --since                 - process only auditLogs occurred after (and including) this date (Optional)
+* -u, --until                 - process only auditLogs occurred before (and including) this date (Optional)
+
+### Build
+
+#### JAR
+To build the jar file, simply use
+
+`sbt analyticsETLAuditLog/assembly`
+
+#### Docker
+
+Not yet available
 
 # Development environment
 

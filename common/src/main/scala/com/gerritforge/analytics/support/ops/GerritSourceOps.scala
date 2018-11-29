@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.common.api
+package com.gerritforge.analytics.support.ops
 
-import java.security.cert.X509Certificate
+import scala.io.Source
 
-import javax.net.ssl._
+object GerritSourceOps {
 
-object TrustAll extends X509TrustManager {
-  override val getAcceptedIssuers: Array[X509Certificate] = Array.empty[X509Certificate]
-  override def checkClientTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-  override def checkServerTrusted(x509Certificates: Array[X509Certificate], s: String): Unit = ()
-}
+  implicit class PimpedSource(source: Source) {
+    def dropGerritPrefix: Iterator[Char] = {
+      val GERRIT_PREFIX = ")]}'\n"
+      source.drop(GERRIT_PREFIX.length)
+    }
+  }
 
-object VerifiesAllHostNames extends HostnameVerifier {
-  override def verify(s: String, sslSession: SSLSession) = true
 }
