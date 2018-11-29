@@ -1,4 +1,5 @@
 package com.gerritforge.analytics.auditlog.model
+import org.json4s.jackson.Serialization.write
 import org.json4s.native.JsonMethods._
 import org.json4s.{DefaultFormats, _}
 
@@ -6,7 +7,7 @@ import scala.util.{Failure, Success, Try}
 
 object AuditEvent {
 
-  implicit private val formats = DefaultFormats
+  implicit private val formats = DefaultFormats + AuditUUID.serializer + AccountId.serializer
 
   def fromJsonString(json: String): Try[AuditEvent] = {
     Try(parse(json)).flatMap { jsValueEvent =>
@@ -20,6 +21,10 @@ object AuditEvent {
         case _ => Failure(new MappingException(s"Could not parse json into an audit event: $json"))
       }
     }
+  }
+
+  def toJsonString[T <: AuditEvent](auditEvent: T): String = {
+    compact(render(parse(write[T](auditEvent)).snakizeKeys))
   }
 }
 
@@ -74,4 +79,22 @@ final case class CurrentUser(
 )
 
 final case class AccountId(id: Int)
+object AccountId {
+  val serializer = new CustomSerializer[AccountId]( _ =>
+      (
+        { case JObject(JField("id", JInt(id)) :: Nil) => AccountId(id.intValue()) },
+        { case a: AccountId => JInt(a.id) }
+      )
+  )
+}
+
 final case class AuditUUID(uuid: String)
+
+object AuditUUID {
+  val serializer = new CustomSerializer[AuditUUID]( _ =>
+      (
+        { case JObject(JField("uuid", JString(uuid)) :: Nil) => AuditUUID(uuid) },
+        { case a: AuditUUID => JString(a.uuid) }
+      )
+  )
+}
