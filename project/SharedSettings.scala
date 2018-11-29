@@ -16,8 +16,8 @@ object SharedSettings {
     parallelExecution in Test := false,
     git.useGitDescribe := true,
     libraryDependencies ++= Seq(
-      "org.apache.spark"           %% "spark-core"             % sparkVersion % "provided" exclude("org.spark-project.spark", "unused"),
-      "org.apache.spark"           %% "spark-sql"              % sparkVersion % "provided",
+      "org.apache.spark"           %% "spark-core"             % sparkVersion,// % "provided" exclude("org.spark-project.spark", "unused"),
+      "org.apache.spark"           %% "spark-sql"              % sparkVersion,// % "provided",
       "org.elasticsearch"          %% "elasticsearch-spark-20" % esSpark excludeAll ExclusionRule(organization = "org.apache.spark"),
       "org.json4s"                 %% "json4s-native"          % json4s,
       "com.google.gerrit"          % "gerrit-plugin-api"       % gerritApiVersion % Provided withSources(),
