@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a60f2068_86a9813d",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-12-07T13:11:21Z",
+      "side": 1,
+      "message": "is this a case object just because of the need to have it Serializiable? Having the enclosing object serializable is actually the symptom of a problem with the lambda enclosure and possible performance issues with the transfer of too large functions/objects. It is better to declare it just as a companion object and handle the serialization issues with refactoring if they happen",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4f781e8c_8d414803",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-12-07T13:11:21Z",
+      "side": 1,
+      "message": "I would use the Scala naming convension with camel case \"Empty\"",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "8c1f54a8_67d76efb",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-12-07T13:11:21Z",
+      "side": 1,
+      "message": "should you try to annotate as Tailrec? Or maybe you already tried and couldn\u0027t do :-)? It looks like it should be feasible to do the tailrec optimisation",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d03c69c9_b9c35ef7",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-12-07T13:11:21Z",
+      "side": 1,
+      "message": "I would suggest to extract this logic into an external method so you could write some \"integration\" tests and let the Main as trivial as possible",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
