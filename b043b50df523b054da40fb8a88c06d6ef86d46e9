@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a2e4451b_6264ec06",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-13T09:23:16Z",
+      "side": 1,
+      "message": "Well spotted @Stefano.\nI don\u0027t actually need this to be a case object as I only reference `loadAccounts` statically, so that no serialization is ever required.",
+      "parentUuid": "a60f2068_86a9813d",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4f781e8c_8d414803",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
         "patchSetId": 8
@@ -30,6 +48,24 @@
       "writtenOn": "2018-12-07T13:11:21Z",
       "side": 1,
       "message": "I would use the Scala naming convension with camel case \"Empty\"",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e8478fdd_1aa812a7",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-13T09:23:16Z",
+      "side": 1,
+      "message": "I am not sure `Empty` UpperCamelCase is actually a convention, methods conventionally are lowerCamelCase, with few exceptions, so perhaps `empty` could be a good name.\n\nThe reason I have used EMPTY here (all uppercase) is to highlight the fact  this is *not* a constructor, but rather a private constant.\n\nI\u0027ll rename this to lowercase `empty`, to stick more to conventions: at the end of the day, every val is a constant anyway.",
+      "parentUuid": "4f781e8c_8d414803",
       "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "8f86e9b1_9fbdb831",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-13T09:23:16Z",
+      "side": 1,
+      "message": "tldr;\nYes I will annotate it :)\n\nLong;\nThe method is already tail recursive. don\u0027t need to annotate it to make it tail recursive, it is enough for the method to just to call itself, which is already the case here.\n\nHaving said that, annotating this with @tailrec will tell the compiler to enforce this to always be tail recursive, so that might be a safe thing to do to avoid someone to refactor this in a bad way, so thanks for mentioning this! :)",
+      "parentUuid": "8c1f54a8_67d76efb",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d03c69c9_b9c35ef7",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
         "patchSetId": 8
@@ -64,6 +118,24 @@
       "writtenOn": "2018-12-07T13:11:21Z",
       "side": 1,
       "message": "I would suggest to extract this logic into an external method so you could write some \"integration\" tests and let the Main as trivial as possible",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ac9dabca_1e34b4d4",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-13T09:23:16Z",
+      "side": 1,
+      "message": "Interesting, I am not sure how to extract this logic somewhere else, nor whether that would make sense to be honest:\n\nA failure to load gerrit accounts should lead to a premature system exit, but this is meaningful only within an App method, so I can\u0027t see how we would move this checking condition somewhere else.\n\nOr were you referring to the wrapping of the Broadcast object?\n\nSorry, maybe I got the wrong side of the stick here, if you can clarify this, I would love to optimise this main method even further.",
+      "parentUuid": "d03c69c9_b9c35ef7",
       "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
