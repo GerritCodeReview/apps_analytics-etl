@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "cd6e45c6_815516ea",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 10
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-12-13T23:29:16Z",
+      "side": 1,
+      "message": "I would suggest moving all this logic into its own function to facilitate the testing of this part of the code",
+      "revId": "0483f1dadd4e1a032a5fbee2cf706567071ef686",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "33f6d9bc_b3326851",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 10
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2018-12-13T23:29:16Z",
+      "side": 1,
+      "message": "The same code to create a SparkSession is present in 2 other places, com.gerritforge.analytics.gitcommits.job.Main and com.gerritforge.analytics.gitcommits.ProcessCommitsCommand.\n\nCould this move into a common location, it\u0027s own trait SparkApp?",
+      "revId": "0483f1dadd4e1a032a5fbee2cf706567071ef686",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
