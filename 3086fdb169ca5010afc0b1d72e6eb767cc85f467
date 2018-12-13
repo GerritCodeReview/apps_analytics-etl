@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1210331e_7daf8486",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T11:47:35Z",
+      "side": 1,
+      "message": "Is it possible to add a custom serialiser and call this accountId for consistency ?",
+      "range": {
+        "startLine": 11,
+        "startChar": 25,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "db9ce39b_e44db3b4",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T11:47:35Z",
+      "side": 1,
+      "message": "The name seems a bit confusing. GerritAccounts leads me to thinks that is a collection of GerritAccount, but it isn\u0027t. Shall we rename ti to something else? Maybe GerritAccountIds ?",
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}

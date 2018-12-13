@@ -2,6 +2,46 @@
   "comments": [
     {
       "key": {
+        "uuid": "45608246_13742476",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T11:47:35Z",
+      "side": 1,
+      "message": "Missing license. License is missing in the other files as well",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "00b05bd3_8bb14232",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T11:47:35Z",
+      "side": 1,
+      "message": "Any reason why we are using this convention for the variable name, rather than calling it accountId ?",
+      "range": {
+        "startLine": 10,
+        "startChar": 25,
+        "endLine": 10,
+        "endChar": 37
+      },
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a60f2068_86a9813d",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
         "patchSetId": 8
