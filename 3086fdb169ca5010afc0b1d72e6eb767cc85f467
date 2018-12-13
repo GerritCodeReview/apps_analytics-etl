@@ -39,6 +39,121 @@
       "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70285fc6_d84bfa35",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T12:46:13Z",
+      "side": 1,
+      "message": "nit: shall we call it eventsURI? Events could come from a URL. Or maybe we can leave it for the moment and refactor later.",
+      "range": {
+        "startLine": 31,
+        "startChar": 26,
+        "endLine": 31,
+        "endChar": 36
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4d12536_a0b6b130",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T12:46:13Z",
+      "side": 1,
+      "message": "might be worth specifying which date format we accept?",
+      "range": {
+        "startLine": 45,
+        "startChar": 16,
+        "endLine": 45,
+        "endChar": 90
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "52823366_8dea2bdb",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T12:46:13Z",
+      "side": 1,
+      "message": "Are we handling this exception to avoid stopping the ETL in case just one entry is broken ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 35,
+        "endLine": 27,
+        "endChar": 69
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "915160b8_f3faf1d8",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T12:46:13Z",
+      "side": 1,
+      "message": "Are we returning Some(null) in this case ? Shall we instead return an empty string ?",
+      "range": {
+        "startLine": 34,
+        "startChar": 88,
+        "endLine": 34,
+        "endChar": 153
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "af2a0aac_c7ed2906",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-13T12:46:13Z",
+      "side": 1,
+      "message": "Are we handling this exception to avoid stopping the ETL in case just one entry is broken ?",
+      "range": {
+        "startLine": 38,
+        "startChar": 35,
+        "endLine": 38,
+        "endChar": 69
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
