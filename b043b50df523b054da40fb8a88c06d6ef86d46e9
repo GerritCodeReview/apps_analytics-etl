@@ -269,6 +269,24 @@
       "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5af15ec7_177b12c9",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2018-12-13T11:55:04Z",
+      "side": 1,
+      "message": "I would extract from line 29 to 44 in a method `aggregateLogs` so the code in Main just try to load the gerrit accounts and saves the output of this function to ES",
+      "parentUuid": "87387136_2a370e41",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
