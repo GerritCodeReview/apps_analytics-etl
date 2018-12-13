@@ -107,6 +107,24 @@
     },
     {
       "key": {
+        "uuid": "3711e21d_5de3f6f0",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-13T09:27:40Z",
+      "side": 1,
+      "message": "Sorry @Stefano, I realized just now what you meant :)\nyou\u0027re right, `loopThroughPages` is not actually tail recursive.\nLet me see if I can come up with a tailrec version",
+      "parentUuid": "8f86e9b1_9fbdb831",
+      "revId": "b043b50df523b054da40fb8a88c06d6ef86d46e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "d03c69c9_b9c35ef7",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
         "patchSetId": 8
