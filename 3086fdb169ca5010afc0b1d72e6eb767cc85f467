@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "4c8beac2_e1bbed4b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-14T10:30:48Z",
+      "side": 1,
+      "message": "Missing issue id",
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "1210331e_7daf8486",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
         "patchSetId": 9
@@ -49,6 +66,30 @@
     },
     {
       "key": {
+        "uuid": "f102ce2f_cee36fcd",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-14T10:30:48Z",
+      "side": 1,
+      "message": "Nice one",
+      "parentUuid": "86e825d9_4e193c00",
+      "range": {
+        "startLine": 11,
+        "startChar": 25,
+        "endLine": 11,
+        "endChar": 36
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db9ce39b_e44db3b4",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
         "patchSetId": 9
@@ -78,6 +119,24 @@
       "side": 1,
       "message": "I renamed GerritAccounts to GerritUserIdentifiers for clarity.\nAlso, the `GerritAccount` case class was does not need to be public, because it is only used for deserialization, so I scoped into GerritUserIdentifiers companion object.",
       "parentUuid": "db9ce39b_e44db3b4",
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d150ada1_0e6c8f65",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-14T10:30:48Z",
+      "side": 1,
+      "message": "Cool!",
+      "parentUuid": "68c1704c_31c6c0d2",
       "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": false
@@ -119,6 +178,30 @@
       "side": 1,
       "message": "Yes, all the arguments could do with more strict rules.\n- `gerritUrl` should be a URL,\n- `since` should be less than `until`, and when specified.\n- `eventsTimeAggregation` an enum\n\nHaving said that, I don\u0027t think we should spend too much time on this. an invalid field would lead to failure anyway, and the fields are documented.",
       "parentUuid": "70285fc6_d84bfa35",
+      "range": {
+        "startLine": 31,
+        "startChar": 26,
+        "endLine": 31,
+        "endChar": 36
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7f644ed_dc952cbf",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-14T10:30:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "0bf5d7bc_c57523c5",
       "range": {
         "startLine": 31,
         "startChar": 26,
@@ -225,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "6a6fd3d7_d2379c77",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-14T10:30:48Z",
+      "side": 1,
+      "message": "I\u0027d go for logging the error and extract the access path as it is. If later on we want to make it more sophisticated we could do something similar to what we do for the \"commits  analytics\", i.e.: store the failed events, for example in a CSV.",
+      "parentUuid": "08233632_0a8ea6b7",
+      "range": {
+        "startLine": 27,
+        "startChar": 35,
+        "endLine": 27,
+        "endChar": 69
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "915160b8_f3faf1d8",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
         "patchSetId": 9
@@ -272,6 +379,30 @@
     },
     {
       "key": {
+        "uuid": "49c1de89_ccda272b",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-14T10:30:48Z",
+      "side": 1,
+      "message": "Oky, makes sense. lets keep it as it is.",
+      "parentUuid": "d02cd974_3cac0086",
+      "range": {
+        "startLine": 34,
+        "startChar": 88,
+        "endLine": 34,
+        "endChar": 153
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "af2a0aac_c7ed2906",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
         "patchSetId": 9
@@ -307,6 +438,30 @@
       "side": 1,
       "message": "See my previous comment",
       "parentUuid": "af2a0aac_c7ed2906",
+      "range": {
+        "startLine": 38,
+        "startChar": 35,
+        "endLine": 38,
+        "endChar": 69
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f567ba84_38cafa97",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-14T10:30:48Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "dd4fdbda_1d7a2812",
       "range": {
         "startLine": 38,
         "startChar": 35,
