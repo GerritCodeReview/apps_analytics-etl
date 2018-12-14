@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "b10c56b7_85cb339a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-14T11:43:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c8beac2_e1bbed4b",
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1210331e_7daf8486",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritAccounts.scala",
         "patchSetId": 9
@@ -332,6 +350,30 @@
     },
     {
       "key": {
+        "uuid": "25e261ad_c117af70",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-14T11:43:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a6fd3d7_d2379c77",
+      "range": {
+        "startLine": 27,
+        "startChar": 35,
+        "endLine": 27,
+        "endChar": 69
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "915160b8_f3faf1d8",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
         "patchSetId": 9
@@ -471,6 +513,30 @@
       "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "06d2bbe3_0a3353b6",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-14T11:43:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f567ba84_38cafa97",
+      "range": {
+        "startLine": 38,
+        "startChar": 35,
+        "endLine": 38,
+        "endChar": 69
+      },
+      "revId": "3086fdb169ca5010afc0b1d72e6eb767cc85f467",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
