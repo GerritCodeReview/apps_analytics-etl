@@ -34,6 +34,24 @@
       "revId": "5b543459c8d22b9d1435ba8c9c295445e960b3ef",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef0e8128_4649f545",
+        "filename": "auditlog/scripts/wait-for-elasticsearch.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2018-12-17T16:48:09Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "485810ac_0e6fa97a",
+      "revId": "5b543459c8d22b9d1435ba8c9c295445e960b3ef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
