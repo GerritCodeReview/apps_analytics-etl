@@ -33,8 +33,11 @@ lazy val analyticsETLAuditLog = (project in file("auditlog"))
     dockerfile in docker := {
       val artifact: File = assembly.value
       val entryPointBase = s"/app"
-
       baseDockerfile(projectName="auditlog", artifact, artifactTargetPath=s"$entryPointBase/${name.value}-assembly.jar")
+        .copy(baseDirectory(_ / "scripts" / "gerrit-analytics-etl-auditlog.sh").value, file(s"$entryPointBase/gerrit-analytics-etl-auditlog.sh"))
+        .copy(baseDirectory(_ / "scripts" / "wait-for-elasticsearch.sh").value, file(s"$entryPointBase/wait-for-elasticsearch.sh"))
+        .volume(s"$entryPointBase/events/")
+        .cmd(s"/bin/sh", s"$entryPointBase/gerrit-analytics-etl-auditlog.sh")
     }
   )
   .dependsOn(common % "compile->compile;test->test")

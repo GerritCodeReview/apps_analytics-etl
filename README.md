@@ -112,26 +112,6 @@ If you want to distribute use:
 The build and distribution override the `latest` image tag too
 Remember to create an annotated tag for a release. The tag is used to define the docker image tag too
 
-### Caveats
-* If you want to run the git commits ETL job from within docker you need to make elasticsearch and gerrit available to it.
-  You can do this by:
-
-    * spinning the container within the same network used by your elasticsearch container (`analytics-etl_ek` if you used the docker-compose provided by this repo)
-    * provide routing to the docker host machine (via `--add-host="gerrit:<your_host_ip_address>"`)
-
-  For example:
-
-  ```bash
-  HOST_IP=`ifconfig en0 | grep "inet " | awk '{print $2}'` \
-      docker run -ti --rm \
-           --add-host="gerrit:$HOST_IP" \
-          --network analytics-etl_ek \
-          -e ES_HOST="elasticsearch" \
-          -e GERRIT_URL="http://$HOST_IP:8080" \
-          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit" \
-          gerritforge/gerrit-analytics-etl-gitcommits:latest
-  ```
-
 ## Audit Logs
 
 Extract, aggregate and persist auditLog entries produced by Gerrit via the [audit-sl4j](https://gerrit.googlesource.com/plugins/audit-sl4j/) plugin.
@@ -161,6 +141,17 @@ spark-submit \
         --until 2020-12-01
 ```
 
+You can also run this job in docker:
+
+```bash
+docker run \
+    --volume <source>/audit_log:/app/events/audit_log -ti --rm \
+    -e ES_HOST="<elasticsearch_url>" \
+    -e GERRIT_URL="http://<gerrit_url>:<gerrit_port>" \
+    -e ANALYTICS_ARGS="--elasticSearchIndex gerrit --eventsPath /app/events/audit_log --ignoreSSLCert false --since 2000-06-01 --until 2020-12-01 -a hour" \
+    gerritforge/gerrit-analytics-etl-auditlog:latest
+```
+
 ## Parameters
 
 * -u, --gerritUrl             - gerrit server URL (Required)
@@ -182,7 +173,16 @@ To build the jar file, simply use
 
 #### Docker
 
-Not yet available
+To build the *gerritforge/gerrit-analytics-etl-auditlog* docker image just run:
+
+`sbt analyticsETLAuditLog/docker`.
+
+If you want to distribute it use:
+
+`sbt analyticsETLAuditLog/dockerBuildAndPush`.
+
+The build and distribution override the `latest` image tag too.
+
 
 # Development environment
 
@@ -190,6 +190,38 @@ A docker compose file is provided to spin up an instance of Elastisearch with Ki
 Just run `docker-compose up`.
 
 ## Caveats
+
+* If you want to run the git ETL job from within docker against containerized elasticsearch and/or gerrit instances, you need
+  to make them reachable by the ETL container. You can do this by spinning the ETL within the same network used by your elasticsearch/gerrit container (use `--network` argument)
+
+* If elasticsearch or gerrit run on your host machine, then you need to make _that_ reachable by the ETL container.
+  You can do this by providing routing to the docker host machine (i.e. `--add-host="gerrit:<your_host_ip_address>"` `--add-host="elasticsearch:<your_host_ip_address>"`)
+
+  For example:
+
+  * Run gitcommits ETL:
+  ```bash
+  HOST_IP=`ifconfig en0 | grep "inet " | awk '{print $2}'` \
+      docker run -ti --rm \
+          --add-host="gerrit:$HOST_IP" \
+          --network analytics-etl_ek \
+          -e ES_HOST="elasticsearch" \
+          -e GERRIT_URL="http://$HOST_IP:8080" \
+          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit" \
+          gerritforge/gerrit-analytics-etl-gitcommits:latest
+  ```
+
+  * Run auditlog ETL:
+    ```bash
+    HOST_IP=`ifconfig en0 | grep "inet " | awk '{print $2}'` \
+        docker run -ti --rm --volume <source>/audit_log:/app/events/audit_log \
+        --add-host="gerrit:$HOST_IP" \
+        --network analytics-wizard_ek \
+        -e ES_HOST="elasticsearch" \
+        -e GERRIT_URL="http://$HOST_IP:8181" \
+        -e ANALYTICS_ARGS="--elasticSearchIndex gerrit --eventsPath /app/events/audit_log --ignoreSSLCert true --since 2000-06-01 --until 2020-12-01 -a hour" \
+        gerritforge/gerrit-analytics-etl-auditlog:latest
+    ```
 
 * If Elastisearch dies with `exit code 137` you might have to give Docker more memory ([check this article for more details](https://github.com/moby/moby/issues/22211))
 
