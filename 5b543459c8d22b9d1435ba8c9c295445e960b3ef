@@ -16,6 +16,24 @@
       "revId": "5b543459c8d22b9d1435ba8c9c295445e960b3ef",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "485810ac_0e6fa97a",
+        "filename": "auditlog/scripts/wait-for-elasticsearch.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2018-12-17T16:43:18Z",
+      "side": 1,
+      "message": "I thought about it but I don\u0027t think being DRY on this would really give us anything.\nThere would be more work in adapting the build script to handle shared files than the work required by changing script if we needed to.\n\nI can share it if you think there\u0027s added value.",
+      "parentUuid": "ff7eaf0f_8ebc42fc",
+      "revId": "5b543459c8d22b9d1435ba8c9c295445e960b3ef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
