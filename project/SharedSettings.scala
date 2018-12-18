@@ -28,6 +28,7 @@ object SharedSettings {
     scalaVersion := "2.11.8",
     organization := "gerritforge",
     parallelExecution in Test := false,
+    fork in Test := true,
     git.useGitDescribe := true,
     libraryDependencies ++= Seq(
       "org.apache.spark"           %% "spark-core"             % sparkVersion % "provided" exclude("org.spark-project.spark", "unused"),
