@@ -30,22 +30,32 @@ object GerritAnalyticsTransformations {
 
   implicit class PimpedGerritProjectRDD(val rdd: RDD[GerritProject]) extends AnyVal {
 
-    def enrichWithSource(projectToContributorsAnalyticsUrlFactory: String => Option[String]): RDD[ProjectContributionSource] = {
+    def enrichWithSource(projectToContributorsAnalyticsUrlFactory: String => Option[String])
+      : RDD[ProjectContributionSource] = {
       rdd.map { project =>
-        ProjectContributionSource(project.name, projectToContributorsAnalyticsUrlFactory(project.id))
+        ProjectContributionSource(project.name,
+                                  projectToContributorsAnalyticsUrlFactory(project.id))
       }
     }
   }
 
-  def getProjectJsonContributorsArray(project: String, sourceURL: Option[String], gerritApiConnection: GerritConnectivity): Array[(String, String)] = {
-    sourceURL.toArray.flatMap(getProjectJsonContributorsArrayFromUrl(project, _, gerritApiConnection))
+  def getProjectJsonContributorsArray(
+      project: String,
+      sourceURL: Option[String],
+      gerritApiConnection: GerritConnectivity): Array[(String, String)] = {
+    sourceURL.toArray.flatMap(
+      getProjectJsonContributorsArrayFromUrl(project, _, gerritApiConnection))
   }
 
   def filterEmptyStrings(urlSource: BufferedSource): Iterator[String] =
-    urlSource.getLines()
+    urlSource
+      .getLines()
       .filterNot(_.trim.isEmpty)
 
-  def getProjectJsonContributorsArrayFromUrl(project: String, sourceURL: String, gerritApiConnection: GerritConnectivity): Array[(String, String)] = {
+  def getProjectJsonContributorsArrayFromUrl(
+      project: String,
+      sourceURL: String,
+      gerritApiConnection: GerritConnectivity): Array[(String, String)] = {
     try {
       filterEmptyStrings(gerritApiConnection.getContentFromApi(sourceURL))
         .map(s => (project, s))
@@ -82,6 +92,7 @@ object GerritAnalyticsTransformations {
                                  added_lines: Integer,
                                  deleted_lines: Integer,
                                  commits: Array[CommitInfo],
+                                 hashtag: Option[String],
                                  branches: Array[String],
                                  last_commit_date: Long,
                                  is_merge: Boolean,
@@ -98,8 +109,7 @@ object GerritAnalyticsTransformations {
   def extractCommits(df: DataFrame)(implicit spark: SparkSession): Dataset[String] = {
     import spark.implicits._
 
-    df
-      .select(explode($"commits.sha1"))
+    df.select(explode($"commits.sha1"))
       .as[String]
       .distinct() //might be useless this distinct, just want to be sure I'm respecting the contract
   }
@@ -110,13 +120,24 @@ object GerritAnalyticsTransformations {
       import spark.sqlContext.implicits._
       df.withColumn("json", from_json($"json", schema))
         .selectExpr(
-          "project", "json.name as author", "json.email as email",
-          "json.year as year", "json.month as month", "json.day as day", "json.hour as hour",
-          "json.num_files as num_files", "json.num_distinct_files as num_distinct_files",
-          "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
-          "json.num_commits as num_commits", "json.last_commit_date as last_commit_date",
-          "json.is_merge as is_merge", "json.commits as commits", "json.branches as branches",
-          "json.is_bot_like"
+          "project",
+          "json.name as author",
+          "json.email as email",
+          "json.year as year",
+          "json.month as month",
+          "json.day as day",
+          "json.hour as hour",
+          "json.num_files as num_files",
+          "json.num_distinct_files as num_distinct_files",
+          "json.added_lines as added_lines",
+          "json.deleted_lines as deleted_lines",
+          "json.num_commits as num_commits",
+          "json.last_commit_date as last_commit_date",
+          "json.is_merge as is_merge",
+          "json.commits as commits",
+          "json.branches as branches",
+          "json.is_bot_like",
+          "json.hashtag as hashtag"
         )
     }
 
@@ -130,8 +151,9 @@ object GerritAnalyticsTransformations {
 
           df.join(renamedAliasesDF, df("email") === renamedAliasesDF("email_alias"), "left_outer")
             .withColumn("organization",
-              when(renamedAliasesDF("organization_alias").notEqual(""), lower(renamedAliasesDF("organization_alias")))
-                .otherwise(df("organization")))
+                        when(renamedAliasesDF("organization_alias").notEqual(""),
+                             lower(renamedAliasesDF("organization_alias")))
+                          .otherwise(df("organization")))
             .withColumn("author", coalesce(renamedAliasesDF("author_alias"), df("author")))
             .drop("email_alias", "author_alias", "organization_alias")
         }
@@ -149,9 +171,9 @@ object GerritAnalyticsTransformations {
       extractCommits(df)
     }
 
-    def dashboardStats(aliasesDFMaybe: Option[DataFrame])(implicit spark: SparkSession): DataFrame = {
-      df
-        .addOrganization()
+    def dashboardStats(aliasesDFMaybe: Option[DataFrame])(
+        implicit spark: SparkSession): DataFrame = {
+      df.addOrganization()
         .handleAliases(aliasesDFMaybe)
         .dropCommits
     }
@@ -159,16 +181,19 @@ object GerritAnalyticsTransformations {
 
   private def emailToDomain(email: String): String = email match {
     case Email(_, domain) => domain
-    case _ => ""
+    case _                => ""
   }
 
   private def emailToDomainUdf = udf(emailToDomain(_: String))
 
-  implicit class PimpedRDDProjectContributionSource(val projectsAndUrls: RDD[ProjectContributionSource]) extends AnyVal {
+  implicit class PimpedRDDProjectContributionSource(
+      val projectsAndUrls: RDD[ProjectContributionSource])
+      extends AnyVal {
 
-    def fetchRawContributors(gerritApiConnection: GerritConnectivity)(implicit spark: SparkSession): RDD[(String, String)] = {
-      projectsAndUrls.flatMap {
-        p => getProjectJsonContributorsArray(p.name, p.contributorsUrl, gerritApiConnection)
+    def fetchRawContributors(gerritApiConnection: GerritConnectivity)(
+        implicit spark: SparkSession): RDD[(String, String)] = {
+      projectsAndUrls.flatMap { p =>
+        getProjectJsonContributorsArray(p.name, p.contributorsUrl, gerritApiConnection)
       }
     }
   }
@@ -180,10 +205,13 @@ object GerritAnalyticsTransformations {
   def longDateToISO(in: Number): String =
     ZonedDateTime.ofInstant(
       LocalDateTime.ofEpochSecond(in.longValue() / 1000L, 0, ZoneOffset.UTC),
-      ZoneOffset.UTC, ZoneId.of("Z")
+      ZoneOffset.UTC,
+      ZoneId.of("Z")
     ) format DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
-  def getContributorStats(projects: RDD[GerritProject], projectToContributorsAnalyticsUrlFactory: String => Option[String], gerritApiConnection: GerritConnectivity)(implicit spark: SparkSession) = {
+  def getContributorStats(projects: RDD[GerritProject],
+                          projectToContributorsAnalyticsUrlFactory: String => Option[String],
+                          gerritApiConnection: GerritConnectivity)(implicit spark: SparkSession) = {
     import spark.sqlContext.implicits._ // toDF
 
     projects
