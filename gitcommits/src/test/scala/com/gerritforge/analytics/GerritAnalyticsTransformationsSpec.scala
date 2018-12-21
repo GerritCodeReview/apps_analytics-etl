@@ -137,12 +137,25 @@ class GerritAnalyticsTransformationsSpec extends FlatSpec with Matchers with Spa
 
     collected should contain allOf(
       Row("p1", "a", "a@mail.com", 2017, 9, 11, 23, 2, 2, 1, 1, 1, 0, false,
-        new mutable.WrappedArray.ofRef(Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, false))), new mutable.WrappedArray.ofRef(Array("master", "stable-2.14"))),
+        new mutable.WrappedArray.ofRef(Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, false))), new mutable.WrappedArray.ofRef(Array("master", "stable-2.14")), null),
       Row("p2", "b", "b@mail.com", 2017, 9, 11, 23, 2, 3, 1, 1, 428, 1500000000000L, true,
-        new mutable.WrappedArray.ofRef[Row](Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, true), Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 1500000000000L, true))), null),
+        new mutable.WrappedArray.ofRef[Row](Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, true), Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 1500000000000L, true))), null, null),
       Row("p3", "c", "c@mail.com", null, null, null, null, 4, 2, 1, 1, 12, 1600000000000L, true,
-        new mutable.WrappedArray.ofRef[Row](Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, true), Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 1600000000000L, true))), null)
+        new mutable.WrappedArray.ofRef[Row](Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0l, true), Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 1600000000000L, true))), null, null)
     )
+  }
+
+  it should "extract hashtags" in {
+    import sql.implicits._
+
+    val hashTag = "test-hash-tag"
+    val rdd = sc.parallelize(Seq(("p1",s"""{"hashtag":"$hashTag" }""")))
+
+    val df = rdd.toDF("project", "json").transformCommitterInfo
+
+    df.count should be(1)
+    df.schema.fields.map(_.name) should contain inOrder("project", "hashtag")
+    df.collect.head.getAs[String]("hashtag") shouldBe hashTag
   }
 
   "handleAliases" should "enrich the data with author from the alias DF" in {

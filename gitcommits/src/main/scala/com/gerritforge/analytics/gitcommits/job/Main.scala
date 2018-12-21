@@ -83,6 +83,10 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
         c.copy(extractBranches = Some(input))
       } text "enables branches extraction for each commit"
 
+      opt[Boolean]('t', "extract-hashtags") optional () action { (input, c) =>
+        c.copy(extractHashTags = Some(input))
+      } text "enables hashtags extraction for each change"
+
     }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {

@@ -57,6 +57,11 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
              usage = "enables branches extraction for each commit")
   var extractBranches: Boolean = false
 
+  @ArgOption(name = "--extract-hashtags",
+    aliases = Array("-t"),
+    usage = "enables hashtags extraction for each change")
+  var extractHashTags: Boolean = false
+
   override def run() {
     implicit val config = GerritEndpointConfig(gerritConfig.getListenUrl(),
                                                prefix =
