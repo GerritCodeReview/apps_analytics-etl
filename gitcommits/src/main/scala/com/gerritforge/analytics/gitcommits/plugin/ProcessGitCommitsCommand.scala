@@ -140,7 +140,7 @@ class ProcessGitCommitsCommand @Inject()(
             logger.warn(s"Unable to fetch project $projectName", e)
             Seq()
           }
-        }
+      }
     )
   }
 }
