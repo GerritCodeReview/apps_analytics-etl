@@ -63,6 +63,9 @@ docker run -ti --rm \
     the system temporary directory
 - -a --email-aliases (*optional*) "emails to author alias" input data path.
 - -k --ignore-ssl-cert allows to proceed even for server connections otherwise considered insecure.
+- -t --extract-hashtags enables hashtags extraction for each change.
+
+
 
   CSVs with 3 columns are expected in input.
 
