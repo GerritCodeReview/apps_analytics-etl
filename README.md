@@ -64,6 +64,8 @@ docker run -ti --rm \
 - -a --email-aliases (*optional*) "emails to author alias" input data path.
 - -k --ignore-ssl-cert allows to proceed even for server connections otherwise considered insecure.
 
+
+
   CSVs with 3 columns are expected in input.
 
   Here an example of the required files structure:
