@@ -36,8 +36,6 @@ bin/spark-submit \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
-    --events file:///tmp/gerrit-events-export.json \
-    --writeNotProcessedEventsTo file:///tmp/failed-events \
     -e gerrit \
     --username gerrit-api-username \
     --password gerrit-api-password
@@ -49,7 +47,7 @@ You can also run this job in docker:
 docker run -ti --rm \
     -e ES_HOST="es.mycompany.com" \
     -e GERRIT_URL="http://gerrit.mycompany.com" \
-    -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit" \
+    -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -e gerrit" \
     gerritforge/gerrit-analytics-etl-gitcommits:latest
 ```
 
@@ -63,11 +61,6 @@ docker run -ti --rm \
     if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
     the system temporary directory
 - -a --email-aliases (*optional*) "emails to author alias" input data path.
-
-- --events location where to load the Gerrit Events
-    If not specified events will be ignored
-- --writeNotProcessedEventsTo location where to write a TSV file containing the events we couldn't process
-    with a description fo the reason why
 - -k --ignore-ssl-cert allows to proceed even for server connections otherwise considered insecure.
 
 
@@ -207,7 +200,7 @@ Just run `docker-compose up`.
           --network analytics-etl_ek \
           -e ES_HOST="elasticsearch" \
           -e GERRIT_URL="http://$HOST_IP:8080" \
-          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour --writeNotProcessedEventsTo file:///tmp/failed-events -e gerrit" \
+          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -e gerrit" \
           gerritforge/gerrit-analytics-etl-gitcommits:latest
   ```
 

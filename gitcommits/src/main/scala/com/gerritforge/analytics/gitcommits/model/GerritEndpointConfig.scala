@@ -29,8 +29,6 @@ case class GerritEndpointConfig(
     until: Option[LocalDate] = None,
     aggregate: Option[String] = None,
     emailAlias: Option[String] = None,
-    eventsPath: Option[String] = None,
-    eventsFailureOutputPath: Option[String] = None,
     username: Option[String] = None,
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,

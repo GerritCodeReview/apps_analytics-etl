@@ -3,7 +3,6 @@ package com.gerritforge.analytics.gitcommits.plugin
 import java.sql.Timestamp
 import java.time.LocalDate
 
-import com.gerritforge.analytics.gitcommits.engine.events.AggregationStrategy
 import com.gerritforge.analytics.gitcommits.job.{FetchProjects, Job}
 import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
 import com.google.gerrit.server.project.ProjectControl
@@ -11,10 +10,9 @@ import com.google.gerrit.sshd.{CommandMetaData, SshCommand}
 import com.google.inject.Inject
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
-import org.apache.spark.sql.{DataFrame, Row, SQLContext, SparkSession}
+import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.kohsuke.args4j.{Argument, Option => ArgOption}
 
-import scala.io.Source
 import scala.util.{Failure, Success}
 
 @CommandMetaData(name = "processGitCommits",
