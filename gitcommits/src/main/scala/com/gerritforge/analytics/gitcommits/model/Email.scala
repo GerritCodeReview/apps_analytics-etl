@@ -18,13 +18,13 @@ case class Email(user: String, domain: String)
 
 object Email {
   val emailWithOutExtension = """(.*?)@([^.]+)$""".r
-  val emailWithExtension = """(.*?)@(.*?)(?:\.co)?.[a-z]{2,4}$""".r
+  val emailWithExtension    = """(.*?)@(.*?)(?:\.co)?.[a-z]{2,4}$""".r
 
   def unapply(emailString: String): Option[(String, String)] = {
     emailString.toLowerCase match {
-      case emailWithOutExtension(u,d) => Some(u,d)
-      case emailWithExtension(u,d) => Some(u,d)
-      case _ => None
+      case emailWithOutExtension(u, d) => Some(u, d)
+      case emailWithExtension(u, d)    => Some(u, d)
+      case _                           => None
     }
   }
 }

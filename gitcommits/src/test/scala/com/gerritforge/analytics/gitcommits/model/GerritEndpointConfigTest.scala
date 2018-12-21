@@ -20,7 +20,7 @@ class GerritEndpointConfigTest extends FlatSpec with Matchers {
 
   "gerritProjectsUrl" should "contain prefix when available" in {
     val prefix = "prefixMustBeThere"
-    val conf = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), prefix = Some(prefix))
+    val conf   = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), prefix = Some(prefix))
     conf.gerritProjectsUrl should contain(s"testBaseUrl/projects/?p=$prefix")
   }
 

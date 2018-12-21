@@ -16,7 +16,11 @@ package com.gerritforge.analytics.gitcommits.job
 
 import java.time.LocalDate
 
-import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.gitcommits.model.{
+  GerritEndpointConfig,
+  GerritProject,
+  GerritProjectsSupport
+}
 import com.gerritforge.analytics.spark.SparkApp
 import com.gerritforge.analytics.support.ops.ReadsOps._
 import com.typesafe.scalalogging.LazyLogging
@@ -81,6 +85,11 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
       opt[Boolean]('r', "extract-branches") optional () action { (input, c) =>
         c.copy(extractBranches = Some(input))
       } text "enables branches extraction for each commit"
+
+      opt[Boolean]('t', "extract-hashtags") optional () action { (input, c) =>
+        c.copy(extractHashTags = Some(input))
+      } text "enables hashtags extraction for each change"
+
     }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
@@ -115,13 +124,16 @@ trait Job {
 
     logger.info(
       s"Loaded a list of ${projects.size} projects ${if (projects.size > 20) projects.take(20).mkString("[", ",", ", ...]")
-      else projects.mkString("[", ",", "]")}")
+      else projects.mkString("[", ",", "]")}"
+    )
 
     val aliasesDF = getAliasDF(config.emailAlias)
 
-    val contributorsStats = getContributorStats(spark.sparkContext.parallelize(projects),
-                                             config.contributorsUrl,
-                                             config.gerritApiConnection)
+    val contributorsStats = getContributorStats(
+      spark.sparkContext.parallelize(projects),
+      config.contributorsUrl,
+      config.gerritApiConnection
+    )
     contributorsStats.dashboardStats(aliasesDF)
   }
 
@@ -146,7 +158,8 @@ trait FetchRemoteProjects extends FetchProjects {
   def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
     config.gerritProjectsUrl.toSeq.flatMap { url =>
       GerritProjectsSupport.parseJsonProjectListResponse(
-        config.gerritApiConnection.getContentFromApi(url))
+        config.gerritApiConnection.getContentFromApi(url)
+      )
     }
   }
 }

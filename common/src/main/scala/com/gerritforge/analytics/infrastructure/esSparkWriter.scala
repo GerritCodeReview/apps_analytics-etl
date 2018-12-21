@@ -36,13 +36,16 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
     with LazyLogging
     with SparkEsClientProvider {
 
-  def saveToEsWithAliasSwap(aliasName: String,
-                            documentType: String): EnrichedAliasActionResponse = {
+  def saveToEsWithAliasSwap(
+      aliasName: String,
+      documentType: String
+  ): EnrichedAliasActionResponse = {
     val newIndexNameWithTime = IndexNameGenerator.timeBasedIndexName(aliasName, Instant.now())
     val newPersistencePath   = s"$newIndexNameWithTime/$documentType"
 
     logger.info(
-      s"Storing data into $newPersistencePath and swapping alias $aliasName to read from the new index")
+      s"Storing data into $newPersistencePath and swapping alias $aliasName to read from the new index"
+    )
 
     import scala.concurrent.ExecutionContext.Implicits.global
     // Save data
@@ -52,7 +55,8 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
         .saveToEs(newPersistencePath)
 
       logger.info(
-        s"Successfully stored the data into index $newIndexNameWithTime. Will now update the alias $aliasName")
+        s"Successfully stored the data into index $newIndexNameWithTime. Will now update the alias $aliasName"
+      )
       moveAliasToNewIndex(aliasName, newIndexNameWithTime).flatMap { response =>
         if (response.isSuccess && response.result.success) {
           logger.info("Alias was updated successfully")

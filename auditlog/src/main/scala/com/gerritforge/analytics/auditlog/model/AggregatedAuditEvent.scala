@@ -16,15 +16,15 @@ package com.gerritforge.analytics.auditlog.model
 import java.sql.Timestamp
 
 case class AggregatedAuditEvent(
-  events_time_bucket: Timestamp,
-  audit_type: String,
-  user_identifier: Option[String],
-  user_type: Option[String],
-  access_path: Option[String],
-  command: String,
-  command_arguments: String,
-  sub_command: Option[String],
-  project: Option[String],
-  result: String,
-  num_events: Long
+    events_time_bucket: Timestamp,
+    audit_type: String,
+    user_identifier: Option[String],
+    user_type: Option[String],
+    access_path: Option[String],
+    command: String,
+    command_arguments: String,
+    sub_command: Option[String],
+    project: Option[String],
+    result: String,
+    num_events: Long
 )

@@ -22,7 +22,6 @@ import org.json4s.JsonDSL._
 
 import scala.util.{Failure, Try}
 
-
 sealed trait AuditEvent {
   def auditType: String
   def accessPath: Option[String]
@@ -45,14 +44,14 @@ sealed trait AuditEvent {
 }
 
 final case class SshAuditEvent(
-  accessPath: Option[String],
-  sessionId: String,
-  who: Option[Int],
-  timeAtStart: Long,
-  what: String,
-  elapsed: Int,
-  uuid: String,
-  result: String
+    accessPath: Option[String],
+    sessionId: String,
+    who: Option[Int],
+    timeAtStart: Long,
+    what: String,
+    elapsed: Int,
+    uuid: String,
+    result: String
 ) extends AuditEvent {
 
   override val auditType = SshAuditEvent.auditType
@@ -82,15 +81,15 @@ sealed trait BaseHttpAuditEvent extends AuditEvent {
 }
 
 final case class HttpAuditEvent(
-  accessPath: Option[String],
-  httpMethod: String,
-  result: String,
-  sessionId: String,
-  who: Option[Int],
-  timeAtStart: Long,
-  what: String,
-  elapsed: Int,
-  uuid: String
+    accessPath: Option[String],
+    httpMethod: String,
+    result: String,
+    sessionId: String,
+    who: Option[Int],
+    timeAtStart: Long,
+    what: String,
+    elapsed: Int,
+    uuid: String
 ) extends BaseHttpAuditEvent {
   override val auditType = HttpAuditEvent.auditType
 }
@@ -115,15 +114,15 @@ object HttpAuditEvent extends AuditLogFieldExtractors {
 }
 
 final case class ExtendedHttpAuditEvent(
-  accessPath: Option[String],
-  httpMethod: String,
-  result: String,
-  sessionId: String,
-  who: Option[Int],
-  timeAtStart: Long,
-  what: String,
-  elapsed: Int,
-  uuid: String
+    accessPath: Option[String],
+    httpMethod: String,
+    result: String,
+    sessionId: String,
+    who: Option[Int],
+    timeAtStart: Long,
+    what: String,
+    elapsed: Int,
+    uuid: String
 ) extends BaseHttpAuditEvent {
   override val auditType = ExtendedHttpAuditEvent.auditType
 }
@@ -152,9 +151,12 @@ object AuditEvent {
   def parseRaw(json: String): Try[AuditEvent] = {
     Try(parse(json)).flatMap { jsValueEvent =>
       jsValueEvent \ "type" match {
-        case JString(eventType) if eventType == "HttpAuditEvent" => HttpAuditEvent(jsValueEvent \ "event")
-        case JString(eventType) if eventType == "ExtendedHttpAuditEvent" => ExtendedHttpAuditEvent(jsValueEvent \"event")
-        case JString(eventType) if eventType == "SshAuditEvent" => SshAuditEvent(jsValueEvent \ "event")
+        case JString(eventType) if eventType == "HttpAuditEvent" =>
+          HttpAuditEvent(jsValueEvent \ "event")
+        case JString(eventType) if eventType == "ExtendedHttpAuditEvent" =>
+          ExtendedHttpAuditEvent(jsValueEvent \ "event")
+        case JString(eventType) if eventType == "SshAuditEvent" =>
+          SshAuditEvent(jsValueEvent \ "event")
         case _ => Failure(new MappingException(s"Could not parse json into an audit event: $json"))
       }
     }

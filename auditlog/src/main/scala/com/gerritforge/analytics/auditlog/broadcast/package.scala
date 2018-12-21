@@ -15,7 +15,7 @@
 package com.gerritforge.analytics.auditlog
 
 package object broadcast {
-  type GerritAccountId = Int
-  type GerritProjectName = String
+  type GerritAccountId      = Int
+  type GerritProjectName    = String
   type GerritUserIdentifier = String
 }

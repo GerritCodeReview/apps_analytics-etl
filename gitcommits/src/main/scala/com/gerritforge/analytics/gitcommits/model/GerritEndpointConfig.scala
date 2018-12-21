@@ -33,9 +33,12 @@ case class GerritEndpointConfig(
     username: Option[String] = None,
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,
-    extractBranches: Option[Boolean] = None) {
+    extractBranches: Option[Boolean] = None,
+    extractHashTags: Option[Boolean] = None
+) {
 
-  val gerritApiConnection: GerritConnectivity = new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
+  val gerritApiConnection: GerritConnectivity =
+    new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
 
   val gerritProjectsUrl: Option[String] = baseUrl.map { url =>
     s"${url}/projects/" + prefix.fold("")("?p=" + _)
@@ -54,7 +57,8 @@ case class GerritEndpointConfig(
     "since"            -> since.map(format.format),
     "until"            -> until.map(format.format),
     "aggregate"        -> aggregate,
-    "extract-branches" -> extractBranches.map(_.toString)
+    "extract-branches" -> extractBranches.map(_.toString),
+    "extract-hashtags" -> extractHashTags.map(_.toString)
   ).flatMap(queryOpt).mkString("?", "&", "")
 
   def contributorsUrl(projectName: String): Option[String] =

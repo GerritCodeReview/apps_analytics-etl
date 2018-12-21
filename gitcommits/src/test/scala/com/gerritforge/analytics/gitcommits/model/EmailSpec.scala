@@ -78,7 +78,7 @@ class EmailSpec extends FlatSpec with Matchers {
   it should "not match an invalid mail format" in {
     "invalid email" match {
       case Email(_, _) => fail("Invalid emails should be rejected")
-      case _ =>
+      case _           =>
     }
   }
 }

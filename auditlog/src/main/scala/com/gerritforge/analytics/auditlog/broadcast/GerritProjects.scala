@@ -26,17 +26,25 @@ import scala.annotation.tailrec
 import scala.util.{Failure, Success, Try}
 
 case class GerritProject(name: GerritProjectName)
-case class GerritProjects(private val projects: Map[GerritProjectName, GerritProject]) extends LazyLogging with RegexUtil {
+case class GerritProjects(private val projects: Map[GerritProjectName, GerritProject])
+    extends LazyLogging
+    with RegexUtil {
 
-  private val PROJECT_SSH_WITH_SPACES           = capture(r = """project:(.+?)\)?\s""")
-  private val PROJECT_SSH_WITH_BRACKETS         = capture(r = """project:\{\^?(.*)\}""")
-  private val PROJECT_SSH_NO_SPACES             = capture(r = """project(?::|.)(.*)""")
-  private val PROJECT_SSH_PACK                  = capture(r = """(?:git-receive-pack|git-upload-pack)\.\/(.+)""")
-  private val PROJECT_SSH_REPLICATION_START     = capture(r = """replication\.start\.([\.\/a-zA-Z0-9]+(?:-[a-zA-Z0-9\.]+)*)(?:\.|\s|$)""")
+  private val PROJECT_SSH_WITH_SPACES   = capture(r = """project:(.+?)\)?\s""")
+  private val PROJECT_SSH_WITH_BRACKETS = capture(r = """project:\{\^?(.*)\}""")
+  private val PROJECT_SSH_NO_SPACES     = capture(r = """project(?::|.)(.*)""")
+  private val PROJECT_SSH_PACK          = capture(r = """(?:git-receive-pack|git-upload-pack)\.\/(.+)""")
+  private val PROJECT_SSH_REPLICATION_START = capture(
+    r = """replication\.start\.([\.\/a-zA-Z0-9]+(?:-[a-zA-Z0-9\.]+)*)(?:\.|\s|$)"""
+  )
   private val PROJECT_REST_API_CHANGES_SEGMENT  = capture(r = """changes\/([^\/]+)~""")
   private val PROJECT_REST_API_PROJECTS_SEGMENT = capture(r = """projects\/([^\/]+)""")
-  private val PROJECT_HTTP_PACK_INFO_REF        = capture(r = """https?:\/\/(.+)\/info\/refs\?service=(?:git-upload-pack|git-receive-pack)""")
-  private val PROJECT_HTTP_PACK                 = capture(r = """https?:\/\/(.+)\/(?:git-upload-pack|git-receive-pack)""")
+  private val PROJECT_HTTP_PACK_INFO_REF = capture(
+    r = """https?:\/\/(.+)\/info\/refs\?service=(?:git-upload-pack|git-receive-pack)"""
+  )
+  private val PROJECT_HTTP_PACK = capture(
+    r = """https?:\/\/(.+)\/(?:git-upload-pack|git-receive-pack)"""
+  )
 
   private val NO_PROJECT_RELATED_COMMANDS = capture(r = """(LOGIN|LOGOUT|AUTH)""")
 
@@ -46,17 +54,33 @@ case class GerritProjects(private val projects: Map[GerritProjectName, GerritPro
   // For example, the string `redhat-performance/quads.github.com.status:open.foo:bar` will match the project
   // redhat-performance/quads.github.com, if that project exists in `gerritProject`
   private def findProjectStringAtStart(rawProject: String, sep: Char = '.'): Option[String] =
-    rawProject.split(sep).foldLeft(List.empty[String]) { case (acc, token) =>
-      acc.headOption.map { t => (t + sep + token) +: acc }.getOrElse(List(token))
-    }.find(existProject)
+    rawProject
+      .split(sep)
+      .foldLeft(List.empty[String]) {
+        case (acc, token) =>
+          acc.headOption
+            .map { t =>
+              (t + sep + token) +: acc
+            }
+            .getOrElse(List(token))
+      }
+      .find(existProject)
 
   // Helper method to find a project at the end of a string.
   // For example, the string `gerrit.foo.bar.baz.redhat-performance/quads.github.com` will match the project
   // redhat-performance/quads.github.com, if that project exists in `gerritProject`
   private def findProjectStringAtEnd(rawProject: String, sep: Char = '.'): Option[String] =
-    rawProject.split(sep).foldRight(List.empty[String]) { case (token, acc) =>
-      acc.headOption.map { t => (token + sep + t) +: acc }.getOrElse(List(token))
-    }.find(existProject)
+    rawProject
+      .split(sep)
+      .foldRight(List.empty[String]) {
+        case (token, acc) =>
+          acc.headOption
+            .map { t =>
+              (token + sep + t) +: acc
+            }
+            .getOrElse(List(token))
+      }
+      .find(existProject)
 
   def extractProject(what: String, accessPath: String): Option[String] = accessPath match {
     case _ if matches(NO_PROJECT_RELATED_COMMANDS, what) =>
@@ -79,7 +103,9 @@ case class GerritProjects(private val projects: Map[GerritProjectName, GerritPro
         .orElse(extractGroup(PROJECT_HTTP_PACK, what))
         .flatMap(findProjectStringAtEnd(_, '/'))
     case unexpected =>
-      logger.warn(s"Unexpected access path '$unexpected' encountered when extracting project from '$what'")
+      logger.warn(
+        s"Unexpected access path '$unexpected' encountered when extracting project from '$what'"
+      )
       None
   }
 }
@@ -90,14 +116,21 @@ object GerritProjects extends LazyLogging {
 
   implicit private val formats = DefaultFormats
 
-  def loadProjects(gerritConnectivity: GerritConnectivity, gerritUrl: String): Try[GerritProjects] = {
+  def loadProjects(
+      gerritConnectivity: GerritConnectivity,
+      gerritUrl: String
+  ): Try[GerritProjects] = {
     val PAGE_SIZE = 500
     logger.debug(s"Loading gerrit projects...")
 
-    val baseUrl = s"""$gerritUrl/projects/?n=$PAGE_SIZE&query=state%3Aactive%20OR%20state%3Aread-only"""
+    val baseUrl =
+      s"""$gerritUrl/projects/?n=$PAGE_SIZE&query=state%3Aactive%20OR%20state%3Aread-only"""
 
     @tailrec
-    def loopThroughPages(more: Boolean, triedAcc: Try[GerritProjects] = Success(empty)): Try[GerritProjects] = {
+    def loopThroughPages(
+        more: Boolean,
+        triedAcc: Try[GerritProjects] = Success(empty)
+    ): Try[GerritProjects] = {
       if (!more)
         triedAcc
       else {
@@ -109,16 +142,21 @@ object GerritProjects extends LazyLogging {
         logger.debug(s"Getting gerrit projects - start: ${acc.projects.size}")
 
         val pageInfo = Try(parse(accountsJsonPage)).map { jsMapProjects =>
-          val thisPageProjects = jsMapProjects.extract[List[GerritProject]].map(prj => prj.name -> prj)
-          (thisPageProjects.size == PAGE_SIZE, acc.copy(projects = acc.projects ++ thisPageProjects))
+          val thisPageProjects =
+            jsMapProjects.extract[List[GerritProject]].map(prj => prj.name -> prj)
+          (
+            thisPageProjects.size == PAGE_SIZE,
+            acc.copy(projects = acc.projects ++ thisPageProjects)
+          )
         }
 
         pageInfo match {
-          case Success((newMore, newGerritProjects)) => loopThroughPages(newMore, Success(newGerritProjects))
-          case Failure(exception) => loopThroughPages(more=false, Failure(exception))
+          case Success((newMore, newGerritProjects)) =>
+            loopThroughPages(newMore, Success(newGerritProjects))
+          case Failure(exception) => loopThroughPages(more = false, Failure(exception))
         }
       }
     }
-    loopThroughPages(more=true)
+    loopThroughPages(more = true)
   }
 }

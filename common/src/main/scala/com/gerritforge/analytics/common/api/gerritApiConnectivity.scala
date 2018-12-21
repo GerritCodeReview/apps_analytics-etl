@@ -24,7 +24,7 @@ import scala.io.{BufferedSource, Codec, Source}
 
 sealed trait HttpBasicAuthentication {
 
-  val BASIC = "Basic"
+  val BASIC         = "Basic"
   val AUTHORIZATION = "Authorization"
 
   def encodeCredentials(username: String, password: String): String = {
@@ -35,12 +35,22 @@ sealed trait HttpBasicAuthentication {
     BASIC + " " + encodeCredentials(username, password)
 }
 
-class GerritConnectivity(maybeUsername: Option[String], maybePassword: Option[String], ignoreSSLCert: Boolean = false) extends HttpBasicAuthentication with Serializable with LazyLogging {
-  private def createBasicSecuredConnection(url: String, username: String, password: String): BufferedSource = {
+class GerritConnectivity(
+    maybeUsername: Option[String],
+    maybePassword: Option[String],
+    ignoreSSLCert: Boolean = false
+) extends HttpBasicAuthentication
+    with Serializable
+    with LazyLogging {
+  private def createBasicSecuredConnection(
+      url: String,
+      username: String,
+      password: String
+  ): BufferedSource = {
     try {
-      if(ignoreSSLCert) trustAllSSLCerts()
+      if (ignoreSSLCert) trustAllSSLCerts()
 
-      val unsecureURL = new URL(url)
+      val unsecureURL  = new URL(url)
       val endPointPath = unsecureURL.getFile
       val basicAuthURL = unsecureURL.toString.replace(endPointPath, s"/a$endPointPath")
 
@@ -49,14 +59,13 @@ class GerritConnectivity(maybeUsername: Option[String], maybePassword: Option[St
       val connection = new URL(basicAuthURL).openConnection
       connection.setRequestProperty(AUTHORIZATION, getHeader(username, password))
       Source.fromInputStream(connection.getInputStream, Codec.UTF8.name)
-    }
-    catch {
+    } catch {
       case e: Exception => throw new Exception(s"Unable to connect to $url. $e")
     }
   }
 
   private def createNonSecuredConnection(url: String): BufferedSource = {
-    if(ignoreSSLCert) trustAllSSLCerts()
+    if (ignoreSSLCert) trustAllSSLCerts()
 
     logger.info(s"Connecting to API $url")
     Source.fromURL(url, Codec.UTF8.name)
@@ -68,7 +77,7 @@ class GerritConnectivity(maybeUsername: Option[String], maybePassword: Option[St
         username <- maybeUsername
         password <- maybePassword
       } yield (createBasicSecuredConnection(url, username, password))
-      ).getOrElse(createNonSecuredConnection(url))
+    ).getOrElse(createNonSecuredConnection(url))
   }
 
   private def trustAllSSLCerts(): Unit = {

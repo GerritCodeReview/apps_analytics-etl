@@ -40,8 +40,10 @@ trait ElasticSearchAliasOps {
 
   }
 
-  def moveAliasToNewIndex(aliasName: String,
-                          newIndexName: String): Future[Response[AliasActionResponse]] = {
+  def moveAliasToNewIndex(
+      aliasName: String,
+      newIndexName: String
+  ): Future[Response[AliasActionResponse]] = {
     val oldIndices: Future[Iterable[Index]] = getIndicesFromAlias(aliasName)
 
     oldIndices.flatMap { indices =>
@@ -51,7 +53,8 @@ trait ElasticSearchAliasOps {
       val addAliasAction: AddAliasActionRequest = addAlias(aliasName) on newIndexName
 
       logger.info(
-        s"Replacing old indices (${indices.mkString(",")}) with $newIndexName from alias $aliasName")
+        s"Replacing old indices (${indices.mkString(",")}) with $newIndexName from alias $aliasName"
+      )
 
       esClient.execute {
         aliases(

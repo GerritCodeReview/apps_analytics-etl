@@ -62,10 +62,10 @@ class TimeRangeSpec extends FlatSpec with Matchers with Inside {
 
 object TimeRangeSpec {
   val yesterday: LocalDate = LocalDate.now().minusDays(1)
-  val tomorrow: LocalDate = LocalDate.now().plusDays(1)
-  val now: LocalDate = LocalDate.now()
-  val nowMs: Long = Instant.now().toEpochMilli
-  val yesterdayMs = yesterday.atStartOfDay().convertToUTCEpochMillis
-  val tomorrowMs = tomorrow.atStartOfDay().convertToUTCEpochMillis
+  val tomorrow: LocalDate  = LocalDate.now().plusDays(1)
+  val now: LocalDate       = LocalDate.now()
+  val nowMs: Long          = Instant.now().toEpochMilli
+  val yesterdayMs          = yesterday.atStartOfDay().convertToUTCEpochMillis
+  val tomorrowMs           = tomorrow.atStartOfDay().convertToUTCEpochMillis
 
 }

@@ -14,7 +14,11 @@
 
 package com.gerritforge.analytics.auditlog.job
 
-import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, GerritProjects, GerritUserIdentifiers}
+import com.gerritforge.analytics.auditlog.broadcast.{
+  AdditionalUserInfo,
+  GerritProjects,
+  GerritUserIdentifiers
+}
 import com.gerritforge.analytics.auditlog.model.ElasticSearchFields._
 import com.gerritforge.analytics.auditlog.model._
 import com.gerritforge.analytics.auditlog.range.TimeRange
@@ -29,9 +33,12 @@ object Main extends SparkApp with App with LazyLogging {
 
   CommandLineArguments(args) match {
     case Some(config) =>
-
       val tryProjects = GerritProjects.loadProjects(
-        new GerritConnectivity(config.gerritUsername, config.gerritPassword, config.ignoreSSLCert.getOrElse(false)),
+        new GerritConnectivity(
+          config.gerritUsername,
+          config.gerritPassword,
+          config.ignoreSSLCert.getOrElse(false)
+        ),
         config.gerritUrl.get
       )
 
@@ -41,7 +48,11 @@ object Main extends SparkApp with App with LazyLogging {
       }
 
       val tryUserIdentifiers = GerritUserIdentifiers.loadAccounts(
-        new GerritConnectivity(config.gerritUsername, config.gerritPassword, config.ignoreSSLCert.getOrElse(false)),
+        new GerritConnectivity(
+          config.gerritUsername,
+          config.gerritPassword,
+          config.ignoreSSLCert.getOrElse(false)
+        ),
         config.gerritUrl.get
       )
 
@@ -52,7 +63,10 @@ object Main extends SparkApp with App with LazyLogging {
 
       val triedAdditionalUserInfo = AdditionalUserInfo.loadAdditionalUserInfo(config)
       if (triedAdditionalUserInfo.isFailure) {
-        logger.error("Error loading additional user information", triedAdditionalUserInfo.failed.get)
+        logger.error(
+          "Error loading additional user information",
+          triedAdditionalUserInfo.failed.get
+        )
         sys.exit(1)
       }
 

@@ -4,7 +4,11 @@ import java.sql.Timestamp
 import java.time.LocalDate
 
 import com.gerritforge.analytics.gitcommits.job.{FetchProjects, Job}
-import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.gitcommits.model.{
+  GerritEndpointConfig,
+  GerritProject,
+  GerritProjectsSupport
+}
 import com.google.gerrit.server.project.ProjectControl
 import com.google.gerrit.sshd.{CommandMetaData, SshCommand}
 import com.google.inject.Inject
@@ -15,11 +19,14 @@ import org.kohsuke.args4j.{Argument, Option => ArgOption}
 
 import scala.util.{Failure, Success}
 
-@CommandMetaData(name = "processGitCommits",
-                 description = "Start the extraction of Git Commits Gerrit analytics")
-class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProjectsSupport,
-                                         val gerritConfig: GerritConfigSupport)
-    extends SshCommand
+@CommandMetaData(
+  name = "processGitCommits",
+  description = "Start the extraction of Git Commits Gerrit analytics"
+)
+class ProcessGitCommitsCommand @Inject()(
+    implicit val gerritProjects: GerritProjectsSupport,
+    val gerritConfig: GerritConfigSupport
+) extends SshCommand
     with Job
     with DateConversions
     with FetchProjects
@@ -37,37 +44,53 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
   @ArgOption(name = "--until", aliases = Array("-u"), usage = "end date")
   var endDate: Timestamp = NO_TIMESTAMP
 
-  @ArgOption(name = "--aggregate",
-             aliases = Array("-g"),
-             usage = "aggregate email/email_hour/email_day/email_month/email_year")
+  @ArgOption(
+    name = "--aggregate",
+    aliases = Array("-g"),
+    usage = "aggregate email/email_hour/email_day/email_month/email_year"
+  )
   var aggregate: String = "email_day"
 
-  @ArgOption(name = "--email-aliases",
-             aliases = Array("-a"),
-             usage = "\"emails to author alias\" input data path")
+  @ArgOption(
+    name = "--email-aliases",
+    aliases = Array("-a"),
+    usage = "\"emails to author alias\" input data path"
+  )
   var emailAlias: String = null
 
-  @ArgOption(name = "--ignore-ssl-cert",
+  @ArgOption(
+    name = "--ignore-ssl-cert",
     aliases = Array("-k"),
-    usage = "Ignore SSL certificate validation")
+    usage = "Ignore SSL certificate validation"
+  )
   var ignoreSSLCert: Boolean = false
 
-  @ArgOption(name = "--extract-branches",
-             aliases = Array("-r"),
-             usage = "enables branches extraction for each commit")
+  @ArgOption(
+    name = "--extract-branches",
+    aliases = Array("-r"),
+    usage = "enables branches extraction for each commit"
+  )
   var extractBranches: Boolean = false
 
+  @ArgOption(
+    name = "--extract-hashtags",
+    aliases = Array("-t"),
+    usage = "enables hashtags extraction for each change"
+  )
+  var extractHashTags: Boolean = false
+
   override def run() {
-    implicit val config = GerritEndpointConfig(gerritConfig.getListenUrl(),
-                                               prefix =
-                                                 Option(projectControl).map(_.getProject.getName),
-                                               "",
-                                               elasticIndex,
-                                               beginDate,
-                                               endDate,
-                                               aggregate,
-                                               emailAlias,
-                                               ignoreSSLCert=Some(ignoreSSLCert))
+    implicit val config = GerritEndpointConfig(
+      gerritConfig.getListenUrl(),
+      prefix = Option(projectControl).map(_.getProject.getName),
+      "",
+      elasticIndex,
+      beginDate,
+      endDate,
+      aggregate,
+      emailAlias,
+      ignoreSSLCert = Some(ignoreSSLCert)
+    )
 
     implicit val spark: SparkSession = SparkSession
       .builder()
@@ -90,7 +113,8 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
 
       config.elasticIndex.foreach { esIndex =>
         stdout.println(
-          s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'")
+          s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'"
+        )
         stdout.flush()
         import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
         import scala.concurrent.ExecutionContext.Implicits.global
@@ -114,15 +138,17 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
   }
 
   def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
-    config.prefix.toSeq.flatMap(projectName =>
-      gerritProjects.getProject(projectName) match {
-        case Success(project) =>
-          Seq(project)
-        case Failure(e) => {
-          logger.warn(s"Unable to fetch project $projectName", e)
-          Seq()
+    config.prefix.toSeq.flatMap(
+      projectName =>
+        gerritProjects.getProject(projectName) match {
+          case Success(project) =>
+            Seq(project)
+          case Failure(e) => {
+            logger.warn(s"Unable to fetch project $projectName", e)
+            Seq()
+          }
         }
-    })
+    )
   }
 }
 
