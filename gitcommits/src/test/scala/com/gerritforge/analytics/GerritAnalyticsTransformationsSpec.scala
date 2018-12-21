@@ -179,7 +179,8 @@ class GerritAnalyticsTransformationsSpec
           Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0L, false))
         ),
         new mutable.WrappedArray.ofRef(Array("master", "stable-2.14")),
-        false
+        false,
+        null
       ),
       Row(
         "p2",
@@ -203,7 +204,8 @@ class GerritAnalyticsTransformationsSpec
           )
         ),
         null,
-        true
+        true,
+        null
       ),
       Row(
         "p3",
@@ -227,9 +229,23 @@ class GerritAnalyticsTransformationsSpec
           )
         ),
         null,
-        false
+        false,
+        null
       )
     )
+  }
+
+  it should "extract hashtags" in {
+    import sql.implicits._
+
+    val hashTag = "test-hash-tag"
+    val rdd     = sc.parallelize(Seq(("p1", s"""{"hashtag":"$hashTag" }""")))
+
+    val df = rdd.toDF("project", "json").transformCommitterInfo
+
+    df.count should be(1)
+    df.schema.fields.map(_.name) should contain inOrder ("project", "hashtag")
+    df.collect.head.getAs[String]("hashtag") shouldBe hashTag
   }
 
   "handleAliases" should "enrich the data with author from the alias DF" in {

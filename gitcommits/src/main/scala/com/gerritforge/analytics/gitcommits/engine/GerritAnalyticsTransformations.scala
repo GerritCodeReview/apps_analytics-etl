@@ -99,6 +99,10 @@ object GerritAnalyticsTransformations {
       added_lines: Integer,
       deleted_lines: Integer,
       commits: Array[CommitInfo],
+<<<<<<< HEAD
+=======
+      hashtag: Option[String],
+>>>>>>> 9c73c24... Allow aggregation per hashtags
       branches: Array[String],
       last_commit_date: Long,
       is_merge: Boolean,
@@ -143,7 +147,8 @@ object GerritAnalyticsTransformations {
           "json.is_merge as is_merge",
           "json.commits as commits",
           "json.branches as branches",
-          "json.is_bot_like"
+          "json.is_bot_like",
+          "json.hashtag as hashtag"
         )
     }
 
