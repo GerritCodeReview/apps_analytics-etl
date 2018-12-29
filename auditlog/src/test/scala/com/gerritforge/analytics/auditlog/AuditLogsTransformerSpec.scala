@@ -41,6 +41,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         anonymousHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         anonymousHttpAuditEvent.what,
+        anonymousHttpAuditEvent.result,
         expectedAggregatedCount
     )
   }
@@ -60,6 +61,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
+      authenticatedHttpAuditEvent.result,
       expectedAggregatedCount
     )
   }
@@ -82,6 +84,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
+      authenticatedHttpAuditEvent.result,
       expectedAggregatedCount
     )
   }
@@ -101,6 +104,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
+      sshAuditEvent.result,
       expectedAggregatedCount
     )
   }
@@ -120,6 +124,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
+      sshAuditEvent.result,
       expectedAggregatedCount
     )
   }
@@ -141,6 +146,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        sshAuditEvent.result,
         expectedAggregatedCount
       ),
       Row(
@@ -150,6 +156,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        sshAuditEvent.result,
         expectedAggregatedCount
       )
     )
@@ -172,6 +179,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        sshAuditEvent.result,
         expectedSshAggregatedCount
       ),
       Row(
@@ -181,6 +189,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         authenticatedHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         authenticatedHttpAuditEvent.what,
+        authenticatedHttpAuditEvent.result,
         expectedHttpAggregatedCount
       )
     )
