@@ -32,6 +32,7 @@ sealed trait AuditEvent {
   def elapsed: Int
   def uuid: String
   def who: Option[Int]
+  def result: String
 
   implicit def formats: Formats = DefaultFormats
 
@@ -50,7 +51,8 @@ final case class SshAuditEvent(
   timeAtStart: Long,
   what: String,
   elapsed: Int,
-  uuid: String
+  uuid: String,
+  result: String
 ) extends AuditEvent {
 
   override val auditType = SshAuditEvent.auditType
@@ -69,20 +71,20 @@ object SshAuditEvent extends AuditLogFieldExtractors {
       timeAtStart(jsEvent),
       what(jsEvent),
       elapsed(jsEvent),
-      uuid(jsEvent)
+      uuid(jsEvent),
+      sshResult(jsEvent)
     )
   }
 }
 
 sealed trait BaseHttpAuditEvent extends AuditEvent {
   def httpMethod: String
-  def httpStatus: Int
 }
 
 final case class HttpAuditEvent(
   accessPath: Option[String],
   httpMethod: String,
-  httpStatus: Int,
+  result: String,
   sessionId: String,
   who: Option[Int],
   timeAtStart: Long,
@@ -101,7 +103,7 @@ object HttpAuditEvent extends AuditLogFieldExtractors {
     HttpAuditEvent(
       accessPath(jsEvent),
       httpMethod(jsEvent),
-      httpStatus(jsEvent),
+      httpResult(jsEvent),
       sessionId(jsEvent),
       who(jsEvent),
       timeAtStart(jsEvent),
@@ -115,7 +117,7 @@ object HttpAuditEvent extends AuditLogFieldExtractors {
 final case class ExtendedHttpAuditEvent(
   accessPath: Option[String],
   httpMethod: String,
-  httpStatus: Int,
+  result: String,
   sessionId: String,
   who: Option[Int],
   timeAtStart: Long,
@@ -133,7 +135,7 @@ object ExtendedHttpAuditEvent extends AuditLogFieldExtractors {
     ExtendedHttpAuditEvent(
       accessPath(jsEvent),
       httpMethod(jsEvent),
-      httpStatus(jsEvent),
+      httpResult(jsEvent),
       sessionId(jsEvent),
       who(jsEvent),
       timeAtStart(jsEvent),

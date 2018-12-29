@@ -27,6 +27,7 @@ trait AuditLogFieldExtractors {
   val uuid        = (jsEvent: JValue) => (jsEvent \ "uuid" \ "uuid").extract[String]
   val who         = (jsEvent: JValue) => (jsEvent \ "who" \ "account_id" \ "id").extractOpt[Int]
   val httpMethod  = (jsEvent: JValue) => (jsEvent \ "http_method").extract[String]
-  val httpStatus  = (jsEvent: JValue) => (jsEvent \ "http_status").extract[Int]
+  val httpResult  = (jsEvent: JValue) => (jsEvent \ "http_status").extract[String]
+  val sshResult   = (jsEvent: JValue) => (jsEvent \ "result").extract[String]
 
 }
