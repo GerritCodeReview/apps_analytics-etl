@@ -21,6 +21,7 @@ object ElasticSearchFields {
   val USER_IDENTIFIER_FIELD = "user_identifier"
   val AUDIT_TYPE_FIELD      = "audit_type"
   val ACCESS_PATH_FIELD     = "access_path"
+  val RESULT_FIELD          = "result"
 
   val FACETING_FIELDS = List(
     TIME_BUCKET_FIELD,
@@ -28,7 +29,8 @@ object ElasticSearchFields {
     USER_IDENTIFIER_FIELD,
     ACCESS_PATH_FIELD,
     COMMAND_FIELD,
-    COMMAND_ARGS_FIELD
+    COMMAND_ARGS_FIELD,
+    RESULT_FIELD
   )
 
   val NUM_EVENTS_FIELD = "num_events"
