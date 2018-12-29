@@ -40,7 +40,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
   "A json representing an http audit event log" should "be parsed into a success of HttpAuditEvent" in {
 
     val httpMethod = "POST"
-    val httpStatus = 200
+    val httpStatus = "200"
     val sessionId  = "1r7ywi4vd3jk410dv60pvd19vk"
     val accountId  = 1009124
     val accessPath = "GIT"
@@ -107,6 +107,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
     val what        = "gerrit.stream-events.-s.patchset-created.-s.change-restored.-s.comment-added"
     val elapsed     = 12
     val auditUUID   = "audit:dd74e098-9260-4720-9143-38a0a0a5e500"
+    val sshResult     = "0"
     val jsonEvent =
       s"""
          |{
@@ -123,7 +124,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
          |    "when": $timeAtStart,
          |    "what": "$what",
          |    "params": {},
-         |    "result": "0",
+         |    "result": "$sshResult",
          |    "time_at_start": $timeAtStart,
          |    "elapsed": $elapsed,
          |    "uuid": {
@@ -134,7 +135,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
        """.stripMargin
 
     inside (AuditEvent.parseRaw(jsonEvent).success.value) {
-      case SshAuditEvent(gotAccessPath, gotSessionId, gotWho, gotTimeAtStart, gotWhat, gotElapsed, gotUUID) =>
+      case SshAuditEvent(gotAccessPath, gotSessionId, gotWho, gotTimeAtStart, gotWhat, gotElapsed, gotUUID, gotResult) =>
         gotSessionId   shouldBe sessionId
         gotWho         should contain(accountId)
         gotTimeAtStart shouldBe timeAtStart
@@ -142,6 +143,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
         gotElapsed     shouldBe elapsed
         gotUUID        shouldBe auditUUID
         gotAccessPath  should contain(accessPath)
+        gotResult      shouldBe sshResult
     }
   }
 
@@ -152,6 +154,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
     val what        = "AUTH"
     val elapsed     = 0
     val auditUUID   = "audit:8d40c495-7b51-4003-81f2-718bc04addf3"
+    val failedResult = "FAIL"
     val jsonEvent =
       s"""
          |{
@@ -161,7 +164,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
          |    "when": 1542240154088,
          |    "what": "$what",
          |    "params": {},
-         |    "result": "FAIL",
+         |    "result": "$failedResult",
          |    "time_at_start": $timeAtStart,
          |    "elapsed": $elapsed,
          |    "uuid": {
@@ -172,7 +175,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
        """.stripMargin
 
     inside (AuditEvent.parseRaw(jsonEvent).success.value) {
-      case SshAuditEvent(gotAccessPath, gotSessionId, gotWho, gotTimeAtStart, gotWhat, gotElapsed, gotUUID) =>
+      case SshAuditEvent(gotAccessPath, gotSessionId, gotWho, gotTimeAtStart, gotWhat, gotElapsed, gotUUID, gotResult) =>
         gotSessionId   shouldBe sessionId
         gotWho         shouldBe empty
         gotTimeAtStart shouldBe timeAtStart
@@ -180,13 +183,14 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
         gotElapsed     shouldBe elapsed
         gotUUID        shouldBe auditUUID
         gotAccessPath  shouldBe empty
+        gotResult shouldBe failedResult
     }
   }
 
   "A json representing an extended http audit event log" should "be parsed into a success of ExtendedHttpAuditEvent" in {
 
     val httpMethod  = "GET"
-    val httpStatus  = 200
+    val httpStatus  = "200"
     val sessionId   = "aQ3Dprttdq3tT25AMDHhF7zKpMOph64XnW"
     val accountId   = 1011373
     val accessPath  = "REST_API"
@@ -222,13 +226,13 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
        """.stripMargin
 
     inside (AuditEvent.parseRaw(jsonEvent).success.value) {
-      case ExtendedHttpAuditEvent(gotAccessPath,gotHttpMethod,gotHttpStatus,gotSessionId,gotWho,gotTimeAtStart,gotWhat,gotElapsed,gotUUID) =>
+      case ExtendedHttpAuditEvent(gotAccessPath,gotHttpMethod,gotHttpResult,gotSessionId,gotWho,gotTimeAtStart,gotWhat,gotElapsed,gotUUID) =>
         gotSessionId   shouldBe sessionId
         gotWho         should   contain(accountId)
         gotTimeAtStart shouldBe timeAtStart
         gotHttpMethod  shouldBe httpMethod
         gotWhat        shouldBe what
-        gotHttpStatus  shouldBe httpStatus
+        gotHttpResult  shouldBe httpStatus
         gotElapsed     shouldBe elapsed
         gotUUID        shouldBe auditUUID
         gotAccessPath  should   contain(accessPath)
@@ -240,7 +244,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
   "an HttpAuditEvent" should "be serializable into json" in {
 
     val httpMethod = "GET"
-    val httpStatus = 200
+    val httpStatus = "200"
     val sessionId = "someSessionId"
     val accessPath = "GIT"
     val timeAtStart = 1000L
@@ -256,7 +260,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
       ("access_path" -> accessPath) ~
       ("time_at_start" -> timeAtStart) ~
       ("http_method" -> httpMethod) ~
-      ("http_status" -> httpStatus) ~
+      ("result" -> httpStatus) ~
       ("what" -> what) ~
       ("elapsed" -> elapsed) ~
       ("uuid" -> uuid) ~
@@ -268,7 +272,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
   "an ExtendedHttpAuditEvent" should "be serializable into json" in {
 
     val httpMethod = "GET"
-    val httpStatus = 200
+    val httpStatus = "200"
     val accessPath = "REST_API"
     val sessionId = "someSessionId"
     val accountId = 123
@@ -285,7 +289,7 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
       ("access_path" -> accessPath) ~
       ("time_at_start" -> timeAtStart) ~
       ("http_method" -> httpMethod) ~
-      ("http_status" -> httpStatus) ~
+      ("result" -> httpStatus) ~
       ("what" -> what) ~
       ("elapsed" -> elapsed) ~
       ("uuid" -> uuid) ~
@@ -302,9 +306,10 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
     val timeAtStart = 1542240322369L
     val what        = "gerrit.stream-events.-s.patchset-created.-s.change-restored.-s.comment-added"
     val elapsed     = 12
-    val uuid   = "audit:dd74e098-9260-4720-9143-38a0a0a5e500"
+    val uuid        = "audit:dd74e098-9260-4720-9143-38a0a0a5e500"
+    val sshResult   = "0"
 
-    val event = SshAuditEvent(Some(accessPath), sessionId, Some(accountId), timeAtStart, what, elapsed, uuid)
+    val event = SshAuditEvent(Some(accessPath), sessionId, Some(accountId), timeAtStart, what, elapsed, uuid, sshResult)
 
     val expectedJson: JValue =
       ("session_id" -> sessionId) ~
@@ -314,7 +319,8 @@ class AuditEventSpec extends FlatSpec with Matchers with Inside {
       ("what" -> what) ~
       ("elapsed" -> elapsed) ~
       ("uuid" -> uuid) ~
-      ("audit_type" -> sshAuditEvent)
+      ("audit_type" -> sshAuditEvent) ~
+      ("result" -> sshResult)
 
     parse(event.toJsonString) shouldBe expectedJson
   }
