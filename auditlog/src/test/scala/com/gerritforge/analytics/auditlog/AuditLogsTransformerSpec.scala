@@ -38,6 +38,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         HttpAuditEvent.auditType,
         null, // no user identifier
+        null, // no user type
         anonymousHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         anonymousHttpAuditEvent.what,
@@ -57,6 +58,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       HttpAuditEvent.auditType,
       s"${authenticatedHttpAuditEvent.who.get}",
+      "human",
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
@@ -79,6 +81,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       HttpAuditEvent.auditType,
       gerritUserIdentifier,
+      "human",
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
@@ -98,6 +101,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       SshAuditEvent.auditType,
       s"${sshAuditEvent.who.get}",
+      "human",
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -117,6 +121,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       SshAuditEvent.auditType,
       s"${sshAuditEvent.who.get}",
+      "human",
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -138,6 +143,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         SshAuditEvent.auditType,
         s"${sshAuditEvent.who.get}",
+        "human",
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -147,6 +153,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         SshAuditEvent.auditType,
         s"${user2Id.get}",
+        "human",
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -169,6 +176,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(events.head.timeAtStart),
         SshAuditEvent.auditType,
         s"${sshAuditEvent.who.get}",
+        "human",
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -178,12 +186,46 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(events.last.timeAtStart),
         HttpAuditEvent.auditType,
         s"${authenticatedHttpAuditEvent.who.get}",
+        "human",
         authenticatedHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         authenticatedHttpAuditEvent.what,
         expectedHttpAggregatedCount
       )
     )
+  }
+
+  it should "process user type" in {
+    val events = Seq(authenticatedHttpAuditEvent)
+
+    import spark.implicits._
+    val additionalUserInfoDF = sc.parallelize(Seq((authenticatedHttpAuditEvent.who.get, "bot"))).toDF("id","type")
+
+    val dataFrame = AuditLogsTransformer().transform(
+        auditEventsRDD        = sc.parallelize(events),
+        additionalUserInfoDF  = additionalUserInfoDF,
+        timeAggregation       = "hour"
+    )
+    dataFrame.collect.length shouldBe 1
+    dataFrame.collect.head.getAs[String](ElasticSearchFields.USER_TYPE_FIELD) shouldBe "bot"
+  }
+
+  it should "process user type when gerrit account could be identified" in {
+    val events = Seq(authenticatedHttpAuditEvent)
+    val gerritUserIdentifier = "Antonio Barone"
+
+    import spark.implicits._
+    val additionalUserInfoDF = sc.parallelize(Seq((authenticatedHttpAuditEvent.who.get, "bot"))).toDF("id","type")
+
+    val dataFrame =
+      AuditLogsTransformer(GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier)))
+        .transform(
+          auditEventsRDD        = sc.parallelize(events),
+          additionalUserInfoDF  = additionalUserInfoDF,
+          timeAggregation       = "hour")
+
+    dataFrame.collect.length shouldBe 1
+    dataFrame.collect.head.getAs[String](ElasticSearchFields.USER_TYPE_FIELD) shouldBe "bot"
   }
 }
 
