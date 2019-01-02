@@ -14,7 +14,7 @@
 
 package com.gerritforge.analytics.auditlog.spark.dataframe.ops
 
-import com.gerritforge.analytics.auditlog.broadcast.GerritUserIdentifiers
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.spark.sql.udf.SparkExtractors.{extractCommandArgumentsUDF, extractCommandUDF}
 import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.expressions.UserDefinedFunction
@@ -51,6 +51,12 @@ object DataFrameOps {
             col("access_path"),
             ifExistThenGetOrNull("http_method", col("http_method"))))
         .withColumn(commandArgsCol, extractCommandArgumentsUDF(col("what"), col("access_path")))
+    }
+
+    def withUserTypeColumn(commandCol: String, additionalUsersInfo: AdditionalUsersInfo): DataFrame = {
+      def extractUserType: UserDefinedFunction = udf((who: Int) => additionalUsersInfo.getUserType(who))
+
+      dataFrame.withColumn(commandCol, ifExistThenGetOrNull("who", extractUserType(col("who"))))
     }
 
     def aggregateNumEventsColumn(numEventsCol: String, cols: List[String]): DataFrame = {

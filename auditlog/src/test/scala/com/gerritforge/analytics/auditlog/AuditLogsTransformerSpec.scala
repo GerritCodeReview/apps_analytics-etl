@@ -16,7 +16,7 @@ package com.gerritforge.analytics.auditlog
 import java.sql
 
 import com.gerritforge.analytics.SparkTestSupport
-import com.gerritforge.analytics.auditlog.broadcast.GerritUserIdentifiers
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, AdditionalUsersInfo, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.model.{ElasticSearchFields, HttpAuditEvent, SshAuditEvent}
 import com.gerritforge.analytics.auditlog.spark.AuditLogsTransformer
 import com.gerritforge.analytics.support.ops.CommonTimeOperations._
@@ -38,6 +38,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         HttpAuditEvent.auditType,
         null, // no user identifier
+        null, // no user type
         anonymousHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         anonymousHttpAuditEvent.what,
@@ -58,6 +59,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       HttpAuditEvent.auditType,
       s"${authenticatedHttpAuditEvent.who.get}",
+      AdditionalUserInfo.DEFAULT_USER_TYPE,
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
@@ -81,6 +83,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       HttpAuditEvent.auditType,
       gerritUserIdentifier,
+      AdditionalUserInfo.DEFAULT_USER_TYPE,
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
@@ -101,6 +104,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       SshAuditEvent.auditType,
       s"${sshAuditEvent.who.get}",
+      AdditionalUserInfo.DEFAULT_USER_TYPE,
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -121,6 +125,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       SshAuditEvent.auditType,
       s"${sshAuditEvent.who.get}",
+      AdditionalUserInfo.DEFAULT_USER_TYPE,
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -143,6 +148,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         SshAuditEvent.auditType,
         s"${sshAuditEvent.who.get}",
+        AdditionalUserInfo.DEFAULT_USER_TYPE,
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -153,6 +159,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         SshAuditEvent.auditType,
         s"${user2Id.get}",
+        AdditionalUserInfo.DEFAULT_USER_TYPE,
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -176,6 +183,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(events.head.timeAtStart),
         SshAuditEvent.auditType,
         s"${sshAuditEvent.who.get}",
+        AdditionalUserInfo.DEFAULT_USER_TYPE,
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
@@ -186,6 +194,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         AuditLogsTransformerSpec.epochMillisToNearestHour(events.last.timeAtStart),
         HttpAuditEvent.auditType,
         s"${authenticatedHttpAuditEvent.who.get}",
+        AdditionalUserInfo.DEFAULT_USER_TYPE,
         authenticatedHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         authenticatedHttpAuditEvent.what,
@@ -193,6 +202,40 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         expectedHttpAggregatedCount
       )
     )
+  }
+
+  it should "process user type" in {
+    val events = Seq(authenticatedHttpAuditEvent)
+
+    val userType = "nonDefaultUserType"
+    val additionalUserInfo = AdditionalUserInfo(authenticatedHttpAuditEvent.who.get, userType)
+
+    val dataFrame = AuditLogsTransformer(additionalUsersInfo = AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))).transform(
+        auditEventsRDD        = sc.parallelize(events),
+        timeAggregation       = "hour"
+    )
+    dataFrame.collect.length shouldBe 1
+    dataFrame.collect.head.getAs[String](ElasticSearchFields.USER_TYPE_FIELD) shouldBe userType
+  }
+
+  it should "process user type when gerrit account could be identified" in {
+    val events = Seq(authenticatedHttpAuditEvent)
+    val gerritUserIdentifier = "Antonio Barone"
+
+    val userType = "nonDefaultUserType"
+    val additionalUserInfo = AdditionalUserInfo(authenticatedHttpAuditEvent.who.get, userType)
+
+    val dataFrame =
+      AuditLogsTransformer(
+        gerritIdentifiers = GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier)),
+        additionalUsersInfo = AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))
+      ).transform(
+          auditEventsRDD        = sc.parallelize(events),
+          timeAggregation       = "hour"
+      )
+
+    dataFrame.collect.length shouldBe 1
+    dataFrame.collect.head.getAs[String](ElasticSearchFields.USER_TYPE_FIELD) shouldBe userType
   }
 }
 
