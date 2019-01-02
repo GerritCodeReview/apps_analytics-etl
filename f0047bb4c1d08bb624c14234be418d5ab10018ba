@@ -1,0 +1,175 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "a83357b1_abaee0b1",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "I am thinking if we could keep transformations and enrichments separate pipeline steps.\n\n[...]\n  .transform(...)\n  .enrichWithUserType(triedAdditionalUserInfo.get)\n\nIt would be semantically more sound, it\u0027d keep interfaces cleaner and perhaps would be more testable.\nWhat do you think?",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e9860f06_02919edd",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "Why a DataFrame? If this is meant to contain only \u0027bot\u0027, well, for now. A simple, small broadcasted Map should be enough maybe?",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 63,
+        "endChar": 76
+      },
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f8a088c3_1fcf3a96",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "It\u0027d be nice if Main contained the minimum code required to execute the ETL and any dependency encapsulated and isolated into a different component.\nHow about we have a AdditionalUserInfo singleton to call and test separately?",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c1d0c181_d254c71a",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "Since this is in a try, perhaps it\u0027d be useful to remove DROPMALFORMED and expose the error?",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ba66665e_d1859a97",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "Shall we describe here the csv format that is expected?",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "116a0524_7cbad4f5",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/dataframe/ops/DataFrameOps.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "perhaps this DEFAULT_USER_TYPE should not be in a pimped class.\nWe could create a dedicated object for it, which we could also use in tests so that we don\u0027t need to repeating strings \"human\" and \"bot\"",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6e30679_a97f8b7c",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/dataframe/ops/DataFrameOps.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "Why don\u0027t we define a UDF that encapsulate this logic?\ni.e.  additionalUserInfoUDF always return the right value",
+      "range": {
+        "startLine": 62,
+        "startChar": 30,
+        "endLine": 62,
+        "endChar": 130
+      },
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "51b1b9d7_3504d098",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/AuditLogsTransformerSpec.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "Maybe you can refer the DEFAULT here (or create a fixture for this)?",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a28ff32a_d5788d69",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/AuditLogsTransformerSpec.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-02T18:07:12Z",
+      "side": 1,
+      "message": "shall we create a fixture for this too (or refer to the value from a singleton)?",
+      "range": {
+        "startLine": 202,
+        "startChar": 89,
+        "endLine": 202,
+        "endChar": 93
+      },
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
