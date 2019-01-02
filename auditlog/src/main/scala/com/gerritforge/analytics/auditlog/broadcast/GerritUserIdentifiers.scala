@@ -25,13 +25,13 @@ import scala.util.{Failure, Success, Try}
 import org.json4s.FieldSerializer._
 
 
-case class GerritUserIdentifiers(private val accounts: Map[GerriAccountId, GerritUserIdentifier]) {
-  def getIdentifier(accountId: GerriAccountId): GerritUserIdentifier = accounts.getOrElse(accountId, s"$accountId")
+case class GerritUserIdentifiers(private val accounts: Map[GerritAccountId, GerritUserIdentifier]) {
+  def getIdentifier(accountId: GerritAccountId): GerritUserIdentifier = accounts.getOrElse(accountId, s"$accountId")
 }
 
 object GerritUserIdentifiers extends LazyLogging {
 
-  private case class GerritAccount(accountId: GerriAccountId, username: Option[String], email: Option[String], name: Option[String]) {
+  private case class GerritAccount(accountId: GerritAccountId, username: Option[String], email: Option[String], name: Option[String]) {
     val getIdentifier: GerritUserIdentifier =
       name.getOrElse(
         email.getOrElse(
@@ -40,7 +40,7 @@ object GerritUserIdentifiers extends LazyLogging {
       )
   }
 
-  val empty = GerritUserIdentifiers(Map.empty[GerriAccountId, GerritUserIdentifier])
+  val empty = GerritUserIdentifiers(Map.empty[GerritAccountId, GerritUserIdentifier])
 
   private val gerritAccountSerializer = FieldSerializer[GerritAccount](
     deserializer=renameFrom(name="_account_id",newName="accountId")
