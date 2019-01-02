@@ -14,7 +14,7 @@
 
 package com.gerritforge.analytics.auditlog.spark.rdd.ops
 
-import com.gerritforge.analytics.auditlog.broadcast.GerritUserIdentifiers
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.model.AuditEvent
 import com.gerritforge.analytics.auditlog.range.TimeRange
 import com.gerritforge.analytics.auditlog.spark.AuditLogsTransformer
@@ -29,10 +29,12 @@ object SparkRDDOps {
 
     def toJsonString: RDD[String] = rdd.map(_.toJsonString)
 
-    def transformEvents(gerritUserIdentifiers: GerritUserIdentifiers, timeAggregation: String, timeRange: TimeRange)
-                       (implicit spark: SparkSession): DataFrame =
-      AuditLogsTransformer(gerritUserIdentifiers)
+    def transformEvents(gerritUserIdentifiers: GerritUserIdentifiers, additionalUsersInfo: AdditionalUsersInfo, timeAggregation: String, timeRange: TimeRange)
+                       (implicit spark: SparkSession): DataFrame = {
+
+      AuditLogsTransformer(gerritUserIdentifiers, additionalUsersInfo)
         .transform(rdd, timeAggregation, timeRange)
+    }
   }
 
   implicit class PimpedStringRDD(rdd: RDD[String]) {
@@ -41,5 +43,4 @@ object SparkRDDOps {
       spark.sqlContext.read.json(rdd.toDS())
     }
   }
-
 }
