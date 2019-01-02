@@ -46,6 +46,10 @@ object CommandLineArguments {
           c.copy(eventsPath = Some(input))
         } text "path to a directory (or a file) containing auditLogs events. Supports also '.gz' files. (Required)"
 
+        opt[String]('a', "additionalUserInfoPath") required () action { (input, c) =>
+          c.copy(additionalUserInfoPath = Some(input))
+        } text "path to a CSV file containing additional user information (Optional) - CSV must have an header. Example:\nid,type\n123456,'bot'\n678876,'human'"
+
         opt[String]('a', "eventsTimeAggregation") optional () action { (input, c) =>
           c.copy(eventsTimeAggregation = Some(input))
         } text "Events of the same type, produced by the same user will be aggregated with this time granularity: " +

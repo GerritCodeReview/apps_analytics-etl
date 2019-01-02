@@ -14,7 +14,7 @@
 
 package com.gerritforge.analytics.auditlog.job
 
-import com.gerritforge.analytics.auditlog.broadcast.GerritUserIdentifiers
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.model.ElasticSearchFields._
 import com.gerritforge.analytics.auditlog.model._
 import com.gerritforge.analytics.auditlog.range.TimeRange
@@ -40,14 +40,21 @@ object Main extends SparkApp with App with LazyLogging {
         sys.exit(1)
       }
 
+      val triedAdditionalUserInfo = AdditionalUserInfo.loadAdditionalUserInfo(config)
+      if (triedAdditionalUserInfo.isFailure) {
+        logger.error("Error loading additional user information", triedAdditionalUserInfo.failed.get)
+        sys.exit(1)
+      }
+
       spark
         .getEventsFromPath(config.eventsPath.get)
-        .transformEvents(tryUserIdentifiers.get, config.eventsTimeAggregation.get, TimeRange(config.since, config.until))
+        .transformEvents(tryUserIdentifiers.get, triedAdditionalUserInfo.get,config.eventsTimeAggregation.get, TimeRange(config.since, config.until))
         .saveToEs(s"${config.elasticSearchIndex.get}/$DOCUMENT_TYPE")
 
     case None =>
       logger.error("Could not parse command line arguments")
       sys.exit(1)
   }
+
 }
 
