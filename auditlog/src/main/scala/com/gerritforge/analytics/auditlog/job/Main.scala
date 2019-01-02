@@ -23,7 +23,11 @@ import com.gerritforge.analytics.auditlog.spark.session.ops.SparkSessionOps._
 import com.gerritforge.analytics.common.api.GerritConnectivity
 import com.gerritforge.analytics.spark.SparkApp
 import com.typesafe.scalalogging.LazyLogging
+import org.apache.spark.sql.DataFrame
+import org.apache.spark.sql.types.{IntegerType, LongType, StringType, StructType}
 import org.elasticsearch.spark.sql._
+
+import scala.util.Try
 
 object Main extends SparkApp with App with LazyLogging {
   override val appName = "Gerrit AuditLog Analytics ETL"
@@ -40,14 +44,39 @@ object Main extends SparkApp with App with LazyLogging {
         sys.exit(1)
       }
 
+      val triedAdditionalUserInfo = tryAdditionalUserInfoDF(config)
+      if (triedAdditionalUserInfo.isFailure) {
+        logger.error("Error loading additional user information", triedAdditionalUserInfo.failed.get)
+        sys.exit(1)
+      }
+
       spark
         .getEventsFromPath(config.eventsPath.get)
-        .transformEvents(tryUserIdentifiers.get, config.eventsTimeAggregation.get, TimeRange(config.since, config.until))
+        .transformEvents(tryUserIdentifiers.get, triedAdditionalUserInfo.get,config.eventsTimeAggregation.get, TimeRange(config.since, config.until))
         .saveToEs(s"${config.elasticSearchIndex.get}/$DOCUMENT_TYPE")
 
     case None =>
       logger.error("Could not parse command line arguments")
       sys.exit(1)
+  }
+
+  def tryAdditionalUserInfoDF(config: AuditLogETLConfig): Try[DataFrame] = {
+
+    val schema = new StructType()
+      .add("id", IntegerType,false)
+      .add("type", StringType,false)
+
+    import spark.implicits._
+    Try {
+      config.additionalUserInfoPath.map { path =>
+        spark.sqlContext.read
+          .option("header", "true")
+          .option("mode", "DROPMALFORMED")
+          .schema(schema)
+          .csv(path)
+          .toDF()
+      }.getOrElse(Seq.empty[(Int, String)].toDF)
+    }
   }
 }
 

@@ -154,15 +154,25 @@ docker run \
 
 ## Parameters
 
-* -u, --gerritUrl             - gerrit server URL (Required)
-* --username                  - Gerrit API Username (Optional)
-* --password                  - Gerrit API Password (Optional)
-* -i, --elasticSearchIndex    - elasticSearch index to persist data into (Required)
-* -p, --eventsPath            - path to a directory (or a file) containing auditLogs events. Supports also _.gz_ files. (Required)
-* -a, --eventsTimeAggregation - Events of the same type, produced by the same user will be aggregated with this time granularity: 'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'
-* -k, --ignoreSSLCert         - Ignore SSL certificate validation (Optional) - Default: false
-* -s, --since                 - process only auditLogs occurred after (and including) this date (Optional)
-* -u, --until                 - process only auditLogs occurred before (and including) this date (Optional)
+* -u, --gerritUrl              - gerrit server URL (Required)
+* --username                   - Gerrit API Username (Optional)
+* --password                   - Gerrit API Password (Optional)
+* -i, --elasticSearchIndex     - elasticSearch index to persist data into (Required)
+* -p, --eventsPath             - path to a directory (or a file) containing auditLogs events. Supports also _.gz_ files. (Required)
+* -a, --eventsTimeAggregation  - Events of the same type, produced by the same user will be aggregated with this time granularity: 'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'
+* -k, --ignoreSSLCert          - Ignore SSL certificate validation (Optional) - Default: false
+* -s, --since                  - process only auditLogs occurred after (and including) this date (Optional)
+* -u, --until                  - process only auditLogs occurred before (and including) this date (Optional)
+* -a, --additionalUserInfoPath - path to a CSV file containing additional user information (Optional). Currently it is only possible to add user `type` (i.e.: _bot_, _human_).
+If the type is not specified the user will be considered _human_.
+
+  Here an additional user information CSV file example:
+  ```csv
+    id,type
+    123,"bot"
+    456,"bot"
+    789,"human"
+  ```
 
 ### Build
 

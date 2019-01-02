@@ -24,10 +24,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, SparkSession}
 
 case class AuditLogsTransformer(gerritIdentifiers: GerritUserIdentifiers = GerritUserIdentifiers.empty)(implicit spark: SparkSession) {
+  import spark.implicits._
 
   private val broadcastUserIdentifiers = spark.sparkContext.broadcast(gerritIdentifiers)
 
-  def transform(auditEventsRDD: RDD[AuditEvent], timeAggregation: String, timeRange: TimeRange = TimeRange.always): DataFrame =
+  def transform(auditEventsRDD: RDD[AuditEvent], additionalUserInfoDF: DataFrame = Seq.empty[(Int, String)].toDF("id","type"), timeAggregation: String, timeRange: TimeRange = TimeRange.always): DataFrame =
     auditEventsRDD
       .filterWithinRange(TimeRange(timeRange.since, timeRange.until))
       .toJsonString
@@ -35,5 +36,6 @@ case class AuditLogsTransformer(gerritIdentifiers: GerritUserIdentifiers = Gerri
       .hydrateWithUserIdentifierColumn(USER_IDENTIFIER_FIELD, broadcastUserIdentifiers.value)
       .withTimeBucketColum(TIME_BUCKET_FIELD, timeAggregation)
       .withCommandColumns(COMMAND_FIELD, COMMAND_ARGS_FIELD)
+      .withUserTypeColumn(USER_TYPE_FIELD, additionalUserInfoDF)
       .aggregateNumEventsColumn(NUM_EVENTS_FIELD, FACETING_FIELDS)
 }

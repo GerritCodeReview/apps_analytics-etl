@@ -25,5 +25,6 @@ case class AuditLogETLConfig(
   since: Option[LocalDate] = None,
   until: Option[LocalDate] = None,
   eventsPath: Option[String] = None,
-  eventsTimeAggregation: Option[String] = Some("hour")
+  eventsTimeAggregation: Option[String] = Some("hour"),
+  additionalUserInfoPath: Option[String] = None
 )

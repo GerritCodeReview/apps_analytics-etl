@@ -25,6 +25,8 @@ import scala.util.Try
 
 object DataFrameOps {
 
+  val DEFAULT_USER_TYPE = "human"
+
   implicit class PimpedAuditLogDataFrame(dataFrame: DataFrame) {
 
     private def hasColumn(path: String) = Try(dataFrame(path)).isSuccess
@@ -51,6 +53,17 @@ object DataFrameOps {
             col("access_path"),
             ifExistThenGetOrNull("http_method", col("http_method"))))
         .withColumn(commandArgsCol, extractCommandArgumentsUDF(col("what"), col("access_path")))
+    }
+
+    def withUserTypeColumn(commandCol: String, additionalUserInfoDF: DataFrame): DataFrame = {
+      if (hasColumn("who")) {
+        dataFrame
+          .join(additionalUserInfoDF, dataFrame("who") === additionalUserInfoDF("id"), "left")
+          .withColumn("type", when(additionalUserInfoDF("type").isNull, DEFAULT_USER_TYPE).otherwise(additionalUserInfoDF("type")))
+          .withColumnRenamed("type", commandCol)
+      } else {
+        dataFrame.withColumn(commandCol, lit(null))
+      }
     }
 
     def aggregateNumEventsColumn(numEventsCol: String, cols: List[String]): DataFrame = {
