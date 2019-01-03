@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f062ab5c_49fc30e1",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/AdditionalUserInfo.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-03T17:34:07Z",
+      "side": 1,
+      "message": "nit: val",
+      "revId": "3f0c0d5a0bf0ba62fc13798f5ee9af6bc674fb7e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09f805ee_69bba2b3",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/AdditionalUserInfo.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-03T17:34:07Z",
+      "side": 1,
+      "message": "I think there\u0027s a GerritAccountId type alias which is already available via the broadcast package",
+      "range": {
+        "startLine": 14,
+        "startChar": 65,
+        "endLine": 14,
+        "endChar": 68
+      },
+      "revId": "3f0c0d5a0bf0ba62fc13798f5ee9af6bc674fb7e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "09bb73f9_ea5f03bb",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/AdditionalUserInfo.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-03T17:34:07Z",
+      "side": 1,
+      "message": "I don\u0027t think we need this comment, but it\u0027s ok if you want to leave it",
+      "revId": "3f0c0d5a0bf0ba62fc13798f5ee9af6bc674fb7e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ebcd3e45_0cef3c85",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/AdditionalUserInfo.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-03T17:34:07Z",
+      "side": 1,
+      "message": "GerriAccountId here should do it.\nP.S. there\u0027s a typo, it should GerriAccountId, if you feel good and you want to fix it",
+      "range": {
+        "startLine": 41,
+        "startChar": 30,
+        "endLine": 41,
+        "endChar": 33
+      },
+      "revId": "3f0c0d5a0bf0ba62fc13798f5ee9af6bc674fb7e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
