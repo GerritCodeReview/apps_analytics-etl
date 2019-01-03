@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "5445014b_3a0b78a7",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T17:10:51Z",
+      "side": 1,
+      "message": "We could divide the operations in transform, enrich and aggregate, and list them in the Main class. This would make testing trickier.\n\nI\u0027d leave it as it is for the moment and rethink it if we see it becomes a problem when adding a new \"enricher\".",
+      "parentUuid": "a83357b1_abaee0b1",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e9860f06_02919edd",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
         "patchSetId": 2
@@ -101,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "9932b779_60454d56",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T17:10:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5499b69b_33e2cfc3",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1d0c181_d254c71a",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
         "patchSetId": 2
@@ -150,6 +186,24 @@
       "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1568b3fd_6c9ad211",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T17:10:51Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "ba66665e_d1859a97",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -272,6 +326,30 @@
       "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d6c5ba3e_cd0f0480",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/AuditLogsTransformerSpec.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 202,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T17:10:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a28ff32a_d5788d69",
+      "range": {
+        "startLine": 202,
+        "startChar": 89,
+        "endLine": 202,
+        "endChar": 93
+      },
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
