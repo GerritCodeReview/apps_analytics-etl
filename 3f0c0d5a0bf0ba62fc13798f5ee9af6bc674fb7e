@@ -119,6 +119,24 @@
     },
     {
       "key": {
+        "uuid": "d758dbcb_dbf0ff07",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/AdditionalUserInfo.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-03T19:46:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a17e747f_f55f8e32",
+      "revId": "3f0c0d5a0bf0ba62fc13798f5ee9af6bc674fb7e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ebcd3e45_0cef3c85",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/AdditionalUserInfo.scala",
         "patchSetId": 6
