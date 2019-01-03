@@ -59,6 +59,48 @@
     },
     {
       "key": {
+        "uuid": "5499b69b_33e2cfc3",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T15:48:59Z",
+      "side": 1,
+      "message": "Good point...I put it there thinking of moving of moving it out later on, but as you can see I haven\u0027t done it :/",
+      "parentUuid": "f8a088c3_1fcf3a96",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "543dc9d2_f1fe10bc",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T15:48:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "e9860f06_02919edd",
+      "range": {
+        "startLine": 63,
+        "startChar": 2,
+        "endLine": 63,
+        "endChar": 76
+      },
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c1d0c181_d254c71a",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
         "patchSetId": 2
@@ -73,6 +115,24 @@
       "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b57cf0ed_827558a9",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T15:48:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "c1d0c181_d254c71a",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +170,24 @@
     },
     {
       "key": {
+        "uuid": "9415ac1a_7fbd42d7",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/dataframe/ops/DataFrameOps.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T15:48:59Z",
+      "side": 1,
+      "message": "Yep for moving it in its own class.\n\nRegarding the strings in the tests, I repeated them on purpose since I was thinking that it might be useful to the ETL users not to be forced to pick among a restricted list of users type.",
+      "parentUuid": "116a0524_7cbad4f5",
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "a6e30679_a97f8b7c",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/dataframe/ops/DataFrameOps.scala",
         "patchSetId": 2
@@ -130,6 +208,30 @@
       "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "46c112b6_c456c1b4",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/dataframe/ops/DataFrameOps.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-03T15:48:59Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a6e30679_a97f8b7c",
+      "range": {
+        "startLine": 62,
+        "startChar": 30,
+        "endLine": 62,
+        "endChar": 130
+      },
+      "revId": "f0047bb4c1d08bb624c14234be418d5ab10018ba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
