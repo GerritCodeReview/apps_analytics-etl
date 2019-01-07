@@ -46,7 +46,7 @@ object CommandLineArguments {
           c.copy(eventsPath = Some(input))
         } text "path to a directory (or a file) containing auditLogs events. Supports also '.gz' files. (Required)"
 
-        opt[String]('a', "additionalUserInfoPath") required () action { (input, c) =>
+        opt[String]('a', "additionalUserInfoPath") optional () action { (input, c) =>
           c.copy(additionalUserInfoPath = Some(input))
         } text "path to a CSV file containing additional user information (Optional)\n\t\t\t\tCSV must have an header. Example:\n\t\t\t\tid,type\n\t\t\t\t123456,'bot'\n\t\t\t\t678876,'human'"
 
