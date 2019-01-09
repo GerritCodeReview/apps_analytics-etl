@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "71cff577_5c36ac2a",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-01-09T23:17:20Z",
+      "side": 1,
+      "message": "2019",
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7d462bc8_04854415",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/AuditLogsTransformer.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-01-09T23:17:20Z",
+      "side": 1,
+      "message": "A couple of things\n1. Not clear to me the reason for doing the conversion toJsonString and then to toJsonTableDataFrame. In the end it\u0027s still the content of the RDD[AuditEvent] filtered by a timeRange, or am I missing something?\n\n2. Wherever possible I believe it\u0027s good practice to return a Dataset of a case class rather than the Dataframe. It makes it easier to understand the schema of the data and how it evolves as it goes through the various transformations.\nIt seems to me that the code is simply enriching the AuditEvent with extra columns",
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7c3825bd_548c79a7",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/util/RegexUtil.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-01-09T23:17:20Z",
+      "side": 1,
+      "message": "2019",
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "e63efae3_3284442d",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjectsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-01-09T23:17:20Z",
+      "side": 1,
+      "message": "2019",
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
