@@ -14,11 +14,11 @@
 
 package com.gerritforge.analytics.auditlog.spark.dataframe.ops
 
-import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritUserIdentifiers}
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritProjects, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.spark.sql.udf.SparkExtractors.{extractCommandArgumentsUDF, extractCommandUDF}
-import org.apache.spark.sql.{Column, DataFrame}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.{udf, _}
+import org.apache.spark.sql.{Column, DataFrame}
 
 import scala.util.Try
 
@@ -51,6 +51,13 @@ object DataFrameOps {
             col("access_path"),
             ifExistThenGetOrNull("http_method", col("http_method"))))
         .withColumn(commandArgsCol, extractCommandArgumentsUDF(col("what"), col("access_path")))
+    }
+
+    def withProjectColumn(projectCol: String, gerritProjects: GerritProjects): DataFrame = {
+      def extractProjectUDF: UserDefinedFunction = udf((what: String, accessPath: String) => gerritProjects.extractProject(what, accessPath))
+
+      dataFrame
+        .withColumn(projectCol, extractProjectUDF(col("what"), col("access_path")))
     }
 
     def withUserTypeColumn(commandCol: String, additionalUsersInfo: AdditionalUsersInfo): DataFrame = {

@@ -14,19 +14,24 @@
 
 package com.gerritforge.analytics.auditlog.spark
 
-import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, AdditionalUsersInfo, GerritUserIdentifiers}
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, AdditionalUsersInfo, GerritProjects, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.model.AuditEvent
 import com.gerritforge.analytics.auditlog.model.ElasticSearchFields._
 import com.gerritforge.analytics.auditlog.range.TimeRange
 import com.gerritforge.analytics.auditlog.spark.dataframe.ops.DataFrameOps._
 import com.gerritforge.analytics.auditlog.spark.rdd.ops.SparkRDDOps._
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{DataFrame, Dataset, SparkSession}
 
-case class AuditLogsTransformer(gerritIdentifiers: GerritUserIdentifiers = GerritUserIdentifiers.empty, additionalUsersInfo: AdditionalUsersInfo = AdditionalUsersInfo.empty)(implicit spark: SparkSession) {
+case class AuditLogsTransformer(
+  gerritIdentifiers: GerritUserIdentifiers = GerritUserIdentifiers.empty,
+  additionalUsersInfo: AdditionalUsersInfo = AdditionalUsersInfo.empty,
+  gerritProjects: GerritProjects = GerritProjects.empty
+)(implicit spark: SparkSession) {
 
   private val broadcastUserIdentifiers = spark.sparkContext.broadcast(gerritIdentifiers)
   private val broadcastAdditionalUsersInfo = spark.sparkContext.broadcast(additionalUsersInfo)
+  private val broadcastGerritProjects = spark.sparkContext.broadcast(gerritProjects)
 
   def transform(auditEventsRDD: RDD[AuditEvent], timeAggregation: String, timeRange: TimeRange = TimeRange.always): DataFrame =
     auditEventsRDD
@@ -37,5 +42,6 @@ case class AuditLogsTransformer(gerritIdentifiers: GerritUserIdentifiers = Gerri
       .withTimeBucketColum(TIME_BUCKET_FIELD, timeAggregation)
       .withCommandColumns(COMMAND_FIELD, COMMAND_ARGS_FIELD)
       .withUserTypeColumn(USER_TYPE_FIELD, broadcastAdditionalUsersInfo.value)
+      .withProjectColumn(PROJECT_FIELD, broadcastGerritProjects.value)
       .aggregateNumEventsColumn(NUM_EVENTS_FIELD, FACETING_FIELDS)
 }

@@ -23,13 +23,14 @@ trait TestFixtures {
   val timeAtStart = 1544802407000L
   val elapsed = 12
   val uuid = "audit:5f10fea5-35d1-4252-b86f-99db7a9b549b"
+  val project = "Mirantis/tcp-qa"
 
   val GIT_UPLOAD_PACK = "git-upload-pack"
 
   val httpMethod = "GET"
   val httpStatus = "200"
 
-  val httpWhat=s"https://review.gerrithub.io/Mirantis/tcp-qa/$GIT_UPLOAD_PACK"
+  val httpWhat=s"https://review.gerrithub.io/$project/$GIT_UPLOAD_PACK"
 
   val anonymousHttpAuditEvent = HttpAuditEvent(Some(gitAccessPath), httpMethod, httpStatus, sessionId, None, timeAtStart, httpWhat, elapsed, uuid)
   val authenticatedHttpAuditEvent: HttpAuditEvent = anonymousHttpAuditEvent.copy(who=Some(userId))
@@ -37,7 +38,7 @@ trait TestFixtures {
   val sshAccessPath  = "SSH_COMMAND"
   val sshResult = "0"
   val SSH_GERRIT_COMMAND = "gerrit"
-  val SSH_GERRIT_COMMAND_ARGUMENTS = "stream-events.-s.patchset-created.-s.change-restored.-s.comment-added"
+  val SSH_GERRIT_COMMAND_ARGUMENTS = s"query.--format.json.--current-patch-set.project:$project"
 
   val sshWhat        = s"$SSH_GERRIT_COMMAND.$SSH_GERRIT_COMMAND_ARGUMENTS"
 

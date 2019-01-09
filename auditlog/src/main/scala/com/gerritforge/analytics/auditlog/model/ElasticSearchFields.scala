@@ -23,6 +23,7 @@ object ElasticSearchFields {
   val ACCESS_PATH_FIELD     = "access_path"
   val RESULT_FIELD          = "result"
   val USER_TYPE_FIELD       = "user_type"
+  val PROJECT_FIELD         = "project"
 
   val FACETING_FIELDS = List(
     TIME_BUCKET_FIELD,
@@ -32,6 +33,7 @@ object ElasticSearchFields {
     ACCESS_PATH_FIELD,
     COMMAND_FIELD,
     COMMAND_ARGS_FIELD,
+    PROJECT_FIELD,
     RESULT_FIELD
   )
 

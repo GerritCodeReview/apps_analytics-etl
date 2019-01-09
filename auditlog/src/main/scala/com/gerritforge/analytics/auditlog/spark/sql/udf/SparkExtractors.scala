@@ -14,25 +14,23 @@
 
 package com.gerritforge.analytics.auditlog.spark.sql.udf
 
+import com.gerritforge.analytics.auditlog.util.RegexUtil
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.udf
 
-import scala.util.matching.Regex
+case object SparkExtractors extends LazyLogging with RegexUtil {
 
-case object SparkExtractors extends LazyLogging {
-  private val GERRIT_SSH_COMMAND = new Regex("""^(.+?)\.""", "capture")
-  private val GERRIT_SSH_COMMAND_ARGUMENTS = new Regex("""^.+?\.(.+)""", "capture")
+  // regular expressions to extract commands
+  private val GERRIT_SSH_COMMAND = capture(r = """^(.+?)\.""")
+  private val GIT_COMMAND        = capture(r = """.*(git-upload-pack|git-receive-pack)""")
 
-  private val GIT_COMMAND = new Regex(""".*(git-upload-pack|git-receive-pack)""", "capture")
-  private val GIT_SSH_COMMAND_ARGUMENTS = new Regex("""git-(?:upload|receive)-pack\.(.+)""", "capture")
-  private val GIT_HTTP_COMMAND_ARGUMENTS = new Regex("""(^http.*)""", "capture")
+  // regular expressions to extract command arguments
+  private val GERRIT_SSH_COMMAND_ARGUMENTS = capture(r = """^.+?\.(.+)""")
+  private val GIT_SSH_COMMAND_ARGUMENTS    = capture(r = """git-(?:upload|receive)-pack\.(.+)""")
+  private val GIT_HTTP_COMMAND_ARGUMENTS   = capture(r = """(^http.*)""")
 
   val FAILED_SSH_AUTH = "FAILED_SSH_AUTH"
-
-  private def extractOrElse(rx: Regex, target: String, default: String): String = extractGroup(rx, target).getOrElse(default)
-
-  private def extractGroup(rx: Regex, target: String): Option[String] = rx.findAllMatchIn(target).toList.headOption.map(_.group("capture"))
 
   def extractCommand(what: String, accessPath: String, httpMethod: String = null): String = accessPath match {
     case "SSH_COMMAND"          => extractOrElse(GERRIT_SSH_COMMAND, what, what)
