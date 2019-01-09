@@ -16,7 +16,7 @@ package com.gerritforge.analytics.auditlog
 import java.sql
 
 import com.gerritforge.analytics.SparkTestSupport
-import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, AdditionalUsersInfo, GerritUserIdentifiers}
+import com.gerritforge.analytics.auditlog.broadcast._
 import com.gerritforge.analytics.auditlog.model.{ElasticSearchFields, HttpAuditEvent, SshAuditEvent}
 import com.gerritforge.analytics.auditlog.spark.AuditLogsTransformer
 import com.gerritforge.analytics.support.ops.CommonTimeOperations._
@@ -42,6 +42,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         anonymousHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         anonymousHttpAuditEvent.what,
+        null, // no project
         anonymousHttpAuditEvent.result,
         expectedAggregatedCount
     )
@@ -63,6 +64,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
+      null, // no project
       authenticatedHttpAuditEvent.result,
       expectedAggregatedCount
     )
@@ -87,6 +89,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       authenticatedHttpAuditEvent.accessPath.get,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
+      null, // no project
       authenticatedHttpAuditEvent.result,
       expectedAggregatedCount
     )
@@ -108,6 +111,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
+      null, // no project
       sshAuditEvent.result,
       expectedAggregatedCount
     )
@@ -129,6 +133,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       sshAuditEvent.accessPath.get,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
+      null, // no project
       sshAuditEvent.result,
       expectedAggregatedCount
     )
@@ -152,6 +157,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        null, // no project
         sshAuditEvent.result,
         expectedAggregatedCount
       ),
@@ -163,6 +169,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        null, // no project
         sshAuditEvent.result,
         expectedAggregatedCount
       )
@@ -187,6 +194,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath.get,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        null, // no project
         sshAuditEvent.result,
         expectedSshAggregatedCount
       ),
@@ -198,6 +206,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         authenticatedHttpAuditEvent.accessPath.get,
         GIT_UPLOAD_PACK,
         authenticatedHttpAuditEvent.what,
+        null, // no project
         authenticatedHttpAuditEvent.result,
         expectedHttpAggregatedCount
       )
@@ -236,6 +245,26 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
 
     dataFrame.collect.length shouldBe 1
     dataFrame.collect.head.getAs[String](ElasticSearchFields.USER_TYPE_FIELD) shouldBe userType
+  }
+
+  it should "extract gerrit project from an http event" in {
+    val events = Seq(authenticatedHttpAuditEvent)
+
+    val dataFrame = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
+      .transform(sc.parallelize(events), timeAggregation="hour")
+
+    dataFrame.collect.length shouldBe 1
+    dataFrame.collect.head.getAs[String](ElasticSearchFields.PROJECT_FIELD) shouldBe project
+  }
+
+  it should "extract gerrit project from an ssh event" in {
+    val events = Seq(sshAuditEvent)
+
+    val dataFrame = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
+      .transform(sc.parallelize(events), timeAggregation="hour")
+
+    dataFrame.collect.length shouldBe 1
+    dataFrame.collect.head.getAs[String](ElasticSearchFields.PROJECT_FIELD) shouldBe project
   }
 }
 

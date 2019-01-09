@@ -14,6 +14,9 @@
 
 package com.gerritforge.analytics.auditlog.spark.sql.udf
 
+import java.net.URLEncoder
+
+import com.gerritforge.analytics.auditlog.broadcast.{GerritProject, GerritProjects}
 import org.scalatest.{FlatSpec, Matchers}
 
 class SparkExtractorsSpec extends FlatSpec with Matchers {
@@ -186,5 +189,4 @@ class SparkExtractorsSpec extends FlatSpec with Matchers {
 
     SparkExtractors.extractCommandArguments(what, accessPath) shouldBe empty
   }
-
 }

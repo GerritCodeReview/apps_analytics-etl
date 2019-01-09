@@ -14,7 +14,7 @@
 
 package com.gerritforge.analytics.auditlog.spark.rdd.ops
 
-import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritUserIdentifiers}
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritProjects, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.model.AuditEvent
 import com.gerritforge.analytics.auditlog.range.TimeRange
 import com.gerritforge.analytics.auditlog.spark.AuditLogsTransformer
@@ -29,10 +29,15 @@ object SparkRDDOps {
 
     def toJsonString: RDD[String] = rdd.map(_.toJsonString)
 
-    def transformEvents(gerritUserIdentifiers: GerritUserIdentifiers, additionalUsersInfo: AdditionalUsersInfo, timeAggregation: String, timeRange: TimeRange)
-                       (implicit spark: SparkSession): DataFrame = {
+    def transformEvents(
+      gerritUserIdentifiers: GerritUserIdentifiers,
+      additionalUsersInfo: AdditionalUsersInfo,
+      gerritProjects: GerritProjects,
+      timeAggregation: String,
+      timeRange: TimeRange
+    )(implicit spark: SparkSession): DataFrame = {
 
-      AuditLogsTransformer(gerritUserIdentifiers, additionalUsersInfo)
+      AuditLogsTransformer(gerritUserIdentifiers, additionalUsersInfo, gerritProjects)
         .transform(rdd, timeAggregation, timeRange)
     }
   }
