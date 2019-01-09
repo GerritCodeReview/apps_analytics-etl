@@ -14,7 +14,7 @@
 
 package com.gerritforge.analytics.auditlog.job
 
-import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, GerritUserIdentifiers}
+import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, GerritProjects, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.model.ElasticSearchFields._
 import com.gerritforge.analytics.auditlog.model._
 import com.gerritforge.analytics.auditlog.range.TimeRange
@@ -30,6 +30,17 @@ object Main extends SparkApp with App with LazyLogging {
 
   CommandLineArguments(args) match {
     case Some(config) =>
+
+      val tryProjects = GerritProjects.loadProjects(
+        new GerritConnectivity(config.gerritUsername, config.gerritPassword, config.ignoreSSLCert.getOrElse(false)),
+        config.gerritUrl.get
+      )
+
+      if (tryProjects.isFailure) {
+        logger.error("Error loading public projects", tryProjects.failed.get)
+        sys.exit(1)
+      }
+
       val tryUserIdentifiers = GerritUserIdentifiers.loadAccounts(
         new GerritConnectivity(config.gerritUsername, config.gerritPassword, config.ignoreSSLCert.getOrElse(false)),
         config.gerritUrl.get
@@ -48,7 +59,13 @@ object Main extends SparkApp with App with LazyLogging {
 
       spark
         .getEventsFromPath(config.eventsPath.get)
-        .transformEvents(tryUserIdentifiers.get, triedAdditionalUserInfo.get,config.eventsTimeAggregation.get, TimeRange(config.since, config.until))
+        .transformEvents(
+          tryUserIdentifiers.get,
+          triedAdditionalUserInfo.get,
+          tryProjects.get,
+          config.eventsTimeAggregation.get,
+          TimeRange(config.since, config.until)
+        )
         .saveToEs(s"${config.elasticSearchIndex.get}/$DOCUMENT_TYPE")
 
     case None =>
@@ -57,4 +74,3 @@ object Main extends SparkApp with App with LazyLogging {
   }
 
 }
-
