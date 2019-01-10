@@ -19,6 +19,98 @@
     },
     {
       "key": {
+        "uuid": "e64e8036_83f0b7a7",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-10T09:28:34Z",
+      "side": 1,
+      "message": "Shouldn\u0027t this be escaped?\n\nWe are looking for a string like \"git-upload-pack./myproject\", correct?\n\nIf so I think the dot and slash both need to be escaped.",
+      "range": {
+        "startLine": 34,
+        "startChar": 101,
+        "endLine": 34,
+        "endChar": 102
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c44ac0c8_4881d282",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-10T09:28:34Z",
+      "side": 1,
+      "message": "I believe there could be a \"replication list\" command as well: https://gerrit.wikimedia.org/r/plugins/replication/Documentation/cmd-list.md",
+      "range": {
+        "startLine": 35,
+        "startChar": 78,
+        "endLine": 35,
+        "endChar": 83
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "fed5daf9_f0ba81b4",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-10T09:28:34Z",
+      "side": 1,
+      "message": "It might be useful to put a couple of examples of cases we are dealing with, otherwise, it is hard to understand the need of these 2 function without context.",
+      "range": {
+        "startLine": 45,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 24
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dd139304_1df41e71",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-10T09:28:34Z",
+      "side": 1,
+      "message": "What is a read-only state? I can\u0027t find it in the project API docs: https://gerrit-review.googlesource.com/Documentation/rest-api-projects.html#project-endpoints",
+      "range": {
+        "startLine": 90,
+        "startChar": 92,
+        "endLine": 90,
+        "endChar": 101
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7d462bc8_04854415",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/AuditLogsTransformer.scala",
         "patchSetId": 1
@@ -64,6 +156,75 @@
       "writtenOn": "2019-01-09T23:17:20Z",
       "side": 1,
       "message": "2019",
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e861b2a_645cf313",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjectsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-10T09:28:34Z",
+      "side": 1,
+      "message": "typo -\u003e \"is well separated by a space\"",
+      "range": {
+        "startLine": 45,
+        "startChar": 78,
+        "endLine": 45,
+        "endChar": 108
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f676c922_76c41c68",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjectsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-10T09:28:34Z",
+      "side": 1,
+      "message": "Is this the space we are referring to in the test title?",
+      "range": {
+        "startLine": 47,
+        "startChar": 80,
+        "endLine": 47,
+        "endChar": 81
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f94af942_1d932016",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractorsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-10T09:28:34Z",
+      "side": 1,
+      "message": "These are not used",
+      "range": {
+        "startLine": 17,
+        "startChar": 1,
+        "endLine": 19,
+        "endChar": 83
+      },
       "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
