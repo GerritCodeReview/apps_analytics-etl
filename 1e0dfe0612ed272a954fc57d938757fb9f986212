@@ -113,6 +113,30 @@
     },
     {
       "key": {
+        "uuid": "7a84691b_c1749823",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-11T11:42:37Z",
+      "side": 1,
+      "message": "Nope it doesn\u0027t, you are right",
+      "parentUuid": "773c895c_9f3869e4",
+      "range": {
+        "startLine": 35,
+        "startChar": 78,
+        "endLine": 35,
+        "endChar": 83
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fed5daf9_f0ba81b4",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
         "patchSetId": 1
@@ -195,6 +219,30 @@
       "side": 1,
       "message": "not sure if it\u0027s documented, but this is the call issued by gerrit in 2.16 to populate the list of projects.\n\nif you look at the network traffic issued by the page at https://review.gerrithub.io/admin/repos, you\u0027ll see that\u0027s the request.",
       "parentUuid": "dd139304_1df41e71",
+      "range": {
+        "startLine": 90,
+        "startChar": 92,
+        "endLine": 90,
+        "endChar": 101
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e310231_e10d39e2",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjects.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-11T11:42:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "a5dec134_0c31542c",
       "range": {
         "startLine": 90,
         "startChar": 92,
@@ -394,6 +442,30 @@
       "side": 1,
       "message": "yep, that\u0027s the one",
       "parentUuid": "f676c922_76c41c68",
+      "range": {
+        "startLine": 47,
+        "startChar": 80,
+        "endLine": 47,
+        "endChar": 81
+      },
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "89113606_2bba6c28",
+        "filename": "auditlog/src/test/scala/com/gerritforge/analytics/auditlog/broadcast/GerritProjectsSpec.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-01-11T11:42:37Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "41d7036b_bb31199f",
       "range": {
         "startLine": 47,
         "startChar": 80,
