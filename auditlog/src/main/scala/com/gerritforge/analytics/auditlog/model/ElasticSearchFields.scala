@@ -18,6 +18,7 @@ object ElasticSearchFields {
   val TIME_BUCKET_FIELD     = "events_time_bucket"
   val COMMAND_FIELD         = "command"
   val COMMAND_ARGS_FIELD    = "command_arguments"
+  val SUB_COMMAND_FIELD     = "sub_command"
   val USER_IDENTIFIER_FIELD = "user_identifier"
   val AUDIT_TYPE_FIELD      = "audit_type"
   val ACCESS_PATH_FIELD     = "access_path"
@@ -33,6 +34,7 @@ object ElasticSearchFields {
     ACCESS_PATH_FIELD,
     COMMAND_FIELD,
     COMMAND_ARGS_FIELD,
+    SUB_COMMAND_FIELD,
     PROJECT_FIELD,
     RESULT_FIELD
   )
