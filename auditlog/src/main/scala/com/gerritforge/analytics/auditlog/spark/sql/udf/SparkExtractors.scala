@@ -30,6 +30,12 @@ case object SparkExtractors extends LazyLogging with RegexUtil {
   private val GIT_SSH_COMMAND_ARGUMENTS    = capture(r = """git-(?:upload|receive)-pack\.(.+)""")
   private val GIT_HTTP_COMMAND_ARGUMENTS   = capture(r = """(^http.*)""")
 
+  // regular expressions to extract sub-commands
+  // Rest API sub-command example: what = /config/server/version -> sub-command: config
+  private val REST_API_SUB_COMMAND = capture("""^\/(.*?)(?:\/|\s|$)""")
+  // SSH sub-command example: what = gerrit.plugin.reload.analytics -> sub-command: reload
+  private val SSH_SUB_COMMAND = capture("""^.*?\.(.*?)(?:\.|\s|$)""")
+
   val FAILED_SSH_AUTH = "FAILED_SSH_AUTH"
 
   def extractCommand(what: String, accessPath: String, httpMethod: String = null): String = accessPath match {
@@ -57,4 +63,16 @@ case object SparkExtractors extends LazyLogging with RegexUtil {
   }
 
   def extractCommandArgumentsUDF: UserDefinedFunction = udf((rawCommand: String, accessPath: String) => extractCommandArguments(rawCommand, accessPath))
+
+  def extractSubCommand(what: String, accessPath: String): Option[String] = accessPath match {
+    case "REST_API"|"UNKNOWN"   => Some(extractOrElse(REST_API_SUB_COMMAND, what, what))
+    case "SSH_COMMAND"          => Some(extractOrElse(SSH_SUB_COMMAND, what, what))
+    case "GIT"                  => None
+    case "JSON_RPC"             => None
+    case unexpected             =>
+      logger.warn(s"Unexpected access path '$unexpected' encountered when extracting command from '$what'")
+      None
+  }
+
+  def extractSubCommandUDF: UserDefinedFunction = udf((rawCommand: String, accessPath: String) => extractSubCommand(rawCommand, accessPath))
 }

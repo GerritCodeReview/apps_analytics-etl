@@ -15,7 +15,7 @@
 package com.gerritforge.analytics.auditlog.spark.dataframe.ops
 
 import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritProjects, GerritUserIdentifiers}
-import com.gerritforge.analytics.auditlog.spark.sql.udf.SparkExtractors.{extractCommandArgumentsUDF, extractCommandUDF}
+import com.gerritforge.analytics.auditlog.spark.sql.udf.SparkExtractors.{extractCommandArgumentsUDF, extractCommandUDF, extractSubCommandUDF}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.{udf, _}
 import org.apache.spark.sql.{Column, DataFrame}
@@ -51,6 +51,15 @@ object DataFrameOps {
             col("access_path"),
             ifExistThenGetOrNull("http_method", col("http_method"))))
         .withColumn(commandArgsCol, extractCommandArgumentsUDF(col("what"), col("access_path")))
+    }
+
+    def withSubCommandColumns(subCommandCol: String): DataFrame = {
+      dataFrame.withColumn(subCommandCol,
+        extractSubCommandUDF(
+          col("what"),
+          col("access_path")
+        )
+      )
     }
 
     def withProjectColumn(projectCol: String, gerritProjects: GerritProjects): DataFrame = {

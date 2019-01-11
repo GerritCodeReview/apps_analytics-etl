@@ -23,6 +23,7 @@ case class AggregatedAuditEvent(
   access_path: Option[String],
   command: String,
   command_arguments: String,
+  sub_command: Option[String],
   project: Option[String],
   result: String,
   num_events: Long

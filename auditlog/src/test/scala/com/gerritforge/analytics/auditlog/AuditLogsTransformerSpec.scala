@@ -41,6 +41,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       GIT_UPLOAD_PACK,
       anonymousHttpAuditEvent.what,
       None,
+      None,
       anonymousHttpAuditEvent.result,
       num_events = 1
     )
@@ -61,6 +62,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       anonymousHttpAuditEvent.accessPath,
       GIT_UPLOAD_PACK,
       anonymousHttpAuditEvent.what,
+      None,
       None,
       anonymousHttpAuditEvent.result,
       num_events = 1
@@ -86,6 +88,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
       None,
+      None,
       authenticatedHttpAuditEvent.result,
       num_events = 1
     )
@@ -106,6 +109,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       sshAuditEvent.accessPath,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
+      Some("query"),
       None,
       sshAuditEvent.result,
       num_events = 1
@@ -127,6 +131,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
       sshAuditEvent.accessPath,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
+      Some("query"),
       None,
       sshAuditEvent.result,
       num_events = 2
@@ -150,6 +155,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        Some("query"),
         None,
         sshAuditEvent.result,
         num_events = 1
@@ -162,6 +168,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        Some("query"),
         None,
         sshAuditEvent.result,
         num_events = 1
@@ -185,6 +192,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         sshAuditEvent.accessPath,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
+        Some("query"),
         None,
         sshAuditEvent.result,
         num_events = 1
@@ -197,6 +205,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
         authenticatedHttpAuditEvent.accessPath,
         GIT_UPLOAD_PACK,
         authenticatedHttpAuditEvent.what,
+        None,
         None,
         authenticatedHttpAuditEvent.result,
         num_events = 1
@@ -256,6 +265,15 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
 
     aggregatedEventsDS.collect.length shouldBe 1
     aggregatedEventsDS.collect.head.project should contain(project)
+  }
+
+  it should "extract sub-command" in {
+    val events = Seq(sshAuditEvent.copy(what = "aCommand.aSubCommand"))
+
+    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+
+    aggregatedEventsDS.collect.length shouldBe 1
+    aggregatedEventsDS.collect.head.sub_command should contain("aSubCommand")
   }
 }
 
