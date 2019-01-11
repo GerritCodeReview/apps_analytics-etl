@@ -290,6 +290,24 @@
     },
     {
       "key": {
+        "uuid": "4d08f5cf_d3980cc4",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/AuditLogsTransformer.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-01-11T14:04:09Z",
+      "side": 1,
+      "message": "Sorry for not being clear, also have in mind this is a suggestion based on my preference.\n\nThe Dataframe will give you more flexibility because it does not force you to follow a specific schema, but the price to pay is the type checking that is not enforced and the fact that it\u0027s not always clear what\u0027s inside the Dataframe.\n\nWhen working with RDDs or Datasets of case classes, it\u0027s usually enough to look at the signature of the methods to understand what it is doing.\n\nThe problem of using Dataframe is also amplified when you have functions that receive a Dataframe and return Dataframe, which forces the reviewer to read a lot more code to follow the content. For this reason I typically prefer to operate with RDDs or Datasets to avoid that negative cascade effect.\n\nHope this clarifies my previous comment.\n\nExample:\n```\nimport spark.implicits._\n    auditEventsRDD\n      .filterWithinRange(TimeRange(timeRange.since, timeRange.until))\n      .toJsonString\n      .toJsonTableDataFrame\n      .hydrateWithUserIdentifierColumn(USER_IDENTIFIER_FIELD, broadcastUserIdentifiers.value)\n      .withTimeBucketColum(TIME_BUCKET_FIELD, timeAggregation)\n      .withCommandColumns(COMMAND_FIELD, COMMAND_ARGS_FIELD)\n      .withUserTypeColumn(USER_TYPE_FIELD, broadcastAdditionalUsersInfo.value)\n      .withProjectColumn(PROJECT_FIELD, broadcastGerritProjects.value)\n      .aggregateNumEventsColumn(NUM_EVENTS_FIELD, FACETING_FIELDS)\n      .as[AggregatedAuditEvent]\n```",
+      "parentUuid": "e836bc34_f25d84cd",
+      "revId": "1e0dfe0612ed272a954fc57d938757fb9f986212",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7c3825bd_548c79a7",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/util/RegexUtil.scala",
         "patchSetId": 1
