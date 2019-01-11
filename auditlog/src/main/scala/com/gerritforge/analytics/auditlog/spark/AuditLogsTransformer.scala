@@ -15,13 +15,13 @@
 package com.gerritforge.analytics.auditlog.spark
 
 import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritProjects, GerritUserIdentifiers}
-import com.gerritforge.analytics.auditlog.model.AuditEvent
+import com.gerritforge.analytics.auditlog.model.{AggregatedAuditEvent, AuditEvent}
 import com.gerritforge.analytics.auditlog.model.ElasticSearchFields._
 import com.gerritforge.analytics.auditlog.range.TimeRange
 import com.gerritforge.analytics.auditlog.spark.dataframe.ops.DataFrameOps._
 import com.gerritforge.analytics.auditlog.spark.rdd.ops.SparkRDDOps._
 import org.apache.spark.rdd.RDD
-import org.apache.spark.sql.{DataFrame, SparkSession}
+import org.apache.spark.sql.{Dataset, SparkSession}
 
 case class AuditLogsTransformer(
   gerritIdentifiers: GerritUserIdentifiers = GerritUserIdentifiers.empty,
@@ -33,7 +33,8 @@ case class AuditLogsTransformer(
   private val broadcastAdditionalUsersInfo = spark.sparkContext.broadcast(additionalUsersInfo)
   private val broadcastGerritProjects = spark.sparkContext.broadcast(gerritProjects)
 
-  def transform(auditEventsRDD: RDD[AuditEvent], timeAggregation: String, timeRange: TimeRange = TimeRange.always): DataFrame =
+  def transform(auditEventsRDD: RDD[AuditEvent], timeAggregation: String, timeRange: TimeRange = TimeRange.always): Dataset[AggregatedAuditEvent] = {
+    import spark.implicits._
     auditEventsRDD
       .filterWithinRange(TimeRange(timeRange.since, timeRange.until))
       .toJsonString
@@ -44,4 +45,6 @@ case class AuditLogsTransformer(
       .withUserTypeColumn(USER_TYPE_FIELD, broadcastAdditionalUsersInfo.value)
       .withProjectColumn(PROJECT_FIELD, broadcastGerritProjects.value)
       .aggregateNumEventsColumn(NUM_EVENTS_FIELD, FACETING_FIELDS)
+      .as[AggregatedAuditEvent]
+  }
 }

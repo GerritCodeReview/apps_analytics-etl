@@ -17,10 +17,9 @@ import java.sql
 
 import com.gerritforge.analytics.SparkTestSupport
 import com.gerritforge.analytics.auditlog.broadcast._
-import com.gerritforge.analytics.auditlog.model.{ElasticSearchFields, HttpAuditEvent, SshAuditEvent}
+import com.gerritforge.analytics.auditlog.model.{AggregatedAuditEvent, ElasticSearchFields, HttpAuditEvent, SshAuditEvent}
 import com.gerritforge.analytics.auditlog.spark.AuditLogsTransformer
 import com.gerritforge.analytics.support.ops.CommonTimeOperations._
-import org.apache.spark.sql.Row
 import org.scalatest.{FlatSpec, Matchers}
 
 class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupport with TestFixtures {
@@ -29,44 +28,42 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "process an anonymous http audit entry" in {
     val events = Seq(anonymousHttpAuditEvent)
 
-    val dataFrame = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
+    aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
-    val expectedAggregatedCount = 1
-    dataFrame.collect should contain only Row(
-        AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
-        HttpAuditEvent.auditType,
-        null, // no user identifier
-        null, // no user type
-        anonymousHttpAuditEvent.accessPath.get,
-        GIT_UPLOAD_PACK,
-        anonymousHttpAuditEvent.what,
-        null, // no project
-        anonymousHttpAuditEvent.result,
-        expectedAggregatedCount
+    aggregatedEventsDS.collect should contain only AggregatedAuditEvent(
+      AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
+      HttpAuditEvent.auditType,
+      None,
+      None,
+      anonymousHttpAuditEvent.accessPath,
+      GIT_UPLOAD_PACK,
+      anonymousHttpAuditEvent.what,
+      None,
+      anonymousHttpAuditEvent.result,
+      num_events = 1
     )
   }
 
   it should "process an authenticated http audit entry where gerrit account couldn't be identified" in {
     val events = Seq(authenticatedHttpAuditEvent)
 
-    val dataFrame = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
+    aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
-    val expectedAggregatedCount = 1
-    dataFrame.collect should contain only Row(
+    aggregatedEventsDS.collect should contain only AggregatedAuditEvent(
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       HttpAuditEvent.auditType,
-      s"${authenticatedHttpAuditEvent.who.get}",
-      AdditionalUserInfo.DEFAULT_USER_TYPE,
-      authenticatedHttpAuditEvent.accessPath.get,
+      authenticatedHttpAuditEvent.who.map(_.toString),
+      Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+      anonymousHttpAuditEvent.accessPath,
       GIT_UPLOAD_PACK,
-      authenticatedHttpAuditEvent.what,
-      null, // no project
-      authenticatedHttpAuditEvent.result,
-      expectedAggregatedCount
+      anonymousHttpAuditEvent.what,
+      None,
+      anonymousHttpAuditEvent.result,
+      num_events = 1
     )
   }
 
@@ -74,68 +71,65 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
     val events = Seq(authenticatedHttpAuditEvent)
     val gerritUserIdentifier = "Antonio Barone"
 
-    val dataFrame =
+    val aggregatedEventsDS =
       AuditLogsTransformer(GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier)))
         .transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
+    aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
-    val expectedAggregatedCount = 1
-    dataFrame.collect should contain only Row(
+    aggregatedEventsDS.collect should contain only AggregatedAuditEvent(
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       HttpAuditEvent.auditType,
-      gerritUserIdentifier,
-      AdditionalUserInfo.DEFAULT_USER_TYPE,
-      authenticatedHttpAuditEvent.accessPath.get,
+      Some(gerritUserIdentifier),
+      Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+      anonymousHttpAuditEvent.accessPath,
       GIT_UPLOAD_PACK,
       authenticatedHttpAuditEvent.what,
-      null, // no project
+      None,
       authenticatedHttpAuditEvent.result,
-      expectedAggregatedCount
+      num_events = 1
     )
   }
 
   it should "process an SSH audit entry" in {
     val events = Seq(sshAuditEvent)
 
-    val dataFrame = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
+    aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
-    val expectedAggregatedCount = 1
-    dataFrame.collect should contain only Row(
+    aggregatedEventsDS.collect should contain only AggregatedAuditEvent(
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       SshAuditEvent.auditType,
-      s"${sshAuditEvent.who.get}",
-      AdditionalUserInfo.DEFAULT_USER_TYPE,
-      sshAuditEvent.accessPath.get,
+      sshAuditEvent.who.map(_.toString),
+      Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+      sshAuditEvent.accessPath,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
-      null, // no project
+      None,
       sshAuditEvent.result,
-      expectedAggregatedCount
+      num_events = 1
     )
   }
 
   it should "group ssh events from the same user together, if they fall within the same time bucket (hour)" in {
     val events = Seq(sshAuditEvent, sshAuditEvent.copy(timeAtStart = timeAtStart + 1000))
 
-    val dataFrame = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
+    aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
-    val expectedAggregatedCount = 2
-    dataFrame.collect should contain only Row(
+    aggregatedEventsDS.collect should contain only AggregatedAuditEvent(
       AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
       SshAuditEvent.auditType,
-      s"${sshAuditEvent.who.get}",
-      AdditionalUserInfo.DEFAULT_USER_TYPE,
-      sshAuditEvent.accessPath.get,
+      sshAuditEvent.who.map(_.toString),
+      Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+      sshAuditEvent.accessPath,
       SSH_GERRIT_COMMAND,
       SSH_GERRIT_COMMAND_ARGUMENTS,
-      null, // no project
+      None,
       sshAuditEvent.result,
-      expectedAggregatedCount
+      num_events = 2
     )
   }
 
@@ -143,35 +137,34 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
     val user2Id = sshAuditEvent.who.map(_ + 1)
     val events = Seq(sshAuditEvent, sshAuditEvent.copy(who=user2Id))
 
-    val dataFrame = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
+    aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
-    val expectedAggregatedCount = 1
-    dataFrame.collect should contain allOf (
-      Row(
+    aggregatedEventsDS.collect should contain allOf (
+      AggregatedAuditEvent(
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         SshAuditEvent.auditType,
-        s"${sshAuditEvent.who.get}",
-        AdditionalUserInfo.DEFAULT_USER_TYPE,
-        sshAuditEvent.accessPath.get,
+        sshAuditEvent.who.map(_.toString),
+        Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+        sshAuditEvent.accessPath,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
-        null, // no project
+        None,
         sshAuditEvent.result,
-        expectedAggregatedCount
+        num_events = 1
       ),
-      Row(
+      AggregatedAuditEvent(
         AuditLogsTransformerSpec.epochMillisToNearestHour(timeAtStart),
         SshAuditEvent.auditType,
-        s"${user2Id.get}",
-        AdditionalUserInfo.DEFAULT_USER_TYPE,
-        sshAuditEvent.accessPath.get,
+        user2Id.map(_.toString),
+        Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+        sshAuditEvent.accessPath,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
-        null, // no project
+        None,
         sshAuditEvent.result,
-        expectedAggregatedCount
+        num_events = 1
       )
     )
   }
@@ -179,36 +172,34 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "group different event types separately, event if they fall within the same time bucket (hour)" in {
     val events = Seq(sshAuditEvent, authenticatedHttpAuditEvent.copy(timeAtStart = sshAuditEvent.timeAtStart + 1000))
 
-    val dataFrame = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
+    aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
-    val expectedSshAggregatedCount = 1
-    val expectedHttpAggregatedCount = 1
-    dataFrame.collect should contain allOf (
-      Row(
+    aggregatedEventsDS.collect should contain allOf (
+      AggregatedAuditEvent(
         AuditLogsTransformerSpec.epochMillisToNearestHour(events.head.timeAtStart),
         SshAuditEvent.auditType,
-        s"${sshAuditEvent.who.get}",
-        AdditionalUserInfo.DEFAULT_USER_TYPE,
-        sshAuditEvent.accessPath.get,
+        sshAuditEvent.who.map(_.toString),
+        Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+        sshAuditEvent.accessPath,
         SSH_GERRIT_COMMAND,
         SSH_GERRIT_COMMAND_ARGUMENTS,
-        null, // no project
+        None,
         sshAuditEvent.result,
-        expectedSshAggregatedCount
+        num_events = 1
       ),
-      Row(
+      AggregatedAuditEvent(
         AuditLogsTransformerSpec.epochMillisToNearestHour(events.last.timeAtStart),
         HttpAuditEvent.auditType,
-        s"${authenticatedHttpAuditEvent.who.get}",
-        AdditionalUserInfo.DEFAULT_USER_TYPE,
-        authenticatedHttpAuditEvent.accessPath.get,
+        authenticatedHttpAuditEvent.who.map(_.toString),
+        Some(AdditionalUserInfo.DEFAULT_USER_TYPE),
+        authenticatedHttpAuditEvent.accessPath,
         GIT_UPLOAD_PACK,
         authenticatedHttpAuditEvent.what,
-        null, // no project
+        None,
         authenticatedHttpAuditEvent.result,
-        expectedHttpAggregatedCount
+        num_events = 1
       )
     )
   }
@@ -219,12 +210,12 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
     val userType = "nonDefaultUserType"
     val additionalUserInfo = AdditionalUserInfo(authenticatedHttpAuditEvent.who.get, userType)
 
-    val dataFrame = AuditLogsTransformer(additionalUsersInfo = AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))).transform(
+    val aggregatedEventsDS = AuditLogsTransformer(additionalUsersInfo = AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))).transform(
         auditEventsRDD        = sc.parallelize(events),
         timeAggregation       = "hour"
     )
-    dataFrame.collect.length shouldBe 1
-    dataFrame.collect.head.getAs[String](ElasticSearchFields.USER_TYPE_FIELD) shouldBe userType
+    aggregatedEventsDS.collect.length shouldBe 1
+    aggregatedEventsDS.collect.head.user_type should contain(userType)
   }
 
   it should "process user type when gerrit account could be identified" in {
@@ -234,7 +225,7 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
     val userType = "nonDefaultUserType"
     val additionalUserInfo = AdditionalUserInfo(authenticatedHttpAuditEvent.who.get, userType)
 
-    val dataFrame =
+    val aggregatedEventsDS =
       AuditLogsTransformer(
         gerritIdentifiers = GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier)),
         additionalUsersInfo = AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))
@@ -243,28 +234,28 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
           timeAggregation       = "hour"
       )
 
-    dataFrame.collect.length shouldBe 1
-    dataFrame.collect.head.getAs[String](ElasticSearchFields.USER_TYPE_FIELD) shouldBe userType
+    aggregatedEventsDS.collect.length shouldBe 1
+    aggregatedEventsDS.collect.head.user_type should contain(userType)
   }
 
   it should "extract gerrit project from an http event" in {
     val events = Seq(authenticatedHttpAuditEvent)
 
-    val dataFrame = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
+    val aggregatedEventsDS = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
       .transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.collect.length shouldBe 1
-    dataFrame.collect.head.getAs[String](ElasticSearchFields.PROJECT_FIELD) shouldBe project
+    aggregatedEventsDS.collect.length shouldBe 1
+    aggregatedEventsDS.collect.head.project should contain(project)
   }
 
   it should "extract gerrit project from an ssh event" in {
     val events = Seq(sshAuditEvent)
 
-    val dataFrame = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
+    val aggregatedEventsDS = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
       .transform(sc.parallelize(events), timeAggregation="hour")
 
-    dataFrame.collect.length shouldBe 1
-    dataFrame.collect.head.getAs[String](ElasticSearchFields.PROJECT_FIELD) shouldBe project
+    aggregatedEventsDS.collect.length shouldBe 1
+    aggregatedEventsDS.collect.head.project should contain(project)
   }
 }
 
