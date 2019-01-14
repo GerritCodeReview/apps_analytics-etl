@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "47b77a5d_e4f24d69",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/spark/sql/udf/SparkExtractors.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-01-14T19:38:38Z",
+      "side": 1,
+      "message": "shouldn\u0027t the subcommand command be `plugin` here?",
+      "range": {
+        "startLine": 36,
+        "startChar": 84,
+        "endLine": 36,
+        "endChar": 90
+      },
+      "revId": "e33c006268ebd23be338908585bcfa7d1ba1dc18",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
