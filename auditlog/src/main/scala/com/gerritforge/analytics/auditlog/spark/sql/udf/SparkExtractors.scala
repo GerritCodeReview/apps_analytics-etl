@@ -32,7 +32,7 @@ case object SparkExtractors extends LazyLogging with RegexUtil {
 
   // regular expressions to extract sub-commands
   // Rest API sub-command example: what = /config/server/version -> sub-command: config
-  private val REST_API_SUB_COMMAND = capture("""^\/(.*?)(?:\/|\s|$)""")
+  private val REST_API_SUB_COMMAND = capture("""^\/(?:a\/)?(.*?)(?:\/|\s|$)""")
   // SSH sub-command example: what = gerrit.plugin.reload.analytics -> sub-command: plugin
   private val SSH_SUB_COMMAND = capture("""^.*?\.(.*?)(?:\.|\s|$)""")
 
@@ -70,7 +70,7 @@ case object SparkExtractors extends LazyLogging with RegexUtil {
     case "GIT"                  => None
     case "JSON_RPC"             => None
     case unexpected             =>
-      logger.warn(s"Unexpected access path '$unexpected' encountered when extracting command from '$what'")
+      logger.warn(s"Unexpected access path '$unexpected' encountered when extracting sub-command from '$what'")
       None
   }
 

@@ -224,6 +224,13 @@ class SparkExtractorsSpec extends FlatSpec with Matchers {
     SparkExtractors.extractSubCommand(what, accessPath) shouldBe Some("changes")
   }
 
+  it should "extract authenticated REST API sub-command" in {
+    val what = "/a/changes/ffilz%2Fnfs-ganesha~372229/comments"
+    val accessPath = "REST_API"
+
+    SparkExtractors.extractSubCommand(what, accessPath) shouldBe Some("changes")
+  }
+
   it should "return no sub-commands failed AUTH" in {
     val what = s"AUTH"
     val accessPath = null
