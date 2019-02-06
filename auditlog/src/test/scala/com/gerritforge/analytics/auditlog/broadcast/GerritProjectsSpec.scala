@@ -199,6 +199,18 @@ class GerritProjectsSpec extends FlatSpec with Matchers {
     existingProjects.extractProject(what, accessPath) should contain(project)
   }
 
+  it should "extract a project from an SSH upload pack command" in {
+    val project = "cbdr/Gjallarhorn"
+    val what = s"git-upload-pack./$project"
+    val accessPath = "GIT"
+
+    val existingProjects = GerritProjects(Map(
+      project -> GerritProject(project)
+    ))
+
+    existingProjects.extractProject(what, accessPath) should contain(project)
+  }
+
   it should "extract the project from an info ref receive pack target" in {
     val project = "dushyantRathore/Jenkins_Test"
     val what = s"https://review.gerrithub.io/$project/info/refs?service=git-receive-pack"

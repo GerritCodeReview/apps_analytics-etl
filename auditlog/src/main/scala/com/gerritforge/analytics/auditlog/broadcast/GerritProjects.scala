@@ -75,6 +75,7 @@ case class GerritProjects(private val projects: Map[GerritProjectName, GerritPro
         .map(URLDecoder.decode(_, "UTF-8"))
     case "GIT" =>
       extractGroup(PROJECT_HTTP_PACK_INFO_REF, what)
+        .orElse(extractGroup(PROJECT_SSH_PACK, what))
         .orElse(extractGroup(PROJECT_HTTP_PACK, what))
         .flatMap(findProjectStringAtEnd(_, '/'))
     case unexpected =>
