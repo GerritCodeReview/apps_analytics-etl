@@ -57,6 +57,7 @@ docker run -ti --rm \
 - -u --url Gerrit server URL with the analytics plugins installed
 - -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
 - -e --elasticIndex Elastic Search index name. If not provided no ES export will be performed
+- -r --extract-branches Extract and process branches information (Optional) - Default: false
 - -o --out folder location for storing the output as JSON files
     if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
     the system temporary directory
