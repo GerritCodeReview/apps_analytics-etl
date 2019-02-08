@@ -156,6 +156,7 @@ docker run \
 * -k, --ignoreSSLCert          - Ignore SSL certificate validation (Optional) - Default: false
 * -s, --since                  - process only auditLogs occurred after (and including) this date (Optional)
 * -u, --until                  - process only auditLogs occurred before (and including) this date (Optional)
+* -r, --extract-branches       - extract and process branches information (Optional) - Default: false
 * -a, --additionalUserInfoPath - path to a CSV file containing additional user information (Optional). Currently it is only possible to add user `type` (i.e.: _bot_, _human_).
 If the type is not specified the user will be considered _human_.
 
