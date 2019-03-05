@@ -35,4 +35,9 @@ trait SparkEsClientProvider {
     RestClient.builder(new HttpHost(esCfg.getNodes, esCfg.getPort, "http")).build()
 
   lazy val esClient: ElasticClient = ElasticClient.fromRestClient(restClient)
+
+  def closeElasticsearchClientConn(): Unit = {
+    esClient.close()
+    restClient.close()
+  }
 }

@@ -14,7 +14,6 @@
 
 package com.gerritforge.analytics.gitcommits.job
 
-
 import java.time.LocalDate
 
 import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
@@ -90,7 +89,6 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
     case Some(config) =>
-
       implicit val _: GerritEndpointConfig = config
 
       logger.info(s"Starting analytics app with config $config")
@@ -132,9 +130,13 @@ trait Job {
   }
 
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
+    import scala.concurrent.ExecutionContext.Implicits.global
     config.elasticIndex.foreach { esIndex =>
       import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
       df.saveToEsWithAliasSwap(esIndex, indexType)
+        .futureAction
+        .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
+        .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
     }
 
   }

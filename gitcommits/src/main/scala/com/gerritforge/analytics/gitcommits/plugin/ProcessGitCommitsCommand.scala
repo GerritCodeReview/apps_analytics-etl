@@ -102,8 +102,12 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
           s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'")
         stdout.flush()
         import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
+        import scala.concurrent.ExecutionContext.Implicits.global
         projectStats
           .saveToEsWithAliasSwap(esIndex, indexType)
+          .futureAction
+          .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
+          .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
       }
 
       val elaspsedTs = (System.currentTimeMillis - startTs) / 1000L

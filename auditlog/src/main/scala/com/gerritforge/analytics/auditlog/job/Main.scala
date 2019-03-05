@@ -57,6 +57,7 @@ object Main extends SparkApp with App with LazyLogging {
       }
 
       import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
+      import scala.concurrent.ExecutionContext.Implicits.global
       spark
         .getEventsFromPath(config.eventsPath.get)
         .transformEvents(
@@ -67,6 +68,9 @@ object Main extends SparkApp with App with LazyLogging {
           TimeRange(config.since, config.until)
         )
         .saveToEsWithAliasSwap(config.elasticSearchIndex.get, DOCUMENT_TYPE)
+        .futureAction
+        .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
+        .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
 
     case None =>
       logger.error("Could not parse command line arguments")
