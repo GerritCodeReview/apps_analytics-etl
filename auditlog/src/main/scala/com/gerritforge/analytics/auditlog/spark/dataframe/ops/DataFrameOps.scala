@@ -38,7 +38,7 @@ object DataFrameOps {
 
     }
 
-    def withTimeBucketColum(timeBucketCol: String, timeAggregation: String): DataFrame = {
+    def withTimeBucketColumn(timeBucketCol: String, timeAggregation: String): DataFrame = {
       dataFrame
         .withColumn(timeBucketCol, date_trunc(format=timeAggregation, from_unixtime(col("time_at_start").divide(1000))))
     }
