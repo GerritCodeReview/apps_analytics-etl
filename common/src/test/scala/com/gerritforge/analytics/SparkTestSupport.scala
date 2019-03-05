@@ -21,6 +21,7 @@ import org.scalatest.{BeforeAndAfterAll, Suite}
 trait SparkTestSupport extends BeforeAndAfterAll { this: Suite =>
 
   implicit val spark : SparkSession = SparkSession.builder()
+    .config("es.nodes.wan.only", "true")
     .master("local[4]")
     .getOrCreate()
 
