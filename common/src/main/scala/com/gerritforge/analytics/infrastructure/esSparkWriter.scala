@@ -23,7 +23,8 @@ import org.apache.spark.sql.{Dataset, SparkSession}
 import org.elasticsearch.spark.sql._
 
 import scala.concurrent.Future
-import scala.util.Try
+
+case class EnrichedAliasActionResponse(futureAction: Future[AliasActionResponse], path: String)
 
 object ESSparkWriterImplicits {
   implicit def withAliasSwap[T](data: Dataset[T]): ElasticSearchPimpedWriter[T] =
@@ -36,7 +37,7 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
     with SparkEsClientProvider {
 
   def saveToEsWithAliasSwap(aliasName: String,
-                            documentType: String): Future[Option[AliasActionResponse]] = {
+                            documentType: String): EnrichedAliasActionResponse = {
     val newIndexNameWithTime = IndexNameGenerator.timeBasedIndexName(aliasName, Instant.now())
     val newPersistencePath   = s"$newIndexNameWithTime/$documentType"
 
@@ -45,35 +46,30 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
 
     import scala.concurrent.ExecutionContext.Implicits.global
     // Save data
-    Try(
+    val futureResponse: Future[AliasActionResponse] = try {
       data
         .toDF()
         .saveToEs(newPersistencePath)
-    ).map { _ =>
-        logger.info(
-          s"Successfully stored the data into index $newIndexNameWithTime. Will now update the alias $aliasName")
 
-        val idxSwapResult: Future[Option[AliasActionResponse]] =
-          moveAliasToNewIndex(aliasName, newIndexNameWithTime).map { response =>
-            response.isSuccess match {
-              case true =>
-                response.result.success match {
-                  case true =>
-                    logger.info("Alias was updated successfully")
-                    Some(response.result)
-                  case false =>
-                    logger.error(
-                      s"Alias update failed with response result error ${response.result}")
-                    None
-                }
-              case false =>
-                logger.error(s"Alias update failed with response error ${response.error.`type`}")
-                None
-            }
-          }
-        idxSwapResult
+      logger.info(
+        s"Successfully stored the data into index $newIndexNameWithTime. Will now update the alias $aliasName")
+
+      moveAliasToNewIndex(aliasName, newIndexNameWithTime).flatMap { response =>
+        if (response.isSuccess && response.result.success) {
+          logger.info("Alias was updated successfully")
+          Future.successful(response.result)
+        } else {
+          logger.error(s"Alias update failed with response result error ${response.error}")
+          logger.error(s"Alias update failed with ES ACK: ${response.result.acknowledged}")
+          Future.failed(new Exception(s"Index alias $aliasName update failure ${response.error}"))
+        }
       }
-      .getOrElse(Future(None))
+    } catch {
+      case e: Exception =>
+        Future.failed[AliasActionResponse](e)
+    }
+
+    EnrichedAliasActionResponse(futureResponse, newPersistencePath)
   }
 
   override val esSparkSession: SparkSession = data.sparkSession
