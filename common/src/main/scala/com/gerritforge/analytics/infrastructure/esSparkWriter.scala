@@ -36,7 +36,7 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
     with SparkEsClientProvider {
 
   def saveToEsWithAliasSwap(aliasName: String,
-                            documentType: String): Future[Option[AliasActionResponse]] = {
+                            documentType: String): (Future[Option[AliasActionResponse]], String) = {
     val newIndexNameWithTime = IndexNameGenerator.timeBasedIndexName(aliasName, Instant.now())
     val newPersistencePath   = s"$newIndexNameWithTime/$documentType"
 
@@ -45,7 +45,7 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
 
     import scala.concurrent.ExecutionContext.Implicits.global
     // Save data
-    Try(
+    val result = Try(
       data
         .toDF()
         .saveToEs(newPersistencePath)
@@ -74,6 +74,8 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
         idxSwapResult
       }
       .getOrElse(Future(None))
+
+    (result, newPersistencePath)
   }
 
   override val esSparkSession: SparkSession = data.sparkSession

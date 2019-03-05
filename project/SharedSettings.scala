@@ -43,7 +43,8 @@ object SharedSettings {
       "com.typesafe.scala-logging" %% "scala-logging"          % scalaLogging,
       "com.github.scopt"           %% "scopt"                  % scopt,
       "org.scalactic"              %% "scalactic"              % scalactic % "test",
-      "org.scalatest"              %% "scalatest"              % scalaTest % "test"
+      "org.scalatest"              %% "scalatest"              % scalaTest % "test",
+      "com.dimafeng"               %% "testcontainers-scala"   % TestContainersScala % Test
     ) ++ elastic4s
   )
 
@@ -97,7 +98,7 @@ object SharedSettings {
 
 object Versions {
   val Elastic4sVersion = "6.5.1"
-  val sparkVersion = "2.3.3"
+  val sparkVersion = "2.3.2"
   val gerritApiVersion = "2.13.7"
   val esSpark = "6.2.0"
   val scalaLogging = "3.7.2"
@@ -105,4 +106,5 @@ object Versions {
   val scalactic = "3.0.1"
   val scalaTest = "3.0.1"
   val json4s = "3.2.11"
+  val TestContainersScala = "0.23.0"
 }
