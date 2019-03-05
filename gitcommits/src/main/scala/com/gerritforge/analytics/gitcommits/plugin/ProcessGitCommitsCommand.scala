@@ -88,13 +88,13 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
       val startTs      = System.currentTimeMillis
       val projectStats = buildProjectStats().cache()
       val numRows      = projectStats.count()
-
-      import org.elasticsearch.spark.sql._
       config.elasticIndex.foreach { esIndex =>
         stdout.println(
           s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'")
         stdout.flush()
-        projectStats.saveToEs(s"$esIndex/$indexType")
+        import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
+        projectStats
+          .saveToEsWithAliasSwap(esIndex, indexType)
       }
 
       val elaspsedTs = (System.currentTimeMillis - startTs) / 1000L
