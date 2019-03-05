@@ -132,12 +132,9 @@ trait Job {
   }
 
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
-    import org.elasticsearch.spark.sql._
     config.elasticIndex.foreach { esIndex =>
-      logger.info(
-        s"ES content created, saving it to elastic search instance at '${config.elasticIndex}/$indexType'")
-
-      df.saveToEs(s"$esIndex/$indexType")
+      import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
+      df.saveToEsWithAliasSwap(esIndex, indexType)
     }
 
   }

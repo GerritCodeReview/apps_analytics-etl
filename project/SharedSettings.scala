@@ -21,6 +21,10 @@ import sbtassembly.AssemblyPlugin.autoImport.{assemblyJarName, _}
 import sbtdocker.DockerPlugin.autoImport._
 
 object SharedSettings {
+  val elastic4s = Seq(
+    "com.sksamuel.elastic4s" %% "elastic4s-core"              % Elastic4sVersion,
+    "com.sksamuel.elastic4s" %% "elastic4s-http"              % Elastic4sVersion
+  )
 
   private val dockerRepositoryPrefix = "gerrit-analytics-etl"
 
@@ -40,7 +44,7 @@ object SharedSettings {
       "com.github.scopt"           %% "scopt"                  % scopt,
       "org.scalactic"              %% "scalactic"              % scalactic % "test",
       "org.scalatest"              %% "scalatest"              % scalaTest % "test"
-    )
+    ) ++ elastic4s
   )
 
   def commonDockerSettings(projectName: String): Seq[Def.Setting[_]] = {
@@ -92,6 +96,7 @@ object SharedSettings {
 }
 
 object Versions {
+  val Elastic4sVersion = "6.5.1"
   val sparkVersion = "2.3.3"
   val gerritApiVersion = "2.13.7"
   val esSpark = "6.2.0"
