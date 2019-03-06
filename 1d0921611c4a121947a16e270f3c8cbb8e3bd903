@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "5df31d24_4df202da",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/infrastructure/ElasticSearchPimpedWriterIT.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-06T23:57:52Z",
+      "side": 1,
+      "message": "Not sure if we have a way to run integration tests for the analytics project?",
+      "revId": "1d0921611c4a121947a16e270f3c8cbb8e3bd903",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
