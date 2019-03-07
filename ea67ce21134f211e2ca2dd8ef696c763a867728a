@@ -19,6 +19,23 @@
     },
     {
       "key": {
+        "uuid": "fb478e0b_64e38b22",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-07T11:50:45Z",
+      "side": 1,
+      "message": "Are you sure we actually need to write a new ES client from scratch?\nAre there not libraries out there that already do this?\nDoesn\u0027t the spark elasticsearch connector already support this? https://www.elastic.co/guide/en/elasticsearch/hadoop/master/spark.html\n\nCan you convince us this is actually needed? :P",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81482d64_b8443dde",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
         "patchSetId": 7
@@ -30,6 +47,86 @@
       "writtenOn": "2019-03-07T09:41:53Z",
       "side": 1,
       "message": "Is this handling errors or are we returning a BufferedSource also when we have a 500 or 404 from the server, just returning the response body?",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ef6946b0_fb24df16",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-07T11:50:45Z",
+      "side": 1,
+      "message": "Perhaps BufferedSource is not the ideal return type for this method: we use it only once and we immediately mkString the result",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b2b4fe4f_503ba32c",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-07T11:50:45Z",
+      "side": 1,
+      "message": "This being scala, perhaps we can expose failures in the signatures and avoid dealing with exceptions?",
+      "range": {
+        "startLine": 76,
+        "startChar": 1,
+        "endLine": 77,
+        "endChar": 54
+      },
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3907786a_0ef802c0",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-07T11:50:45Z",
+      "side": 1,
+      "message": "*If* we do implement alias handling ourselves can we do so by using a higher level API rather than dealing with json payloads directly?",
+      "range": {
+        "startLine": 93,
+        "startChar": 1,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "344736d9_095e4f18",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-07T11:50:45Z",
+      "side": 1,
+      "message": "Why do we need this?\nShould this not be set/unset by the user, with more knowledge of their specific environment, via --conf argument instead?",
       "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
