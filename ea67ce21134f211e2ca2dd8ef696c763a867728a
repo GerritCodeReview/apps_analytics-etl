@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91358329_71a86fc0",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2019-03-07T09:41:53Z",
+      "side": 1,
+      "message": "Samuel wrote an ElasticSearch client https://github.com/sksamuel/elastic4s that might handle many use cases for us. Probably worthy a discussion with the rest of the community between getting a new dependency or writing ourselves",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "81482d64_b8443dde",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2019-03-07T09:41:53Z",
+      "side": 1,
+      "message": "Is this handling errors or are we returning a BufferedSource also when we have a 500 or 404 from the server, just returning the response body?",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "627269cb_44ac12cf",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/infrastructure/ElasticSearchPimpedWriterIT.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2019-03-07T09:41:53Z",
+      "side": 1,
+      "message": "Are you starting an embedded ElasticSearch instance? I don\u0027t see the code. Have a look at the code written by this guy :-) https://github.com/galarragas/event-aggregator/blob/master/src/it/scala/com/pragmasoft/eventaggregator/support/ElasticsearchContainer.scala",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c16a0117_27aef5c9",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2019-03-07T09:41:53Z",
+      "side": 1,
+      "message": "let\u0027s change the log to say that we are doing swap, it would be nice to show the real index name too if easy/possible",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
