@@ -2,6 +2,23 @@
   "comments": [
     {
       "key": {
+        "uuid": "453dbd4b_6a785e96",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2019-03-07T14:21:17Z",
+      "side": 1,
+      "message": "Remove the blank line here.",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "91358329_71a86fc0",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
         "patchSetId": 7
