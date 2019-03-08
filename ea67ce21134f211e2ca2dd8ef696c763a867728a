@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "27182283_a8666401",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-08T08:56:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "453dbd4b_6a785e96",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "91358329_71a86fc0",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
         "patchSetId": 7
@@ -53,6 +71,24 @@
     },
     {
       "key": {
+        "uuid": "2ce250e3_71a48a8c",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-08T08:56:16Z",
+      "side": 1,
+      "message": "Agree, we can use an existing client like elastic4s.\n\nIn regards to the Hadoop/Spark ES connector, I\u0027ve tried various things.\nFirst tried to use the available spark DSL \u0027saveToEs\u0027, then tried to use directly their org.elasticsearch.hadoop.rest.RestClient but with none of these options I was able to find a way to modify the aliases.",
+      "parentUuid": "fb478e0b_64e38b22",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "81482d64_b8443dde",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
         "patchSetId": 7
@@ -70,6 +106,24 @@
     },
     {
       "key": {
+        "uuid": "4efaf9cd_85e14b2b",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-08T08:56:16Z",
+      "side": 1,
+      "message": "No it\u0027s not handling 500 or 404, it\u0027s just returning the response body. But I assume most of this logic will change once I move to elastic4s",
+      "parentUuid": "81482d64_b8443dde",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "ef6946b0_fb24df16",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
         "patchSetId": 7
@@ -84,6 +138,24 @@
       "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "74492408_b3f6d7b6",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-08T08:56:16Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "ef6946b0_fb24df16",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -110,6 +182,30 @@
     },
     {
       "key": {
+        "uuid": "3e825b25_39df30e7",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-08T08:56:16Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "b2b4fe4f_503ba32c",
+      "range": {
+        "startLine": 76,
+        "startChar": 1,
+        "endLine": 77,
+        "endChar": 54
+      },
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3907786a_0ef802c0",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
         "patchSetId": 7
@@ -133,6 +229,30 @@
     },
     {
       "key": {
+        "uuid": "8b611bff_d296cfd9",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-08T08:56:16Z",
+      "side": 1,
+      "message": "Agree",
+      "parentUuid": "3907786a_0ef802c0",
+      "range": {
+        "startLine": 93,
+        "startChar": 1,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "344736d9_095e4f18",
         "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
         "patchSetId": 7
@@ -144,6 +264,24 @@
       "writtenOn": "2019-03-07T11:50:45Z",
       "side": 1,
       "message": "Why do we need this?\nShould this not be set/unset by the user, with more knowledge of their specific environment, via --conf argument instead?",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1ca062d_4b92f4de",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-08T08:56:16Z",
+      "side": 1,
+      "message": "This is the spark session used in the unit tests\n\nThis option was required to get spark to connect to elasticsearch in docker. I will try to remove this option when I use the ES embedded version suggested by @stefano for our unit tests",
+      "parentUuid": "344736d9_095e4f18",
       "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
