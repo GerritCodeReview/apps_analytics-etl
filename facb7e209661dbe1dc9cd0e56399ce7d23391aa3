@@ -46,6 +46,30 @@
       "revId": "facb7e209661dbe1dc9cd0e56399ce7d23391aa3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72acaf72_718ac24f",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-12T17:42:17Z",
+      "side": 1,
+      "message": "Makes sense what you\u0027re saying. I hadn\u0027t seen the change above. It makes sense that it\u0027s tracked by whoever calls the ETL.",
+      "parentUuid": "0c1237ec_8170efea",
+      "range": {
+        "startLine": 86,
+        "startChar": 6,
+        "endLine": 88,
+        "endChar": 153
+      },
+      "revId": "facb7e209661dbe1dc9cd0e56399ce7d23391aa3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
