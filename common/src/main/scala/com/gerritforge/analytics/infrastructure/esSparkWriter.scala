@@ -14,6 +14,7 @@
 
 package com.gerritforge.analytics.infrastructure
 import java.time.{Instant, LocalDateTime, ZoneId}
+import java.util.concurrent.TimeUnit
 
 import com.gerritforge.analytics.common.api.{ElasticSearchAliasOps, SparkEsClientProvider}
 import com.gerritforge.analytics.support.ops.AnalyticsDateTimeFormatter
@@ -23,7 +24,8 @@ import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.sql.{Dataset, SparkSession}
 import org.elasticsearch.spark.sql._
 
-import scala.concurrent.Future
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future}
 
 object ESSparkWriterImplicits {
   implicit def withAliasSwap[T](data: Dataset[T]): ElasticSearchPimpedWriter[T] =
@@ -36,7 +38,7 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
     with SparkEsClientProvider {
 
   def saveToEsWithAliasSwap(aliasName: String,
-                            documentType: String): Future[Response[AliasActionResponse]] = {
+                            documentType: String): (Response[AliasActionResponse], String) = {
     val now: Long = Instant.now().toEpochMilli
     val dateWithStrFormat: String =
       LocalDateTime
@@ -55,7 +57,12 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
       .saveToEs(newPersistencePath)
 
     // Replace alias
-    replaceAliasOldIndicesWithNew(aliasName, newIndexNameWithTime)
+    val futureIndices: Future[Response[AliasActionResponse]] =
+      replaceAliasOldIndicesWithNew(aliasName, newIndexNameWithTime)
+
+    val aliasSwapresult = Await.result(futureIndices, Duration.apply(5, TimeUnit.SECONDS))
+
+    (aliasSwapresult, newPersistencePath)
   }
   override val esSparkSession: SparkSession = data.sparkSession
 }
