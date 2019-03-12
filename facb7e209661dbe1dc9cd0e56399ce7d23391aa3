@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1e4e9d12_380aaa63",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-12T14:48:39Z",
+      "side": 1,
+      "message": "I think this should be passed via a configuration file rather than being a cli option.\nThe reason is because there\u0027s no clear way to track back in history why a commit was considered \"bot-like\".\nThis won\u0027t be so much of a problem if the ETL rebuild the historic data every time it runs",
+      "range": {
+        "startLine": 86,
+        "startChar": 6,
+        "endLine": 88,
+        "endChar": 153
+      },
+      "revId": "facb7e209661dbe1dc9cd0e56399ce7d23391aa3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
