@@ -19,9 +19,15 @@ import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.scalatest.{BeforeAndAfterAll, Suite}
 
 trait SparkTestSupport extends BeforeAndAfterAll { this: Suite =>
-  implicit val spark: SparkSession = SparkSession
+
+  lazy val elasticSearchConnPort: Int    = 9200
+  lazy val elasticSearchConnHost: String = "localhost"
+
+  implicit lazy val spark: SparkSession = SparkSession
     .builder()
     .config("es.nodes.wan.only", "true")
+    .config("es.nodes", elasticSearchConnHost)
+    .config("es.port", elasticSearchConnPort)
     .master("local[4]")
     .getOrCreate()
 
