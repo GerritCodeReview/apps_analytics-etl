@@ -84,7 +84,8 @@ object GerritAnalyticsTransformations {
                                  commits: Array[CommitInfo],
                                  branches: Array[String],
                                  last_commit_date: Long,
-                                 is_merge: Boolean)
+                                 is_merge: Boolean,
+                                 is_bot_like: Boolean)
 
   import org.apache.spark.sql.Encoders
 
@@ -114,7 +115,8 @@ object GerritAnalyticsTransformations {
           "json.num_files as num_files", "json.num_distinct_files as num_distinct_files",
           "json.added_lines as added_lines", "json.deleted_lines as deleted_lines",
           "json.num_commits as num_commits", "json.last_commit_date as last_commit_date",
-          "json.is_merge as is_merge", "json.commits as commits", "json.branches as branches"
+          "json.is_merge as is_merge", "json.commits as commits", "json.branches as branches",
+          "json.is_bot_like"
         )
     }
 

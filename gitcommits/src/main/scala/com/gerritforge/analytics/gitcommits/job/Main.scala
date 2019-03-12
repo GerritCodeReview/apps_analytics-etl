@@ -83,6 +83,9 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
         c.copy(extractBranches = Some(input))
       } text "enables branches extraction for each commit"
 
+      opt[String]('n', "bot-like-regexps") optional () action { (input, c) =>
+        c.copy(botLikeRegexps = Some(input))
+      } text "comma separated list of regexps that identify a bot-like commit, commits that modify only files matching these will be flagged as bot-like"
     }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
