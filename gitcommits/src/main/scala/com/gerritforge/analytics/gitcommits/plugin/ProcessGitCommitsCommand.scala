@@ -57,6 +57,13 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
              usage = "enables branches extraction for each commit")
   var extractBranches: Boolean = false
 
+
+  @ArgOption(name = "--botlike-filename-regexps",
+    aliases = Array("-n"),
+    usage = "comma separated list of regexps that identify a bot-like commit, commits that modify only files whose name is a match will be flagged as bot-like")
+  var botLikeRegexps: String = ""
+
+
   override def run() {
     implicit val config = GerritEndpointConfig(gerritConfig.getListenUrl(),
                                                prefix =
@@ -67,7 +74,8 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
                                                endDate,
                                                aggregate,
                                                emailAlias,
-                                               ignoreSSLCert=Some(ignoreSSLCert)
+                                               ignoreSSLCert=Some(ignoreSSLCert),
+                                               botLikeRegexps=botLikeRegexps
     )
 
     implicit val spark: SparkSession = SparkSession
