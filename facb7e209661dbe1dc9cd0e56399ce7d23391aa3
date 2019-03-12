@@ -22,6 +22,30 @@
       "revId": "facb7e209661dbe1dc9cd0e56399ce7d23391aa3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c1237ec_8170efea",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-12T15:56:36Z",
+      "side": 1,
+      "message": "mmm Interesting point, my 2 cents:\n\nPassing the parameter from a file doesn\u0027t automatically make it trackable from history (i.e. --bot-like-regexp\u003d/tmp/foo.csv, where /tmp/foo is not in any revision control).\nThe usage of the ETL should be independent of any revision control and we should not make assumptions on where those configuration files come from.\n\n*Should* the ETL user want to track in history what set of regular expressions were used, then it would be up to that user to check-in the regexps in a repository, as we did here for gerrithub:\nhttps://review.gerrithub.io/c/GerritForge/gerrithub/+/447807\n\n\u003e This won\u0027t be so much of a problem if the ETL rebuild the historic data every time it runs\nyes, this is actually the case for gerrithub, but we can\u0027t assume all users would do this, they might decide to do incremental imports of the data, for example.\n\nIf you think we should be persisting *in elasticsearch*, what the regular expressions we used to flag those commits as bot-like, then that would be an interesting, though different story.\n\nPerhaps let\u0027s talk about this f2f :)",
+      "parentUuid": "1e4e9d12_380aaa63",
+      "range": {
+        "startLine": 86,
+        "startChar": 6,
+        "endLine": 88,
+        "endChar": 153
+      },
+      "revId": "facb7e209661dbe1dc9cd0e56399ce7d23391aa3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
