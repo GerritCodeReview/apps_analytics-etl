@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7979252e_cbb6b762",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/ElasticSearchAliasOps.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-12T15:36:40Z",
+      "side": 1,
+      "message": "map(_._1) can just be replaced by .keys\n\nIn general, I find this a bit difficult to follow, is there a way to make it a bit more idiomatic?",
+      "range": {
+        "startLine": 40,
+        "startChar": 6,
+        "endLine": 40,
+        "endChar": 39
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "79812057_4d0ad835",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-12T15:36:40Z",
+      "side": 1,
+      "message": "perhaps we could extract this logic into a getNewIndexName(alias) or something? so that it can be tested separately?",
+      "range": {
+        "startLine": 40,
+        "startChar": 0,
+        "endLine": 46,
+        "endChar": 72
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "94f8e2b9_c570969b",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-12T15:36:40Z",
+      "side": 1,
+      "message": "I am not too sure about this method, I have a couple of concerns:\n\n- it returns a Future[Response[AliasActionResponse]] but that return value is never checked by its clients. If the future fails, I think we should expose that failure to the user.\n\n- The method is side-effecting (saveToEs) and does more than one thing.\nPerhaps we can capture the saveToEs exception in a Try, or an Either and then chain the swapping only when that succeeds?\n\nsomething like:\n\ndata\n   .toDf()\n   .trySaveToES(newPersistencePath)\n   .map{\n      replaceAliasOldInicesWithNew(...)\n    }",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 66
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
