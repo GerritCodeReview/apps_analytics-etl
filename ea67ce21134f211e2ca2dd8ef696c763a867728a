@@ -89,6 +89,42 @@
     },
     {
       "key": {
+        "uuid": "051747a2_ba02b755",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-13T10:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91358329_71a86fc0",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d6e805cd_a34ec65e",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-13T10:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2ce250e3_71a48a8c",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "81482d64_b8443dde",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
         "patchSetId": 7
@@ -253,6 +289,30 @@
     },
     {
       "key": {
+        "uuid": "7eefd066_71fab4ca",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/esRestAPIOperations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-13T10:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b611bff_d296cfd9",
+      "range": {
+        "startLine": 93,
+        "startChar": 1,
+        "endLine": 99,
+        "endChar": 0
+      },
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "344736d9_095e4f18",
         "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
         "patchSetId": 7
@@ -285,6 +345,24 @@
       "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "cda0e49d_40fb7494",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-13T10:42:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1ca062d_4b92f4de",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
