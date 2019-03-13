@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "52e8d6e5_850bee9d",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/ElasticSearchAliasOps.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-03-13T10:43:08Z",
+      "side": 1,
+      "message": "Why do we need to specify it is immutable? we don\u0027t have any mutable Data Structure around",
+      "range": {
+        "startLine": 32,
+        "startChar": 53,
+        "endLine": 32,
+        "endChar": 63
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "7979252e_cbb6b762",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/ElasticSearchAliasOps.scala",
         "patchSetId": 11
@@ -18,6 +41,75 @@
         "startChar": 6,
         "endLine": 40,
         "endChar": 39
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a6a5fb1b_a55c7a42",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/ElasticSearchAliasOps.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-03-13T10:43:08Z",
+      "side": 1,
+      "message": "What about something like: moveAliasToNewIndeces?",
+      "range": {
+        "startLine": 44,
+        "startChar": 6,
+        "endLine": 44,
+        "endChar": 35
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b4947354_f9a10b14",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/ElasticSearchAliasOps.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-03-13T10:43:08Z",
+      "side": 1,
+      "message": "Can we import this just once?",
+      "range": {
+        "startLine": 48,
+        "startChar": 4,
+        "endLine": 48,
+        "endChar": 51
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "17db5762_eeb25ee9",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/ElasticSearchAliasOps.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-03-13T10:43:08Z",
+      "side": 1,
+      "message": "This is actually a removeAliasActions, isn\u0027t in?",
+      "range": {
+        "startLine": 51,
+        "startChar": 10,
+        "endLine": 51,
+        "endChar": 26
       },
       "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
@@ -88,6 +180,53 @@
         "startChar": 0,
         "endLine": 58,
         "endChar": 66
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "98108e96_e3e8c69c",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-03-13T10:43:08Z",
+      "side": 1,
+      "message": "In order to circumscribe the side effects, do you think we could group somehow all the side effects into the execute of the client?\n\nesClient.execute {\n   inedxAliasSwap()\n   saveToEs()\n   ....\n}",
+      "parentUuid": "0024d054_87f2080f",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 66
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "beecf982_36d938a2",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-03-13T10:43:08Z",
+      "side": 1,
+      "message": "Is this part of this change?",
+      "range": {
+        "startLine": 24,
+        "startChar": 5,
+        "endLine": 24,
+        "endChar": 40
       },
       "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
