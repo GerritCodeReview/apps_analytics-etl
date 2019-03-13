@@ -383,6 +383,24 @@
     },
     {
       "key": {
+        "uuid": "52085e05_55924d29",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/infrastructure/ElasticSearchPimpedWriterIT.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-13T21:46:12Z",
+      "side": 1,
+      "message": "Using now the docker-containers, ES is not supporting anymore the embedded node",
+      "parentUuid": "627269cb_44ac12cf",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c16a0117_27aef5c9",
         "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
         "patchSetId": 7
@@ -397,6 +415,24 @@
       "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "656339c7_f29ebe7c",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-13T21:46:12Z",
+      "side": 1,
+      "message": "Done. I\u0027ve moved this into the ElasticSearchPimpedWriter class, which will include all the information",
+      "parentUuid": "c16a0117_27aef5c9",
+      "revId": "ea67ce21134f211e2ca2dd8ef696c763a867728a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
