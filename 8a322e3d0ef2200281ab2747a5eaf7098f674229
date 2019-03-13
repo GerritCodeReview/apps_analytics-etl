@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "37f4e63d_70db8bbf",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-13T23:40:07Z",
+      "side": 1,
+      "message": "Changed this to return a Future",
+      "parentUuid": "c9ead24d_ef973709",
+      "range": {
+        "startLine": 41,
+        "startChar": 51,
+        "endLine": 41,
+        "endChar": 90
+      },
+      "revId": "8a322e3d0ef2200281ab2747a5eaf7098f674229",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "69b84d4b_6ab66ecf",
         "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
         "patchSetId": 5
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "ba8ad64c_8c1d2d50",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/SparkTestSupport.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-13T23:40:07Z",
+      "side": 1,
+      "message": "Yes, unfortunately without this spark will not work with docker",
+      "parentUuid": "69b84d4b_6ab66ecf",
+      "range": {
+        "startLine": 28,
+        "startChar": 1,
+        "endLine": 28,
+        "endChar": 40
+      },
+      "revId": "8a322e3d0ef2200281ab2747a5eaf7098f674229",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "5bd5f729_d7cc21bb",
         "filename": "common/src/test/scala/com/gerritforge/analytics/support/ops/ElasticsearchTestITSupport.scala",
         "patchSetId": 5
@@ -68,6 +116,30 @@
       "revId": "8a322e3d0ef2200281ab2747a5eaf7098f674229",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d9942d4c_6a0d961e",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/support/ops/ElasticsearchTestITSupport.scala",
+        "patchSetId": 5
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-13T23:40:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bd5f729_d7cc21bb",
+      "range": {
+        "startLine": 29,
+        "startChar": 5,
+        "endLine": 29,
+        "endChar": 32
+      },
+      "revId": "8a322e3d0ef2200281ab2747a5eaf7098f674229",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
