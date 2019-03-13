@@ -68,6 +68,30 @@
       "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0024d054_87f2080f",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 11
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2019-03-13T09:12:32Z",
+      "side": 1,
+      "message": "Good point, but also we need to handle the failure in the future, even if just with an `onFailure(logger.error...)`",
+      "parentUuid": "94f8e2b9_c570969b",
+      "range": {
+        "startLine": 52,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 66
+      },
+      "revId": "84f5847af4ad6e9cc74c49b011dcfb43499e077d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
