@@ -92,7 +92,7 @@ object SharedSettings {
 }
 
 object Versions {
-  val sparkVersion = "2.3.2"
+  val sparkVersion = "2.3.3"
   val gerritApiVersion = "2.13.7"
   val esSpark = "6.2.0"
   val scalaLogging = "3.7.2"
