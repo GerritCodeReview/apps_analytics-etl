@@ -97,6 +97,30 @@
     },
     {
       "key": {
+        "uuid": "6f068ba3_9accaefd",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2019-03-13T10:30:20Z",
+      "side": 1,
+      "message": "Ponch, so do you suggest to has this bot-like-regexps as file?",
+      "parentUuid": "4bd19c01_f5b912b8",
+      "range": {
+        "startLine": 86,
+        "startChar": 6,
+        "endLine": 88,
+        "endChar": 153
+      },
+      "revId": "facb7e209661dbe1dc9cd0e56399ce7d23391aa3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "2d97e770_8320fac5",
         "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/plugin/ProcessGitCommitsCommand.scala",
         "patchSetId": 1
