@@ -16,6 +16,24 @@
       "revId": "82190e6aaffede23030e8474cc0714d62229df73",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ff2f4ed4_23ecb667",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-14T07:55:40Z",
+      "side": 1,
+      "message": "The return type is None when it fails otherwise it will return a valid AliasActionResponse. I think it could make more sense to return a Future[Option[(AliasActionResponse, String)]] rather than (Future[Option[AliasActionResponse]], String)",
+      "parentUuid": "817bf298_1b68e2e6",
+      "revId": "82190e6aaffede23030e8474cc0714d62229df73",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
