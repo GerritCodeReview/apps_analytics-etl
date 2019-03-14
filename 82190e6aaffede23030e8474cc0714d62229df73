@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "817bf298_1b68e2e6",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2019-03-14T07:39:47Z",
+      "side": 1,
+      "message": "I think that this return type is getting too complex.\n\nFirst we have an immediate result (the new path) and a future. It can make sense but essentially the returned path would be effective only if the future completes successfully right?\n\nSecond the future contains an option that is always None?",
+      "revId": "82190e6aaffede23030e8474cc0714d62229df73",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
