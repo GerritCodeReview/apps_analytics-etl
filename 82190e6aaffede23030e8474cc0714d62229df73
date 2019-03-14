@@ -34,6 +34,24 @@
       "revId": "82190e6aaffede23030e8474cc0714d62229df73",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7b1ffe35_82927475",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala",
+        "patchSetId": 8
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1059414
+      },
+      "writtenOn": "2019-03-14T08:03:15Z",
+      "side": 1,
+      "message": "I agree on merging the two types but I would suggest to:\n\n1. Create a case class (or enrich the AliasActionResponse with the path) to hold this type\n\n2. No to use Option as a failure representing type but rather Try (and with future you shouldn\u0027t even use Try but let the future fail) or an Either",
+      "parentUuid": "ff2f4ed4_23ecb667",
+      "revId": "82190e6aaffede23030e8474cc0714d62229df73",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
