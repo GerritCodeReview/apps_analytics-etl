@@ -16,6 +16,24 @@
       "revId": "b062d89cf856e1cd4c154d6a406cd74c6bcd1d84",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f7c32595_de56bb64",
+        "filename": "common/src/test/scala/com/gerritforge/analytics/infrastructure/ElasticSearchPimpedWriterIT.scala",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1065251
+      },
+      "writtenOn": "2019-03-22T17:19:44Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "7be260c0_b544836c",
+      "revId": "b062d89cf856e1cd4c154d6a406cd74c6bcd1d84",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
