@@ -34,7 +34,9 @@ case class GerritEndpointConfig(
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,
     extractBranches: Option[Boolean] = None,
-    botLikeRegexps: Option[String] = None) {
+    botLikeRegexps: Option[String] = None,
+    ignoreBinaryFiles: Option[Boolean] = None
+    ) {
 
   val gerritApiConnection: GerritConnectivity = new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
 
@@ -56,6 +58,7 @@ case class GerritEndpointConfig(
     "until"            -> until.map(format.format),
     "aggregate"        -> aggregate,
     "extract-branches" -> extractBranches.map(_.toString),
+    "ignore-binary-files" -> ignoreBinaryFiles.map(_.toString),
     "botlike-filename-regexps" -> botLikeRegexps.map(URLEncoder.encode(_, "UTF-8"))
   ).flatMap(queryOpt).mkString("?", "&", "")
 
