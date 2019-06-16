@@ -36,7 +36,6 @@ bin/spark-submit \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
-    --botlike-filename-regexps='.+\.xml,.+\.bzl,BUILD,WORKSPACE,\.gitignore,plugins/,\.settings' \
     -e gerrit \
     --username gerrit-api-username \
     --password gerrit-api-password
@@ -64,8 +63,6 @@ docker run -ti --rm \
     the system temporary directory
 - -a --email-aliases (*optional*) "emails to author alias" input data path.
 - -k --ignore-ssl-cert allows to proceed even for server connections otherwise considered insecure.
-- -n --botlike-filename-regexps comma separated list of regexps that identify a bot-like commit, commits that modify only files whose name is a match will be flagged as bot-like
-
 
   CSVs with 3 columns are expected in input.
 

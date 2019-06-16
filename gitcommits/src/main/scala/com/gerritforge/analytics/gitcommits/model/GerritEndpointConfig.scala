@@ -33,8 +33,7 @@ case class GerritEndpointConfig(
     username: Option[String] = None,
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,
-    extractBranches: Option[Boolean] = None,
-    botLikeRegexps: Option[String] = None) {
+    extractBranches: Option[Boolean] = None) {
 
   val gerritApiConnection: GerritConnectivity = new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
 
@@ -55,8 +54,7 @@ case class GerritEndpointConfig(
     "since"            -> since.map(format.format),
     "until"            -> until.map(format.format),
     "aggregate"        -> aggregate,
-    "extract-branches" -> extractBranches.map(_.toString),
-    "botlike-filename-regexps" -> botLikeRegexps.map(URLEncoder.encode(_, "UTF-8"))
+    "extract-branches" -> extractBranches.map(_.toString)
   ).flatMap(queryOpt).mkString("?", "&", "")
 
   def contributorsUrl(projectName: String): Option[String] =
