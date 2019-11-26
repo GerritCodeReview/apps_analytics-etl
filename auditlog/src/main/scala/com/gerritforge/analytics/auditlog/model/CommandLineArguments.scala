@@ -16,6 +16,7 @@ package com.gerritforge.analytics.auditlog.model
 
 import java.time.LocalDate
 
+import com.gerritforge.analytics.common.api.SaveMode
 import com.gerritforge.analytics.support.ops.ReadsOps._
 import scopt.OptionParser
 
@@ -38,9 +39,29 @@ object CommandLineArguments {
           c.copy(gerritPassword = Some(input))
         } text "Gerrit API Password (Optional)"
 
-        opt[String]('i', "elasticSearchIndex") required () action { (input, c) =>
-          c.copy(elasticSearchIndex = Some(input))
-        } text "elasticSearch index to persist data into (Required)"
+        cmd("saveToEs").optional()
+          .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_ES))
+          .children(
+            opt[String]('i', "elasticSearchIndex") required() action { (input, c) =>
+              c.copy(elasticSearchIndex = Some(input))
+            } text "elasticSearch index to persist data into (Required)"
+
+        )
+
+        cmd("saveToDb").optional()
+          .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_DB))
+          .children(
+            opt[String]('j', "jdbcConnection") required() action { (input, c) =>
+              c.copy(jdbcConnection = Some(input))
+            } text "Jdbc connection string",
+            opt[String]('t', "tableName") required() action { (input, c) =>
+              c.copy(tableName = Some(input))
+            } text "Database table name",
+            opt[String]('d', "driverClass") optional() action { (input, c) =>
+              c.copy(driverClassName = Some(input))
+            } text "Database jdbc driver class name"
+
+          )
 
         opt[String]('p', "eventsPath") required () action { (input, c) =>
           c.copy(eventsPath = Some(input))
@@ -50,7 +71,7 @@ object CommandLineArguments {
           c.copy(additionalUserInfoPath = Some(input))
         } text "path to a CSV file containing additional user information (Optional)\n\t\t\t\tCSV must have an header. Example:\n\t\t\t\tid,type\n\t\t\t\t123456,'bot'\n\t\t\t\t678876,'human'"
 
-        opt[String]('a', "eventsTimeAggregation") optional () action { (input, c) =>
+        opt[String]('e', "eventsTimeAggregation") optional () action { (input, c) =>
           c.copy(eventsTimeAggregation = Some(input))
         } text "Events of the same type, produced by the same user will be aggregated with this time granularity: " +
                  "'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'"
@@ -64,8 +85,11 @@ object CommandLineArguments {
 
         opt[LocalDate]('u', "until") optional () action { (input, c) => c.copy(until = Some(input))
         } text "process only auditLogs occurred before (and including) this date, expressed as 'yyyy-MM-dd' (Optional)"
+
+        checkConfig(config => if(config.elasticSearchIndex.isEmpty && config.jdbcConnection.isEmpty) Left("saveToEs or saveToDb command must be specified") else Right())
+
       }
 
-      parser.parse(args, AuditLogETLConfig())
+    parser.parse(args, AuditLogETLConfig())
   }
 }

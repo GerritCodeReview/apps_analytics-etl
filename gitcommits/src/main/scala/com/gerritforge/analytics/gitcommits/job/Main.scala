@@ -15,7 +15,9 @@
 package com.gerritforge.analytics.gitcommits.job
 
 import java.time.LocalDate
+import java.util.Properties
 
+import com.gerritforge.analytics.common.api.SaveMode
 import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
 import com.gerritforge.analytics.spark.SparkApp
 import com.gerritforge.analytics.support.ops.ReadsOps._
@@ -49,9 +51,27 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
       opt[String]('o', "out") optional () action { (x, c) =>
         c.copy(outputDir = x)
       } text "output directory"
-      opt[String]('e', "elasticIndex") optional () action { (x, c) =>
-        c.copy(elasticIndex = Some(x))
-      } text "index name"
+      cmd("saveToEs").optional()
+        .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_ES))
+        .children(
+          opt[String]('e', "elasticSearchIndex") required() action { (input, c) =>
+            c.copy(elasticIndex = Some(input))
+          } text "elasticSearch index to persist data into (Required)"
+
+        )
+      cmd("saveToDb").optional()
+        .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_DB))
+        .children(
+          opt[String]('j', "jdbcConnection") required() action { (input, c) =>
+            c.copy(jdbcConnection = Some(input))
+          } text "Jdbc connection string",
+          opt[String]('t', "tableName") required() action { (input, c) =>
+            c.copy(tableName = Some(input))
+          } text "Database table name",
+          opt[String]('d', "driverClass") optional() action { (input, c) =>
+            c.copy(driverClassName = Some(input))
+          } text "Database jdbc driver class name"
+        )
       opt[LocalDate]('s', "since") optional () action { (x, c) =>
         c.copy(since = Some(x))
       } text "begin date "
@@ -81,6 +101,7 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
       opt[Boolean]('r', "extract-branches") optional () action { (input, c) =>
         c.copy(extractBranches = Some(input))
       } text "enables branches extraction for each commit"
+      checkConfig(config => if(config.elasticIndex.isEmpty && config.jdbcConnection.isEmpty) Left("saveToEs or saveToDb command must be specified") else Right())
     }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
@@ -94,7 +115,7 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
       logger.info(s"ES content created, saving it to '${config.outputDir}'")
       dataFrame.write.json(config.outputDir)
 
-      saveES(dataFrame)
+      save(dataFrame)
 
     case None => // invalid configuration usage has been displayed
   }
@@ -125,14 +146,30 @@ trait Job {
     contributorsStats.dashboardStats(aliasesDF)
   }
 
-  def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
+  def save(df: DataFrame)(implicit config: GerritEndpointConfig) {
     import scala.concurrent.ExecutionContext.Implicits.global
-    config.elasticIndex.foreach { esIndex =>
-      import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
-      df.saveToEsWithAliasSwap(esIndex, indexType)
-        .futureAction
-        .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
-        .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
+    config.saveMode match {
+      case SaveMode.SAVE_TO_ES =>
+        config.elasticIndex.foreach { esIndex =>
+          import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
+          df.saveToEsWithAliasSwap(esIndex, indexType)
+            .futureAction
+            .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
+            .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
+        }
+      case SaveMode.SAVE_TO_DB =>
+        import com.gerritforge.analytics.infrastructure.DBSparkWriterImplicits.withDbWriter
+        val connectionProperties = new Properties()
+        config.driverClassName.foreach(driverClassName => connectionProperties.put("driver", driverClassName))
+
+        for{
+          jdbcConnection <- config.jdbcConnection
+          tableName <- config.tableName
+        } df.saveToDb(jdbcConnection, tableName, connectionProperties)
+          .futureAction
+          .map(actionResponse => logger.info(s"Completed view update ${actionResponse}"))
+          .recover { case exception: Exception => logger.info(s"View update failed ${exception}") }
+      case _ => logger.warn(s"Unrecognised save mode: ${config.saveMode}. Saving data skipped")
     }
 
   }
