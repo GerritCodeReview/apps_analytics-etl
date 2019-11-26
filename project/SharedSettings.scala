@@ -42,9 +42,11 @@ object SharedSettings {
       "com.google.gerrit"          % "gerrit-plugin-api"       % gerritApiVersion % Provided withSources(),
       "com.typesafe.scala-logging" %% "scala-logging"          % scalaLogging,
       "com.github.scopt"           %% "scopt"                  % scopt,
+      "com.jsuereth"               %% "scala-arm"              % scalaarm,
       "org.scalactic"              %% "scalactic"              % scalactic % "test",
       "org.scalatest"              %% "scalatest"              % scalaTest % "test",
-      "com.dimafeng"               %% "testcontainers-scala"   % TestContainersScala % Test
+      "com.dimafeng"               %% "testcontainers-scala"   % TestContainersScala % Test,
+      "org.postgresql"              % "postgresql"             % postgresql % Test
     ) ++ elastic4s
   )
 
@@ -103,8 +105,10 @@ object Versions {
   val esSpark = "6.2.0"
   val scalaLogging = "3.7.2"
   val scopt = "3.6.0"
+  val scalaarm = "2.0"
   val scalactic = "3.0.1"
   val scalaTest = "3.0.1"
   val json4s = "3.2.11"
   val TestContainersScala = "0.23.0"
+  val postgresql = "9.4.1207"
 }
