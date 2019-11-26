@@ -16,12 +16,19 @@ package com.gerritforge.analytics.auditlog.model
 
 import java.time.LocalDate
 
+import com.gerritforge.analytics.common.api.SaveMode
+import com.gerritforge.analytics.common.api.SaveMode.SaveMode
+
 case class AuditLogETLConfig(
   gerritUrl: Option[String] = None,
   gerritUsername: Option[String] = None,
   gerritPassword: Option[String] = None,
   ignoreSSLCert: Option[Boolean] = None,
   elasticSearchIndex: Option[String] = None,
+  saveMode: SaveMode = SaveMode.SAVE_TO_ES,
+  jdbcConnection: Option[String] = None,
+  tableName: Option[String] = None,
+  driverClassName: Option[String] = None,
   since: Option[LocalDate] = None,
   until: Option[LocalDate] = None,
   eventsPath: Option[String] = None,

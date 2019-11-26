@@ -42,9 +42,11 @@ object SharedSettings {
       "com.google.gerrit"          % "gerrit-plugin-api"       % gerritApiVersion % Provided withSources(),
       "com.typesafe.scala-logging" %% "scala-logging"          % scalaLogging,
       "com.github.scopt"           %% "scopt"                  % scopt,
+      "com.jsuereth"               %% "scala-arm"              % scalaarm,
       "org.scalactic"              %% "scalactic"              % scalactic % "test",
       "org.scalatest"              %% "scalatest"              % scalaTest % "test",
-      "com.dimafeng"               %% "testcontainers-scala"   % TestContainersScala % Test
+      "com.dimafeng"               %% "testcontainers-scala"   % TestContainersScala % Test,
+      "org.postgresql"              % "postgresql"             % postgresql % Test
     ) ++ elastic4s
   )
 
@@ -89,7 +91,7 @@ object SharedSettings {
       env("PATH","$PATH:$SPARK_HOME/bin")
       env("SPARK_JAR_PATH", artifactTargetPath)
       env("SPARK_JAR_CLASS",s"com.gerritforge.analytics.$projectName.job.Main")
-      runRaw("curl -sL \"http://www-eu.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz\" | tar -xz -C /usr/local")
+      runRaw("curl -sL \"http://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz\" | tar -xz -C /usr/local")
       add(artifact, artifactTargetPath)
       runRaw(s"chmod +x $artifactTargetPath")
     }
@@ -103,8 +105,10 @@ object Versions {
   val esSpark = "6.2.0"
   val scalaLogging = "3.7.2"
   val scopt = "3.6.0"
+  val scalaarm = "2.0"
   val scalactic = "3.0.1"
   val scalaTest = "3.0.1"
   val json4s = "3.2.11"
   val TestContainersScala = "0.23.0"
+  val postgresql = "9.4.1207"
 }

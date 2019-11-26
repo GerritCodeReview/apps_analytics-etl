@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.support.ops
-import java.time.format.DateTimeFormatter
-import java.time.{Instant, LocalDateTime, ZoneId}
+package com.gerritforge.analytics.common.api.db
+import java.sql.Connection
 
-object IndexNameGenerator {
-  def timeBasedIndexName(indexName: String, instant: Instant): String = {
-    val now: Long = instant.toEpochMilli
-    val dateWithStrFormat: String =
-      LocalDateTime
-        .ofInstant(Instant.ofEpochMilli(now), ZoneId.systemDefault())
-        .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+import resource.managed
+import scala.concurrent.Future
 
-    s"${indexName}_${dateWithStrFormat}_$now"
-  }
+trait RelationalDatabaseViewOps {
+
+    def updateViewToTheNewTable(newTableName: String, viewName: String)(implicit connection: Connection): Future[Boolean] = {
+      import scala.concurrent.ExecutionContext.Implicits.global
+      Future {
+        managed(connection.createStatement())
+          .map(statement => statement.execute(s"""CREATE OR REPLACE VIEW $viewName AS
+          SELECT * FROM $newTableName""")).opt.get
+      }
+    }
 }

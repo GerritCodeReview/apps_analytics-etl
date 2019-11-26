@@ -14,13 +14,15 @@
 
 package com.gerritforge.analytics.auditlog.job
 
+import java.util.Properties
+
 import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUserInfo, GerritProjects, GerritUserIdentifiers}
 import com.gerritforge.analytics.auditlog.model.ElasticSearchFields._
 import com.gerritforge.analytics.auditlog.model._
 import com.gerritforge.analytics.auditlog.range.TimeRange
 import com.gerritforge.analytics.auditlog.spark.rdd.ops.SparkRDDOps._
 import com.gerritforge.analytics.auditlog.spark.session.ops.SparkSessionOps._
-import com.gerritforge.analytics.common.api.GerritConnectivity
+import com.gerritforge.analytics.common.api.{GerritConnectivity, SaveMode}
 import com.gerritforge.analytics.spark.SparkApp
 import com.typesafe.scalalogging.LazyLogging
 
@@ -56,9 +58,7 @@ object Main extends SparkApp with App with LazyLogging {
         sys.exit(1)
       }
 
-      import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
-      import scala.concurrent.ExecutionContext.Implicits.global
-      spark
+     val processedRecords = spark
         .getEventsFromPath(config.eventsPath.get)
         .transformEvents(
           tryUserIdentifiers.get,
@@ -67,11 +67,30 @@ object Main extends SparkApp with App with LazyLogging {
           config.eventsTimeAggregation.get,
           TimeRange(config.since, config.until)
         )
-        .saveToEsWithAliasSwap(config.elasticSearchIndex.get, DOCUMENT_TYPE)
-        .futureAction
-        .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
-        .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
 
+      import scala.concurrent.ExecutionContext.Implicits.global
+
+      config.saveMode match {
+        case SaveMode.SAVE_TO_ES =>
+          import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
+          processedRecords.saveToEsWithAliasSwap(config.elasticSearchIndex.get, DOCUMENT_TYPE)
+            .futureAction
+            .map(actionResponse => logger.info(s"Completed index swap ${actionResponse}"))
+            .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
+
+        case SaveMode.SAVE_TO_DB =>
+          import com.gerritforge.analytics.infrastructure.DBSparkWriterImplicits.withDbWriter
+
+          val connectionProperties = new Properties()
+          config.driverClassName.foreach(driverClassName => connectionProperties.put("driver", driverClassName))
+
+          processedRecords.saveToDb(config.jdbcConnection.get, config.tableName.get, connectionProperties)
+            .futureAction
+            .map(actionResponse => logger.info(s"Completed view update ${actionResponse}"))
+            .recover { case exception: Exception => logger.info(s"View update failed ${exception}") }
+
+        case _ => logger.warn(s"Unrecognised save mode: ${config.saveMode}. Saving data skipped")
+      }
     case None =>
       logger.error("Could not parse command line arguments")
       sys.exit(1)
