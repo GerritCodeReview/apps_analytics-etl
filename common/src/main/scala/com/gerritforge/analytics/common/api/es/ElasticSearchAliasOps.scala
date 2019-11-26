@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.common.api
+package com.gerritforge.analytics.common.api.es
 import com.sksamuel.elastic4s.Index
 import com.sksamuel.elastic4s.alias.{AddAliasActionRequest, RemoveAliasAction}
 import com.sksamuel.elastic4s.http.ElasticDsl._

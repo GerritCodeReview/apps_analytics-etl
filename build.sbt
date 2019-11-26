@@ -44,6 +44,8 @@ lazy val analyticsETLAuditLog = (project in file("auditlog"))
               file(s"$entryPointBase/gerrit-analytics-etl-auditlog.sh"))
         .copy(baseDirectory(_ / "scripts" / "wait-for-elasticsearch.sh").value,
               file(s"$entryPointBase/wait-for-elasticsearch.sh"))
+        .copy(baseDirectory(_ / "scripts" / "wait-for-it.sh").value,
+          file(s"$entryPointBase/wait-for-it.sh"))
         .volume(s"$entryPointBase/events/")
         .volume(s"$entryPointBase/data/")
         .cmd(s"/bin/sh", s"$entryPointBase/gerrit-analytics-etl-auditlog.sh")

@@ -16,6 +16,7 @@ package com.gerritforge.analytics.auditlog.model
 
 import java.time.LocalDate
 
+import com.gerritforge.analytics.common.api.SaveMode
 import com.gerritforge.analytics.support.ops.ReadsOps._
 import scopt.OptionParser
 
@@ -38,9 +39,29 @@ object CommandLineArguments {
           c.copy(gerritPassword = Some(input))
         } text "Gerrit API Password (Optional)"
 
-        opt[String]('i', "elasticSearchIndex") required () action { (input, c) =>
-          c.copy(elasticSearchIndex = Some(input))
-        } text "elasticSearch index to persist data into (Required)"
+        cmd("saveToEs").optional()
+          .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_ES))
+          .children(
+            opt[String]('i', "elasticSearchIndex") required() action { (input, c) =>
+              c.copy(elasticSearchIndex = Some(input))
+            } text "elasticSearch index to persist data into (Required)"
+
+        )
+
+        cmd("saveToDb").optional()
+          .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_DB))
+          .children(
+            opt[String]('j', "jdbcConnection") required() action { (input, c) =>
+              c.copy(jdbcConnection = Some(input))
+            } text "Jdbc connection string",
+            opt[String]('t', "tableName") required() action { (input, c) =>
+              c.copy(tableName = Some(input))
+            } text "Database table name",
+            opt[String]('d', "driverClass") optional() action { (input, c) =>
+              c.copy(driverClassName = Some(input))
+            } text "Database jdbc driver class name"
+
+          )
 
         opt[String]('p', "eventsPath") required () action { (input, c) =>
           c.copy(eventsPath = Some(input))
@@ -64,8 +85,14 @@ object CommandLineArguments {
 
         opt[LocalDate]('u', "until") optional () action { (input, c) => c.copy(until = Some(input))
         } text "process only auditLogs occurred before (and including) this date, expressed as 'yyyy-MM-dd' (Optional)"
+
+        checkConfig(config => if(config.elasticSearchIndex.isEmpty && config.jdbcConnection.isEmpty) Left("saveToEs or saveToDb command must be specified") else Right())
+
       }
 
-      parser.parse(args, AuditLogETLConfig())
+    parser.parse(addDefaultSaveModeIfMissing(args), AuditLogETLConfig())
   }
+
+  def addDefaultSaveModeIfMissing(args: Array[String]): Array[String] =
+    if(args.find(_.startsWith("saveTo")).isEmpty) SaveMode.SAVE_TO_ES.toString +: args else args
 }
