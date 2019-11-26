@@ -18,6 +18,7 @@ import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, Gerrit
 import com.gerritforge.analytics.auditlog.spark.sql.udf.SparkExtractors.{extractCommandArgumentsUDF, extractCommandUDF, extractSubCommandUDF}
 import org.apache.spark.sql.expressions.UserDefinedFunction
 import org.apache.spark.sql.functions.{udf, _}
+import org.apache.spark.sql.types.StringType
 import org.apache.spark.sql.{Column, DataFrame}
 
 import scala.util.Try
@@ -34,7 +35,7 @@ object DataFrameOps {
     def hydrateWithUserIdentifierColumn(userIdentifierCol: String, gerritAccounts: GerritUserIdentifiers): DataFrame = {
       def extractIdentifier: UserDefinedFunction = udf((who: Int) => gerritAccounts.getIdentifier(who))
 
-      dataFrame.withColumn(userIdentifierCol, ifExistThenGetOrNull("who", extractIdentifier(col("who"))))
+      dataFrame.withColumn(userIdentifierCol, ifExistThenGetOrNull("who", extractIdentifier(col("who"))).cast(StringType))
 
     }
 
@@ -72,7 +73,7 @@ object DataFrameOps {
     def withUserTypeColumn(commandCol: String, additionalUsersInfo: AdditionalUsersInfo): DataFrame = {
       def extractUserType: UserDefinedFunction = udf((who: Int) => additionalUsersInfo.getUserType(who))
 
-      dataFrame.withColumn(commandCol, ifExistThenGetOrNull("who", extractUserType(col("who"))))
+      dataFrame.withColumn(commandCol, ifExistThenGetOrNull("who", extractUserType(col("who"))).cast(StringType))
     }
 
     def aggregateNumEventsColumn(numEventsCol: String, cols: List[String]): DataFrame = {

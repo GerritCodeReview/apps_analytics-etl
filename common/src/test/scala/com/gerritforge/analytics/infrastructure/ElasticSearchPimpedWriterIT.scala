@@ -14,6 +14,7 @@
 
 package com.gerritforge.analytics.infrastructure
 import com.gerritforge.analytics.SparkTestSupport
+import com.gerritforge.analytics.common.api.EnrichedAliasActionResponse
 import com.gerritforge.analytics.support.ops.ElasticsearchTestITSupport
 import org.apache.spark.sql.Dataset
 import org.scalatest.{BeforeAndAfterAll, FlatSpec, Matchers}
