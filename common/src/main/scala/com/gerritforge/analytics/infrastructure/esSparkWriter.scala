@@ -15,16 +15,15 @@
 package com.gerritforge.analytics.infrastructure
 import java.time.Instant
 
-import com.gerritforge.analytics.common.api.{ElasticSearchAliasOps, SparkEsClientProvider}
+import com.gerritforge.analytics.common.api.EnrichedAliasActionResponse
+import com.gerritforge.analytics.common.api.es.{ElasticSearchAliasOps, SparkEsClientProvider}
 import com.gerritforge.analytics.support.ops.IndexNameGenerator
-import com.sksamuel.elastic4s.http.index.admin.AliasActionResponse
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.sql.{Dataset, SparkSession}
 import org.elasticsearch.spark.sql._
 
 import scala.concurrent.Future
 
-case class EnrichedAliasActionResponse(futureAction: Future[AliasActionResponse], path: String)
 
 object ESSparkWriterImplicits {
   implicit def withAliasSwap[T](data: Dataset[T]): ElasticSearchPimpedWriter[T] =
@@ -46,7 +45,7 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
 
     import scala.concurrent.ExecutionContext.Implicits.global
     // Save data
-    val futureResponse: Future[AliasActionResponse] = try {
+    val futureResponse: Future[Boolean] = try {
       data
         .toDF()
         .saveToEs(newPersistencePath)
@@ -57,7 +56,7 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
         if (response.isSuccess && response.result.success) {
           logger.info("Alias was updated successfully")
           closeElasticsearchClientConn()
-          Future.successful(response.result)
+          Future.successful(response.result.success)
         } else {
           closeElasticsearchClientConn()
           logger.error(s"Alias update failed with response result error ${response.error}")
@@ -67,7 +66,7 @@ class ElasticSearchPimpedWriter[T](data: Dataset[T])
       }
     } catch {
       case e: Exception =>
-        Future.failed[AliasActionResponse](e)
+        Future.failed[Boolean](e)
     }
     EnrichedAliasActionResponse(futureResponse, newPersistencePath)
   }

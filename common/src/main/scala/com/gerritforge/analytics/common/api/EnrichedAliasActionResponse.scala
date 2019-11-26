@@ -12,18 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.support.ops
-import java.time.format.DateTimeFormatter
-import java.time.{Instant, LocalDateTime, ZoneId}
+package com.gerritforge.analytics.common.api
+import scala.concurrent.Future
 
-object IndexNameGenerator {
-  def timeBasedIndexName(indexName: String, instant: Instant): String = {
-    val now: Long = instant.toEpochMilli
-    val dateWithStrFormat: String =
-      LocalDateTime
-        .ofInstant(Instant.ofEpochMilli(now), ZoneId.systemDefault())
-        .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
-
-    s"${indexName}_${dateWithStrFormat}_$now"
-  }
-}
+case class EnrichedAliasActionResponse(futureAction: Future[Boolean], path: String)

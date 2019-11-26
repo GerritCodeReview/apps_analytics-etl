@@ -6,11 +6,11 @@ gerrit projects with the purpose of performing analytics tasks.
 Each job focuses on a specific dataset and it knows how to extract it, filter it, aggregate it,
 transform it and then persist it.
 
-The persistent storage of choice is *elasticsearch*, which plays very well with the *kibana* dashboard for
-visualizing the analytics.
+The default persistent storage is *elasticsearch*, which plays very well with the *kibana* dashboard for
+visualizing the analytics. Relational database can be use as an alternative.
 
 All jobs are configured as separate sbt projects and have in common just a thin layer of core
-dependencies, such as spark, elasticsearch client, test utils, etc.
+dependencies, such as spark, elasticsearch client, jdbc client, test utils, etc.
 
 Each job can be built and published independently, both as a fat jar artifact or a docker image.  
 
@@ -33,6 +33,7 @@ bin/spark-submit \
     --class com.gerritforge.analytics.gitcommits.job.Main \
     --conf spark.es.nodes=es.mycompany.com \
     $JARS/analytics-etl-gitcommits.jar \
+    saveToEs \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
@@ -50,19 +51,44 @@ docker run -ti --rm \
     -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -e gerrit" \
     gerritforge/gerrit-analytics-etl-gitcommits:latest
 ```
+Example of storing data in PostgreSql instead of ElasticSearch:
+
+```bash
+docker run -ti --rm \
+    --volume <path to local directory with jdbc driver>:/app/additional_jars \
+     -e DB_HOST="<postgres_host_ip>" \
+     -e DB_DRIVER_JAR="postgresql-9.4.1207.jar" \
+     -e SAVE_MODE="saveToDb" \
+     -e GERRIT_URL="http://gerrit.mycompany.com" \
+     -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -t analytics_gitcommits -j jdbc:postgresql://<postgres_host_ip>:5432/analytics?user=gerrit&password=secret" \
+     gerritforge/gerrit-analytics-etl-gitcommits:latest
+```
 
 ### Parameters
-- since, until, aggregate are the same defined in Gerrit Analytics plugin
-    see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
-- -u --url Gerrit server URL with the analytics plugins installed
-- -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
-- -e --elasticIndex Elastic Search index name. If not provided no ES export will be performed
-- -r --extract-branches Extract and process branches information (Optional) - Default: false
-- -o --out folder location for storing the output as JSON files
-    if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
-    the system temporary directory
-- -a --email-aliases (*optional*) "emails to author alias" input data path.
-- -k --ignore-ssl-cert allows to proceed even for server connections otherwise considered insecure.
+- Command: saveToEs [options]
+  -  -e, --elasticSearchIndex <value> ElasticSearch index to persist data into (Required)
+- Command: saveToDb [options]
+  -  -j, --jdbcConnection <value>
+                           Jdbc connection string
+  -  -t, --tableName <value>  Database table name
+  -  -d, --driverClass <value>
+                           Database jdbc driver class name
+-  -u, --url <value>        Gerrit server URL with the analytics plugins installed
+-  -p, --prefix <value>     Projects prefix. Limit the results to those projects that start with the specified prefix.
+-  -o, --out <value>        folder location for storing the output as JSON files
+-  -s, --since <value>      aggregate are the same defined in Gerrit Analytics plugin
+                            see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
+-  -u, --until <value>      aggregate are the same defined in Gerrit Analytics plugin
+                            see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
+-  -g, --aggregate <value>  aggregate email/email_hour/email_day/email_month/email_year
+-  -a, --email-aliases <value>
+                           "emails to author alias" input data path
+-  --username <value>       Gerrit API Username
+-  --password <value>       Gerrit API Password
+-  -k, --ignore-ssl-cert <value>
+                           Ignore SSL certificate validation
+-  -r, --extract-branches <value>
+                           enables branches extraction for each commit
 
   CSVs with 3 columns are expected in input.
 
@@ -126,6 +152,7 @@ spark-submit \
     --conf spark.es.port=9200 \
     --conf spark.es.index.auto.create=true \
     $JARS/analytics-etl-auditlog.jar \
+    saveToEs \
         --gerritUrl https://gerrit.mycompany.com \
         --elasticSearchIndex gerrit \
         --eventsPath /path/to/auditlogs \
@@ -145,19 +172,52 @@ docker run \
     gerritforge/gerrit-analytics-etl-auditlog:latest
 ```
 
+Example of storing data in PostgreSql instead of ElasticSearch:
+
+```bash
+docker run -ti --rm --volume /home/maczech/development/workspace/gerrit_testsite/logs/audit_log:/app/events/audit_log \
+     --volume <path to local directory with jdbc driver>:/app/additional_jars \
+     -e DB_HOST="<postgres_host_ip>" \
+     -e DB_DRIVER_JAR="postgresql-9.4.1207.jar" \
+     -e SAVE_MODE="saveToDb" \
+     -e GERRIT_URL="http://gerrit.mycompany.com" \
+     -e ANALYTICS_ARGS="-t analytics_gitaudit -j jdbc:postgresql://<postgres_host_ip>:5432/analytics?user=gerrit&password=secret --eventsPath /app/events/audit_log --ignoreSSLCert true --since 2000-06-01 --until 2020-12-01" \
+     gerritforge/gerrit-analytics-etl-auditlog:latest
+
+```
+
 ## Parameters
 
-* -u, --gerritUrl              - gerrit server URL (Required)
-* --username                   - Gerrit API Username (Optional)
-* --password                   - Gerrit API Password (Optional)
-* -i, --elasticSearchIndex     - elasticSearch index to persist data into (Required)
-* -p, --eventsPath             - path to a directory (or a file) containing auditLogs events. Supports also _.gz_ files. (Required)
-* -a, --eventsTimeAggregation  - Events of the same type, produced by the same user will be aggregated with this time granularity: 'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'
-* -k, --ignoreSSLCert          - Ignore SSL certificate validation (Optional) - Default: false
-* -s, --since                  - process only auditLogs occurred after (and including) this date (Optional)
-* -u, --until                  - process only auditLogs occurred before (and including) this date (Optional)
-* -a, --additionalUserInfoPath - path to a CSV file containing additional user information (Optional). Currently it is only possible to add user `type` (i.e.: _bot_, _human_).
-If the type is not specified the user will be considered _human_.
+- Command: saveToEs [options]
+
+  - -i, --elasticSearchIndex <value>
+                           elasticSearch index to persist data into (Required)
+- Command: saveToDb [options]
+
+  - -j, --jdbcConnection <value>
+                           Jdbc connection string
+  - -t, --tableName <value>  Database table name
+  - -d, --driverClass <value>
+                           Database jdbc driver class name    
+- -u, --gerritUrl <value>  gerrit server URL (Required)
+- --username <value>       Gerrit API Username (Optional)
+- --password <value>       Gerrit API Password (Optional)
+- -p, --eventsPath <value>
+         path to a directory (or a file) containing auditLogs events. Supports also '.gz' files. (Required)
+- -e, --eventsTimeAggregation <value>
+                           Events of the same type, produced by the same user will be aggregated with this time granularity: 'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'
+- -k, --ignoreSSLCert <value>
+                           Ignore SSL certificate validation (Optional) - Default: false
+- -s, --since <value>      process only auditLogs occurred after (and including) this date, expressed as 'yyyy-MM-dd' (Optional)
+- -u, --until <value>      process only auditLogs occurred before (and including) this date, expressed as 'yyyy-MM-dd' (Optional)
+- -a, --additionalUserInfoPath <value>
+                             path to a CSV file containing additional user information (Optional)
+                                  CSV must have an header. Example:
+                                  id,type
+                                  123456,'bot'
+                                  678876,'human' 
+      Currently it is only possible to add user `type` (i.e.: _bot_, _human_).
+      If the type is not specified the user will be considered _human_.
 
   Here an additional user information CSV file example:
   ```csv
@@ -213,6 +273,20 @@ Just run `docker-compose up`.
           -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -e gerrit" \
           gerritforge/gerrit-analytics-etl-gitcommits:latest
   ```
+  * Run gitcommits ETL and store data in PostgreSql:
+  ```bash
+  HOST_IP=`ifconfig en0 | grep "inet " | awk '{print $2}'` \
+       docker run -ti --rm \
+          --volume <additional_jars_local_dir>:/app/additional_jars \
+          --add-host="gerrit:$HOST_IP" \
+          --network analytics-etl_ek \
+          -e DB_HOST="$HOST_IP" \
+          -e DB_DRIVER_JAR="postgresql-9.4.1207.jar" \
+          -e SAVE_MODE="saveToDb" \
+          -e GERRIT_URL="http://$HOST_IP:8080" \
+          -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -t gitcommits -j jdbc:postgresql://$HOST_IP:5432/analytics?user=gerrit&password=secret" \
+          gerritforge/gerrit-analytics-etl-gitcommits:latest
+  ```
 
   * Run auditlog ETL:
     ```bash
@@ -225,6 +299,21 @@ Just run `docker-compose up`.
         -e ANALYTICS_ARGS="--elasticSearchIndex gerrit --eventsPath /app/events/audit_log --ignoreSSLCert true --since 2000-06-01 --until 2020-12-01 -a hour" \
         gerritforge/gerrit-analytics-etl-auditlog:latest
     ```
+  * Run auditlog ETL and store data in PostgreSql:
+  ```bash
+  HOST_IP=`ifconfig en0 | grep "inet " | awk '{print $2}'` \
+       docker run -ti --rm --volume <source>/audit_log:/app/events/audit_log \
+            --volume <additional_jars_local_dir>:/app/additional_jars \
+            --add-host="gerrit:$HOST_IP" \
+            --network analytics-etl_ek \
+            -e DB_HOST="$HOST_IP" \
+            -e DB_DRIVER_JAR="postgresql-9.4.1207.jar" \
+            -e SAVE_MODE="saveToDb" \
+            -e GERRIT_URL="http://$HOST_IP:8080" \
+            -e ANALYTICS_ARGS="-t auditlogs -j jdbc:postgresql://$HOST_IP:5432/analytics?user=gerrit&password=secret --eventsPath /app/events/audit_log --ignoreSSLCert true --since 2000-06-01 --until 2020-12-01" \
+            gerritforge/gerrit-analytics-etl-auditlog:latest
+
+  ```
 
 * If Elastisearch dies with `exit code 137` you might have to give Docker more memory ([check this article for more details](https://github.com/moby/moby/issues/22211))
 

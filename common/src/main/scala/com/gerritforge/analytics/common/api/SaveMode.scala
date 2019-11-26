@@ -12,18 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.gerritforge.analytics.support.ops
-import java.time.format.DateTimeFormatter
-import java.time.{Instant, LocalDateTime, ZoneId}
+package com.gerritforge.analytics.common.api
 
-object IndexNameGenerator {
-  def timeBasedIndexName(indexName: String, instant: Instant): String = {
-    val now: Long = instant.toEpochMilli
-    val dateWithStrFormat: String =
-      LocalDateTime
-        .ofInstant(Instant.ofEpochMilli(now), ZoneId.systemDefault())
-        .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+object SaveMode extends Enumeration {
+  type SaveMode = Value
 
-    s"${indexName}_${dateWithStrFormat}_$now"
-  }
+  val SAVE_TO_ES = Value("saveToEs")
+  val SAVE_TO_DB = Value("saveToDb")
 }
