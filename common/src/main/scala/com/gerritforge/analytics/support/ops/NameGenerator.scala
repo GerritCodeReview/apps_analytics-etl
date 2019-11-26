@@ -13,24 +13,17 @@
 // limitations under the License.
 
 package com.gerritforge.analytics.support.ops
-import java.time.{Instant, LocalDateTime, ZoneOffset}
+import java.time.format.DateTimeFormatter
+import java.time.{Instant, LocalDateTime, ZoneId}
 
-import org.scalatest.{FlatSpec, Matchers}
-
-class IndexNameGeneratorSpec extends FlatSpec with Matchers {
-
-  "Index name generator" should "return an index name based on current time" in {
-    val instantUTC: Instant =
+object NameGenerator {
+  def timeBasedName(name: String, instant: Instant): String = {
+    val now: Long = instant.toEpochMilli
+    val dateWithStrFormat: String =
       LocalDateTime
-        .of(2019, 1, 1, 12, 0, 0, 0)
-        .atOffset(ZoneOffset.UTC)
-        .toInstant
+        .ofInstant(Instant.ofEpochMilli(now), ZoneId.systemDefault())
+        .format(DateTimeFormatter.ofPattern("yyyyMMdd"))
 
-    val indexName = "index_name"
-
-    val timeBasedIndexName: String = NameGenerator.timeBasedName(indexName, instantUTC)
-
-    val expectedIndexName = s"${indexName}_2019-01-01_${instantUTC.toEpochMilli}"
-    timeBasedIndexName shouldEqual (expectedIndexName)
+    s"${name}_${dateWithStrFormat}_$now"
   }
 }
