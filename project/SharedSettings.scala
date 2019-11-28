@@ -89,7 +89,7 @@ object SharedSettings {
       env("PATH","$PATH:$SPARK_HOME/bin")
       env("SPARK_JAR_PATH", artifactTargetPath)
       env("SPARK_JAR_CLASS",s"com.gerritforge.analytics.$projectName.job.Main")
-      runRaw("curl -sL \"http://www-eu.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz\" | tar -xz -C /usr/local")
+      runRaw("curl -sL \"http://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz\" | tar -xz -C /usr/local")
       add(artifact, artifactTargetPath)
       runRaw(s"chmod +x $artifactTargetPath")
     }
