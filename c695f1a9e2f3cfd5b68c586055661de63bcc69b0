@@ -190,6 +190,30 @@
     },
     {
       "key": {
+        "uuid": "c3003741_a05c84f6",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/SaveMode.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-11-29T21:06:50Z",
+      "side": 1,
+      "message": "Sorry let me give another go, I read my comment and it is not that clear 😊\n\nI think there are 2 questions here:\n1) saveToES Vs saveToDb: in the first case (saveToES) we expose the fact we are writing on ES, but I believe we shouldn\u0027t. People could potentially write in Splunk, DataDog,... In the second case (saveToDb) we try to be generic, and we abstract the relational DB we are writing into. I\u0027m happy with both the directions as long as we are consistent, WDYT?\n \n2) if we decide to have multiple \"saveTo\" flags, saveToDb should probably be saveToRelationalDb? If we decide to expose the backend type we are writing into, I believe we should be explicit. Say we will allow people to write on MongoDB. On the other end, we could decide not to expose the target implementation, hence we should probably have a more generic parameter \"saveTo\u003d(pg|mysal|es|splunk)\" to select the target.\n\nHope my comment makes more sense.",
+      "parentUuid": "31cb35ec_c748031c",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 36
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67911792_9204edf7",
         "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/dbSparkWriter.scala",
         "patchSetId": 2
@@ -284,6 +308,30 @@
     },
     {
       "key": {
+        "uuid": "5e6cf7f6_6d5d3a8e",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfig.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-11-29T21:06:50Z",
+      "side": 1,
+      "message": "I agree we could do it in a separate change. As I was suggesting in this (https://gerrit-review.googlesource.com/c/apps/analytics-etl/+/247054/3#message-7cfd101ca845ba07e6bd31a4f699f197cf4bff5b) comment, what about splitting this change set in 2, i.e.: abstraction of the target and relational DB target implementation?\n\nI\u0027d personally start from start with the \"abstraction of the target\" to make sure we provide a clean interface and avoid making all the configuration optional as in here (https://gerrit-review.googlesource.com/c/apps/analytics-etl/+/247054/3/auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditLogETLConfig.scala).\n\nEither way the order is ok for me.",
+      "parentUuid": "8fcd9d09_1f332bee",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 43
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e5bbcbef_e77e85b1",
         "filename": "project/SharedSettings.scala",
         "patchSetId": 2
@@ -316,6 +364,24 @@
       "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "462cd19b_0215f025",
+        "filename": "project/SharedSettings.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-11-29T21:06:50Z",
+      "side": 1,
+      "message": "Ack",
+      "parentUuid": "4850dfb1_125889ac",
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }

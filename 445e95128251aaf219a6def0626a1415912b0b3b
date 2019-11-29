@@ -34,6 +34,24 @@
       "revId": "445e95128251aaf219a6def0626a1415912b0b3b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5f4bdaaa_946f48b4",
+        "filename": "gitcommits/scripts/wait-for-it.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-11-29T21:06:50Z",
+      "side": 0,
+      "message": "Ack",
+      "parentUuid": "acd1ccd9_9d69b8c6",
+      "revId": "445e95128251aaf219a6def0626a1415912b0b3b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
