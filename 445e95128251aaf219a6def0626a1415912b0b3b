@@ -16,6 +16,24 @@
       "revId": "445e95128251aaf219a6def0626a1415912b0b3b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "acd1ccd9_9d69b8c6",
+        "filename": "gitcommits/scripts/wait-for-it.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:29:40Z",
+      "side": 0,
+      "message": "I agree we should have one script and wait-for-it.sh is a script which we are using in many other places. wait-for-it is generic and can wait for any service I do not know why it wasn\u0027t used at first place. But to avoid to many moving parts I decided to refactor current one in a following change.",
+      "parentUuid": "05b988f5_5c49f8f1",
+      "revId": "445e95128251aaf219a6def0626a1415912b0b3b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }

@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "a3520195_049cd819",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:29:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a3e8275_aa907e90",
+      "range": {
+        "startLine": 7,
+        "startChar": 37,
+        "endLine": 7,
+        "endChar": 43
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b116f792_f6515e88",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "64753d3a_b300015b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:29:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b116f792_f6515e88",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 17
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4c17a5c9_d83473c7",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
         "patchSetId": 2
@@ -68,6 +116,30 @@
       "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "bf35372c_27a91e2f",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:29:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c17a5c9_d83473c7",
+      "range": {
+        "startLine": 87,
+        "startChar": 10,
+        "endLine": 90,
+        "endChar": 101
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -117,6 +189,30 @@
     },
     {
       "key": {
+        "uuid": "fd40c11f_d1fe3bf0",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/dbSparkWriter.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:29:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67911792_9204edf7",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 28
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "e937d43e_b027c402",
         "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfig.scala",
         "patchSetId": 2
@@ -140,6 +236,30 @@
     },
     {
       "key": {
+        "uuid": "8fcd9d09_1f332bee",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfig.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:29:40Z",
+      "side": 1,
+      "message": "I agree I was planning to do that in following change, but let me have a look if it is possible without massive refactoring",
+      "parentUuid": "e937d43e_b027c402",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 43
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "e5bbcbef_e77e85b1",
         "filename": "project/SharedSettings.scala",
         "patchSetId": 2
@@ -151,6 +271,24 @@
       "writtenOn": "2019-11-28T23:04:06Z",
       "side": 1,
       "message": "What are we using this for?",
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4850dfb1_125889ac",
+        "filename": "project/SharedSettings.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:29:40Z",
+      "side": 1,
+      "message": "It is providing try-with-resources like functionality. I\u0027m using it to manage java.sql.Statement in com.gerritforge.analytics.common.api.db.RelationalDatabaseViewOps.\nhttps://github.com/jsuereth/scala-arm",
+      "parentUuid": "e5bbcbef_e77e85b1",
       "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
