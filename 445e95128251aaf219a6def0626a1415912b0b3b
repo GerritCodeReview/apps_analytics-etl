@@ -46,6 +46,30 @@
       "revId": "445e95128251aaf219a6def0626a1415912b0b3b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a4401a4a_7f3c0407",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T13:07:18Z",
+      "side": 1,
+      "message": "Upgrade to 2.4.4 would require more work. For users which are using docker it\u0027s easy but for others it require runtime environment update. That\u0027s why we have to tag and release current code with spark 2.3.3 and then we can upgrade. This will allow users to gradually migrate to spark 2.4.4",
+      "parentUuid": "397a4459_0a398df3",
+      "range": {
+        "startLine": 9,
+        "startChar": 26,
+        "endLine": 9,
+        "endChar": 32
+      },
+      "revId": "445e95128251aaf219a6def0626a1415912b0b3b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
