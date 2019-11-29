@@ -166,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "31cb35ec_c748031c",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/SaveMode.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-11-29T15:53:34Z",
+      "side": 1,
+      "message": "I\u0027m not sure that I fully understand. To totally abstract the target we would have to change our approach because the current code is using implicit classes, I\u0027m fine with doing that but this should be done in a separate change. About not being explicit about saveToDb idea is that we can store to any relational database which is supporting jdbc. WDYT how we can be more explicit about saveToDb?",
+      "parentUuid": "bacc45b0_7a63070d",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 36
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67911792_9204edf7",
         "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/dbSparkWriter.scala",
         "patchSetId": 2
