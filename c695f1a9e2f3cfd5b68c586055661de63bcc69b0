@@ -48,6 +48,29 @@
     },
     {
       "key": {
+        "uuid": "4c17a5c9_d83473c7",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-11-29T01:25:54Z",
+      "side": 1,
+      "message": "What about wrapping this all saveToDB in a for comprehension, so we avoid to call a \"get\" on an option (i.e.: \"config.jdbcConnection.get\")?",
+      "range": {
+        "startLine": 87,
+        "startChar": 10,
+        "endLine": 90,
+        "endChar": 101
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bacc45b0_7a63070d",
         "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/SaveMode.scala",
         "patchSetId": 2
@@ -64,6 +87,29 @@
         "startChar": 0,
         "endLine": 21,
         "endChar": 36
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "67911792_9204edf7",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/dbSparkWriter.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-11-29T01:25:54Z",
+      "side": 1,
+      "message": "Since we are here in the relational database context, I found a bit confusing using a variable with prefix \"newIndex\" as a table name.\n\nShall we just call it \"newTableName\" or something similar?",
+      "range": {
+        "startLine": 39,
+        "startChar": 8,
+        "endLine": 39,
+        "endChar": 28
       },
       "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
