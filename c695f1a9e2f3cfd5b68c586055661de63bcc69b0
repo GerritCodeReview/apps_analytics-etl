@@ -214,6 +214,30 @@
     },
     {
       "key": {
+        "uuid": "e5e64f37_1ff3f06d",
+        "filename": "common/src/main/scala/com/gerritforge/analytics/common/api/SaveMode.scala",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-12-02T09:59:50Z",
+      "side": 1,
+      "message": "You are right it should be saveToRelationalDb instead of saveToDb. I\u0027m not sure how ElasticSearch, Splunk and DataDog are related together. They require different api calls, different data preparation and different configuration. That\u0027s why we cannot combine them to a single saveTo.. flag. On the other hand when we are using jdbc we have common settings, data preparations and configuration that\u0027s why from spark perspective it doesn\u0027t make any difference if you are writing to PostgreSql, MySql or Oracle it\u0027s the same technology.\n\nI understand your point I also prefer to have approach where you have a single method called \"save\" and inside this method based on the configuration we are deciding where we want to write(target). But this project is not using config file it\u0027s based on command line params and it\u0027s using scopt framework. Moving from scopt to config file it\u0027s a incompatible change and it requires to version and release current code to allow current users to continue with the setup they have.\n\nAnother thing is that current implementation is based on implicit classes and we are not defining interfaces for any operation because the approach is different. I was following original design to have less moving parts if we all agree that we prefer to use interfaces I\u0027m happy to refactor current code in following change.\n\nAbout \"saveTo\u003d(pg|mysal|es|splunk)\" I was trying to do that but it looks like that in scopt only commands can have children options this means that if you want to have separate options per \u0027writer\u0027 there is no other way. By separate options I mean that ES needs just index name but for Relational database we need also jdbc string. Again because we are not using config files we have to pass all params from command line",
+      "parentUuid": "c3003741_a05c84f6",
+      "range": {
+        "startLine": 19,
+        "startChar": 0,
+        "endLine": 21,
+        "endChar": 36
+      },
+      "revId": "c695f1a9e2f3cfd5b68c586055661de63bcc69b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "67911792_9204edf7",
         "filename": "common/src/main/scala/com/gerritforge/analytics/infrastructure/dbSparkWriter.scala",
         "patchSetId": 2
