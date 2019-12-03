@@ -43,6 +43,7 @@ object SharedSettings {
       "com.typesafe.scala-logging" %% "scala-logging"          % scalaLogging,
       "com.github.scopt"           %% "scopt"                  % scopt,
       "com.jsuereth"               %% "scala-arm"              % scalaarm,
+      "com.typesafe"                % "config"                 % typesafeConfig,
       "org.scalactic"              %% "scalactic"              % scalactic % "test",
       "org.scalatest"              %% "scalatest"              % scalaTest % "test",
       "com.dimafeng"               %% "testcontainers-scala"   % TestContainersScala % Test,
@@ -106,6 +107,7 @@ object Versions {
   val scalaLogging = "3.7.2"
   val scopt = "3.6.0"
   val scalaarm = "2.0"
+  val typesafeConfig = "1.4.0"
   val scalactic = "3.0.1"
   val scalaTest = "3.0.1"
   val json4s = "3.2.11"
