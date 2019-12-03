@@ -5,14 +5,16 @@ import java.time.LocalDate
 
 import com.gerritforge.analytics.common.api.SaveMode
 import com.gerritforge.analytics.gitcommits.job.{FetchProjects, Job}
-import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.gitcommits.model.{GerritProject, GerritProjectsSupport}
 import com.google.gerrit.server.project.ProjectControl
 import com.google.gerrit.sshd.{CommandMetaData, SshCommand}
 import com.google.inject.Inject
+import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.{SQLContext, SparkSession}
 import org.kohsuke.args4j.{Argument, Option => ArgOption}
+import com.gerritforge.analytics.gitcommits.model.GerritEndpointConfig._
 
 import scala.util.{Failure, Success}
 
@@ -59,20 +61,18 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
   var extractBranches: Boolean = false
 
   override def run() {
-    implicit val config = GerritEndpointConfig(gerritConfig.getListenUrl(),
-                                               prefix =
+    import collection.JavaConverters._
+    implicit val config = ConfigFactory.parseMap(Map[String, Any](BASE_URL -> gerritConfig.getListenUrl(),
+                                               PREFIX ->
                                                  Option(projectControl).map(_.getProject.getName),
-                                               "",
-                                               elasticIndex,
-                                               SaveMode.SAVE_TO_ES,
-                                               None,
-                                               None,
-                                               None,
-                                               beginDate,
-                                               endDate,
-                                               aggregate,
-                                               emailAlias,
-                                               ignoreSSLCert=Some(ignoreSSLCert))
+                                               OUTPUT_DIR -> "",
+                                               ELASTIC_SEARCH_INDEX -> elasticIndex,
+                                               SAVE_MODE -> SaveMode.SAVE_TO_ES.toString,
+                                               SINCE -> beginDate,
+                                               UNTIL -> endDate,
+                                               AGGREGATE -> aggregate,
+                                               EMAIL_ALIAS -> emailAlias,
+                                               IGNORE_SSL_CERT-> ignoreSSLCert).asJava)
 
     implicit val spark: SparkSession = SparkSession
       .builder()
@@ -85,7 +85,7 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
     implicit lazy val sql: SQLContext  = spark.sqlContext
 
     val prevClassLoader = Thread.currentThread().getContextClassLoader
-    Thread.currentThread().setContextClassLoader(getClass.getClassLoader)
+    Thread.currentThread().setContextClassLoader(this.getClass.getClassLoader)
     try {
       stdout.println(s"Starting new Spark job with parameters: $config")
       stdout.flush()
@@ -93,9 +93,10 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
       val projectStats = buildProjectStats().cache()
       val numRows      = projectStats.count()
 
-      config.elasticIndex.foreach { esIndex =>
-        stdout.println(
-          s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'")
+      val esIndex = config.getString(ELASTIC_SEARCH_INDEX)
+
+      stdout.println(
+          s"$numRows rows extracted. Posting Elasticsearch at '$esIndex/$indexType'")
         stdout.flush()
         import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
         import scala.concurrent.ExecutionContext.Implicits.global
@@ -104,7 +105,6 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
           .futureAction
           .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
           .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
-      }
 
       val elaspsedTs = (System.currentTimeMillis - startTs) / 1000L
       stdout.println(s"Job COMPLETED in $elaspsedTs secs")
@@ -118,8 +118,8 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
     }
   }
 
-  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
-    config.prefix.toSeq.flatMap(projectName =>
+  def fetchProjects(config: Config): Seq[GerritProject] = {
+    config.getOptional[String](PREFIX).toSeq.flatMap(projectName =>
       gerritProjects.getProject(projectName) match {
         case Success(project) =>
           Seq(project)
@@ -127,7 +127,7 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
           logger.warn(s"Unable to fetch project $projectName", e)
           Seq()
         }
-    })
+      }
   }
 }
 
