@@ -18,13 +18,15 @@ import java.time.LocalDate
 import java.util.Properties
 
 import com.gerritforge.analytics.common.api.SaveMode
-import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.gitcommits.model.{ GerritProject, GerritProjectsSupport}
 import com.gerritforge.analytics.spark.SparkApp
 import com.gerritforge.analytics.support.ops.ReadsOps._
+import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.LazyLogging
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.{DataFrame, SparkSession}
 import scopt.OptionParser
+import com.gerritforge.analytics.gitcommits.model.GerritEndpointConfig._
 
 import scala.io.Codec
 
@@ -39,77 +41,78 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
     }
   }
 
-  private val cliOptionParser: OptionParser[GerritEndpointConfig] =
-    new scopt.OptionParser[GerritEndpointConfig]("scopt") {
+  private val cliOptionParser: OptionParser[Map[String, _]] =
+    new scopt.OptionParser[Map[String, _]]("scopt") {
       head("scopt", "3.x")
       opt[String]('u', "url") optional () action { (x, c) =>
-        c.copy(baseUrl = Some(x))
+        c+(BASE_URL -> x)
       } text "gerrit url"
       opt[String]('p', "prefix") optional () action { (p, c) =>
-        c.copy(prefix = Some(p))
+        c + (PREFIX -> p)
       } text "projects prefix"
       opt[String]('o', "out") optional () action { (x, c) =>
-        c.copy(outputDir = x)
+        c + (OUTPUT_DIR -> x)
       } text "output directory"
       cmd("saveToEs").optional()
-        .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_ES))
+        .action((_, c) => c + (SAVE_MODE -> SaveMode.SAVE_TO_ES.toString))
         .children(
           opt[String]('e', "elasticSearchIndex") required() action { (input, c) =>
-            c.copy(elasticIndex = Some(input))
+            c + (ELASTIC_SEARCH_INDEX -> input)
           } text "elasticSearch index to persist data into (Required)"
 
         )
       cmd("saveToDb").optional()
-        .action((_, c) => c.copy(saveMode = SaveMode.SAVE_TO_DB))
+        .action((_, c) => c + (SAVE_MODE -> SaveMode.SAVE_TO_DB.toString))
         .children(
           opt[String]('j', "jdbcConnection") required() action { (input, c) =>
-            c.copy(jdbcConnection = Some(input))
+            c + (RELATIONAL_DATABASE_JDBC_CONNECTION -> input)
           } text "Jdbc connection string",
           opt[String]('t', "tableName") required() action { (input, c) =>
-            c.copy(tableName = Some(input))
+            c + (RELATIONAL_DATABASE_TABLE -> input)
           } text "Database table name",
           opt[String]('d', "driverClass") optional() action { (input, c) =>
-            c.copy(driverClassName = Some(input))
+            c + (RELATIONAL_DATABASE_DRIVER -> input)
           } text "Database jdbc driver class name"
         )
       opt[LocalDate]('s', "since") optional () action { (x, c) =>
-        c.copy(since = Some(x))
+        c + (SINCE -> x.toEpochDay)
       } text "begin date "
       opt[LocalDate]('u', "until") optional () action { (x, c) =>
-        c.copy(until = Some(x))
+        c + (UNTIL -> x.toEpochDay)
       } text "since date"
       opt[String]('g', "aggregate") optional () action { (x, c) =>
-        c.copy(aggregate = Some(x))
+        c + (AGGREGATE -> x)
       } text "aggregate email/email_hour/email_day/email_month/email_year"
 
       opt[String]('a', "email-aliases") optional () validate fileExists action { (path, c) =>
-        c.copy(emailAlias = Some(path))
+        c + (EMAIL_ALIAS -> path)
       } text "\"emails to author alias\" input data path"
 
       opt[String]("username") optional () action { (input, c) =>
-        c.copy(username = Some(input))
+        c + (USERNAME -> input)
       } text "Gerrit API Username"
 
       opt[String]("password") optional () action { (input, c) =>
-        c.copy(password = Some(input))
+        c + (PASSWORD -> input)
       } text "Gerrit API Password"
 
       opt[Boolean]('k', "ignore-ssl-cert") optional () action { (input, c) =>
-        c.copy(ignoreSSLCert = Some(input))
+        c + (IGNORE_SSL_CERT -> input)
       } text "Ignore SSL certificate validation"
 
       opt[Boolean]('r', "extract-branches") optional () action { (input, c) =>
-        c.copy(extractBranches = Some(input))
+        c + (EXTRACT_BRANCHES -> input)
       } text "enables branches extraction for each commit"
-      checkConfig(config => if(config.elasticIndex.isEmpty && config.jdbcConnection.isEmpty) Left("saveToEs or saveToDb command must be specified") else Right())
+      checkConfig(config => if(config.get(ELASTIC_SEARCH_INDEX).isEmpty && config.get(RELATIONAL_DATABASE_JDBC_CONNECTION).isEmpty) Left("saveToEs or saveToDb command must be specified") else Right())
     }
 
-  cliOptionParser.parse(args, GerritEndpointConfig()) match {
-    case Some(config) =>
-      implicit val _: GerritEndpointConfig = config
+  cliOptionParser.parse(args, Map()) match {
+    case Some(c) =>
+      import collection.JavaConverters._
+      val config = ConfigFactory.parseMap(c.asJava)
+      implicit val _: Config = config
 
       logger.info(s"Starting analytics app with config $config")
-
       val dataFrame = buildProjectStats().cache() //This dataframe is written twice
 
       logger.info(s"ES content created, saving it to '${config.outputDir}'")
@@ -127,18 +130,17 @@ trait Job {
 
   val indexType = "gitCommits"
 
-  def buildProjectStats()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
+  def buildProjectStats()(implicit config: Config, spark: SparkSession): DataFrame = {
     import com.gerritforge.analytics.gitcommits.engine.GerritAnalyticsTransformations._
 
     implicit val sc: SparkContext = spark.sparkContext
-
     val projects = fetchProjects(config)
 
     logger.info(
       s"Loaded a list of ${projects.size} projects ${if (projects.size > 20) projects.take(20).mkString("[", ",", ", ...]")
       else projects.mkString("[", ",", "]")}")
 
-    val aliasesDF = getAliasDF(config.emailAlias)
+    val aliasesDF = getAliasDF(config.getOptional[String](EMAIL_ALIAS))
 
     val contributorsStats = getContributorStats(spark.sparkContext.parallelize(projects),
                                              config.contributorsUrl,
@@ -146,41 +148,44 @@ trait Job {
     contributorsStats.dashboardStats(aliasesDF)
   }
 
-  def save(df: DataFrame)(implicit config: GerritEndpointConfig) {
+  def save(df: DataFrame)(implicit config: Config) {
     import scala.concurrent.ExecutionContext.Implicits.global
-    config.saveMode match {
+    SaveMode.withName(config.getString(SAVE_MODE)) match {
       case SaveMode.SAVE_TO_ES =>
-        config.elasticIndex.foreach { esIndex =>
-          import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
-          df.saveToEsWithAliasSwap(esIndex, indexType)
+        val esIndex = config.getString(ELASTIC_SEARCH_INDEX)
+        import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
+        df.saveToEsWithAliasSwap(esIndex, indexType)
             .futureAction
             .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
             .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
-        }
+
       case SaveMode.SAVE_TO_DB =>
         import com.gerritforge.analytics.infrastructure.DBSparkWriterImplicits.withDbWriter
         val connectionProperties = new Properties()
-        config.driverClassName.foreach(driverClassName => connectionProperties.put("driver", driverClassName))
+        config.getOptional[String](RELATIONAL_DATABASE_DRIVER)
+          .foreach(driverClassName =>
+            connectionProperties.put("driver", driverClassName))
 
-        for{
-          jdbcConnection <- config.jdbcConnection
-          tableName <- config.tableName
-        } df.saveToDb(jdbcConnection, tableName, connectionProperties)
+       df.saveToDb(
+         config.getString(RELATIONAL_DATABASE_JDBC_CONNECTION),
+         config.getString(RELATIONAL_DATABASE_TABLE),
+         connectionProperties)
           .futureAction
           .map(actionResponse => logger.info(s"Completed view update ${actionResponse}"))
           .recover { case exception: Exception => logger.info(s"View update failed ${exception}") }
-      case _ => logger.warn(s"Unrecognised save mode: ${config.saveMode}. Saving data skipped")
+      case saveMode => logger.warn(s"Unrecognised save mode: $saveMode. Saving data skipped")
     }
 
   }
 }
 
 trait FetchProjects {
-  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject]
+  def fetchProjects(config: Config): Seq[GerritProject]
 }
 
 trait FetchRemoteProjects extends FetchProjects {
-  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
+  def fetchProjects(config: Config): Seq[GerritProject] = {
+
     config.gerritProjectsUrl.toSeq.flatMap { url =>
       GerritProjectsSupport.parseJsonProjectListResponse(
         config.gerritApiConnection.getContentFromApi(url))
