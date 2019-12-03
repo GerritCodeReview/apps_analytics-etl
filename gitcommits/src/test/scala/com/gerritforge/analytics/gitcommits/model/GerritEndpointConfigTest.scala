@@ -15,17 +15,21 @@
 package com.gerritforge.analytics.gitcommits.model
 
 import org.scalatest.{FlatSpec, Matchers}
+import com.gerritforge.analytics.gitcommits.model.GerritEndpointConfig._
+import com.typesafe.config.ConfigFactory
 
 class GerritEndpointConfigTest extends FlatSpec with Matchers {
 
+  import collection.JavaConverters._
+
   "gerritProjectsUrl" should "contain prefix when available" in {
     val prefix = "prefixMustBeThere"
-    val conf = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), prefix = Some(prefix))
+    val conf = ConfigFactory.parseMap(Map[String, Any](BASE_URL -> "testBaseUrl", PREFIX -> prefix).asJava)
     conf.gerritProjectsUrl should contain(s"testBaseUrl/projects/?p=$prefix")
   }
 
   it should "not contain prefix when not available" in {
-    val conf = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), prefix = None)
+    val conf = ConfigFactory.parseMap(Map[String, Any](BASE_URL -> "testBaseUrl").asJava)
     conf.gerritProjectsUrl should contain(s"testBaseUrl/projects/")
   }
 
