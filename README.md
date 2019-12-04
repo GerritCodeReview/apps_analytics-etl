@@ -6,11 +6,11 @@ gerrit projects with the purpose of performing analytics tasks.
 Each job focuses on a specific dataset and it knows how to extract it, filter it, aggregate it,
 transform it and then persist it.
 
-The persistent storage of choice is *elasticsearch*, which plays very well with the *kibana* dashboard for
-visualizing the analytics.
+The default persistent storage is *elasticsearch*, which plays very well with the *kibana* dashboard for
+visualizing the analytics. Relational database can be use as an alternative.
 
 All jobs are configured as separate sbt projects and have in common just a thin layer of core
-dependencies, such as spark, elasticsearch client, test utils, etc.
+dependencies, such as spark, elasticsearch client, jdbc client, test utils, etc.
 
 Each job can be built and published independently, both as a fat jar artifact or a docker image.  
 
@@ -33,6 +33,7 @@ bin/spark-submit \
     --class com.gerritforge.analytics.gitcommits.job.Main \
     --conf spark.es.nodes=es.mycompany.com \
     $JARS/analytics-etl-gitcommits.jar \
+    saveToEs \
     --since 2000-06-01 \
     --aggregate email_hour \
     --url http://gerrit.mycompany.com \
@@ -50,19 +51,44 @@ docker run -ti --rm \
     -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -e gerrit" \
     gerritforge/gerrit-analytics-etl-gitcommits:latest
 ```
+Example of storing data in PostgreSql instead of ElasticSearch:
+
+```bash
+docker run -ti --rm \
+    --volume <path to local directory with jdbc driver>:/app/additional_jars \
+     -e DB_HOST="<postgres_host_ip>" \
+     -e DB_DRIVER_JAR="postgresql-9.4.1207.jar" \
+     -e SAVE_MODE="saveToDb" \
+     -e GERRIT_URL="http://gerrit.mycompany.com" \
+     -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -t analytics_gitcommits -j jdbc:postgresql://<postgres_host_ip>:5432/analytics?user=gerrit&password=secret" \
+     gerritforge/gerrit-analytics-etl-gitcommits:latest
+```
 
 ### Parameters
-- since, until, aggregate are the same defined in Gerrit Analytics plugin
-    see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
-- -u --url Gerrit server URL with the analytics plugins installed
-- -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
-- -e --elasticIndex Elastic Search index name. If not provided no ES export will be performed
-- -r --extract-branches Extract and process branches information (Optional) - Default: false
-- -o --out folder location for storing the output as JSON files
-    if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
-    the system temporary directory
-- -a --email-aliases (*optional*) "emails to author alias" input data path.
-- -k --ignore-ssl-cert allows to proceed even for server connections otherwise considered insecure.
+- Command: saveToEs [options]
+  -  -e, --elasticSearchIndex <value> ElasticSearch index to persist data into (Required)
+- Command: saveToDb [options]
+  -  -j, --jdbcConnection <value>
+                           Jdbc connection string
+  -  -t, --tableName <value>  Database table name
+  -  -d, --driverClass <value>
+                           Database jdbc driver class name
+-  -u, --url <value>        Gerrit server URL with the analytics plugins installed
+-  -p, --prefix <value>     Projects prefix. Limit the results to those projects that start with the specified prefix.
+-  -o, --out <value>        folder location for storing the output as JSON files
+-  -s, --since <value>      aggregate are the same defined in Gerrit Analytics plugin
+                            see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
+-  -u, --until <value>      aggregate are the same defined in Gerrit Analytics plugin
+                            see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
+-  -g, --aggregate <value>  aggregate email/email_hour/email_day/email_month/email_year
+-  -a, --email-aliases <value>
+                           "emails to author alias" input data path
+-  --username <value>       Gerrit API Username
+-  --password <value>       Gerrit API Password
+-  -k, --ignore-ssl-cert <value>
+                           Ignore SSL certificate validation
+-  -r, --extract-branches <value>
+                           enables branches extraction for each commit
 
   CSVs with 3 columns are expected in input.
 
@@ -116,7 +142,6 @@ AuditLog entries are an immutable trace of what happened on Gerrit and this ETL 
 - Top#10 users of receive-pack
 
 and many others questions related to the usage of Gerrit.
-Relational database can be use as an alternative storage to ElasticSearch.
 
 Job can be launched, for example, with the following parameters:
 
