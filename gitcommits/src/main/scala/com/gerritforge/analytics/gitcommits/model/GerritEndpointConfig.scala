@@ -18,7 +18,8 @@ import java.net.URLEncoder
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
 
-import com.gerritforge.analytics.common.api.GerritConnectivity
+import com.gerritforge.analytics.common.api.SaveMode.SaveMode
+import com.gerritforge.analytics.common.api.{GerritConnectivity, SaveMode}
 import com.gerritforge.analytics.support.ops.AnalyticsDateTimeFormatter
 case class GerritEndpointConfig(
     baseUrl: Option[String] = None,
@@ -26,6 +27,10 @@ case class GerritEndpointConfig(
     outputDir: String =
       s"file://${System.getProperty("java.io.tmpdir")}/analytics-${System.nanoTime()}",
     elasticIndex: Option[String] = None,
+    saveMode: SaveMode = SaveMode.SAVE_TO_ES,
+    jdbcConnection: Option[String] = None,
+    tableName: Option[String] = None,
+    driverClassName: Option[String] = None,
     since: Option[LocalDate] = None,
     until: Option[LocalDate] = None,
     aggregate: Option[String] = None,
