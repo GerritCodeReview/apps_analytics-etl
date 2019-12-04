@@ -3,6 +3,7 @@ package com.gerritforge.analytics.gitcommits.plugin
 import java.sql.Timestamp
 import java.time.LocalDate
 
+import com.gerritforge.analytics.common.api.SaveMode
 import com.gerritforge.analytics.gitcommits.job.{FetchProjects, Job}
 import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
 import com.google.gerrit.server.project.ProjectControl
@@ -63,6 +64,10 @@ class ProcessGitCommitsCommand @Inject()(implicit val gerritProjects: GerritProj
                                                  Option(projectControl).map(_.getProject.getName),
                                                "",
                                                elasticIndex,
+                                               SaveMode.SAVE_TO_ES,
+                                               None,
+                                               None,
+                                               None,
                                                beginDate,
                                                endDate,
                                                aggregate,

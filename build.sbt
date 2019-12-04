@@ -23,6 +23,8 @@ lazy val analyticsETLGitCommits = (project in file("gitcommits"))
               file(s"$entryPointBase/gerrit-analytics-etl-gitcommits.sh"))
         .copy(baseDirectory(_ / "scripts" / "wait-for-elasticsearch.sh").value,
               file(s"$entryPointBase/wait-for-elasticsearch.sh"))
+        .copy(baseDirectory(_ / "scripts" / "wait-for-it.sh").value,
+          file(s"$entryPointBase/wait-for-it.sh"))
         .cmd(s"/bin/sh", s"$entryPointBase/gerrit-analytics-etl-gitcommits.sh")
     }
   )
