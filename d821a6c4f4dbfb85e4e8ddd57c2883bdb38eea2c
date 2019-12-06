@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1dddbcc3_c2162d8c",
+        "filename": "README.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-12-06T23:14:30Z",
+      "side": 1,
+      "message": "Can we keep the default to ES and avoid changing the syntax?",
+      "range": {
+        "startLine": 130,
+        "startChar": 4,
+        "endLine": 130,
+        "endChar": 14
+      },
+      "revId": "d821a6c4f4dbfb85e4e8ddd57c2883bdb38eea2c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d5a99c4d_bef90395",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/AuditLogETLConfig.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-12-06T23:14:30Z",
+      "side": 1,
+      "message": "Where are the credentials to access the DBMS?",
+      "range": {
+        "startLine": 29,
+        "startChar": 2,
+        "endLine": 29,
+        "endChar": 40
+      },
+      "revId": "d821a6c4f4dbfb85e4e8ddd57c2883bdb38eea2c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f9164858_023ceb46",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-12-06T23:14:30Z",
+      "side": 1,
+      "message": "Is this a separate fix? Can we extract in its own change?",
+      "range": {
+        "startLine": 74,
+        "startChar": 21,
+        "endLine": 74,
+        "endChar": 22
+      },
+      "revId": "d821a6c4f4dbfb85e4e8ddd57c2883bdb38eea2c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f46a7627_c17cf03a",
+        "filename": "project/SharedSettings.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2019-12-06T23:14:30Z",
+      "side": 1,
+      "message": "Why is this needed?",
+      "range": {
+        "startLine": 45,
+        "startChar": 6,
+        "endLine": 45,
+        "endChar": 74
+      },
+      "revId": "d821a6c4f4dbfb85e4e8ddd57c2883bdb38eea2c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
