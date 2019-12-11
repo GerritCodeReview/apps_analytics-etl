@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "aa924fa7_6c35a3fb",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-12-11T16:45:29Z",
+      "side": 1,
+      "message": "I was going through the code again to understand how we could abstract away the storage. I think we can simplify this bit here...correct me if I\u0027m wrong:\n* the connection parameters can come from the spark session, as we are currently doing for ES, i.e. from `spark-submit --conf spark.es.nodes\u003des.mycompany.com....` or `spark-submit --conf spark.postgres_sql\u003dpsql.mycompany.com....`. This mean we don\u0027t need to pass them here and have this fiddly logic.\n\n* we could then have a simple parameter (say \"saveTo\", \"storage\", .. ), defaulted to ES, which will be used to select which storage to write to\n\n* maybe we could rename the `indexName` parameter to something more generic for a data storage (I guess in a relational DB this will be a table name?)",
+      "range": {
+        "startLine": 42,
+        "startChar": 8,
+        "endLine": 64,
+        "endChar": 11
+      },
+      "revId": "f79c37ec1f188b387d416fd791a96901d1d33aad",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
