@@ -16,7 +16,12 @@ package com.gerritforge.analytics.gitcommits.job
 
 import java.time.LocalDate
 
-import com.gerritforge.analytics.gitcommits.model.{GerritEndpointConfig, GerritProject, GerritProjectsSupport}
+import com.gerritforge.analytics.common.api.{ElasticSearchST, PSQLST, Storage}
+import com.gerritforge.analytics.gitcommits.model.{
+  GerritEndpointConfig,
+  GerritProject,
+  GerritProjectsSupport
+}
 import com.gerritforge.analytics.spark.SparkApp
 import com.gerritforge.analytics.support.ops.ReadsOps._
 import com.typesafe.scalalogging.LazyLogging
@@ -74,6 +79,17 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
         c.copy(password = Some(input))
       } text "Gerrit API Password"
 
+      opt[String]('t', "storageType") optional () action { (input, c) =>
+        {
+          //XXX Make it nicer
+          if (input == "elasticsearch") {
+            c.copy(storageType = Some(ElasticSearchST(c.elasticIndex.get, indexType)))
+          } else {
+            c.copy(storageType = Some(PSQLST(c.elasticIndex.get, indexType)))
+          }
+        }
+      } text "Storage Type"
+
       opt[Boolean]('k', "ignore-ssl-cert") optional () action { (input, c) =>
         c.copy(ignoreSSLCert = Some(input))
       } text "Ignore SSL certificate validation"
@@ -94,7 +110,7 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
       logger.info(s"ES content created, saving it to '${config.outputDir}'")
       dataFrame.write.json(config.outputDir)
 
-      saveES(dataFrame)
+      Storage.storeDf(config.storageType.get, dataFrame)
 
     case None => // invalid configuration usage has been displayed
   }
@@ -120,21 +136,9 @@ trait Job {
     val aliasesDF = getAliasDF(config.emailAlias)
 
     val contributorsStats = getContributorStats(spark.sparkContext.parallelize(projects),
-                                             config.contributorsUrl,
-                                             config.gerritApiConnection)
+                                                config.contributorsUrl,
+                                                config.gerritApiConnection)
     contributorsStats.dashboardStats(aliasesDF)
-  }
-
-  def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
-    import scala.concurrent.ExecutionContext.Implicits.global
-    config.elasticIndex.foreach { esIndex =>
-      import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
-      df.saveToEsWithAliasSwap(esIndex, indexType)
-        .futureAction
-        .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
-        .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
-    }
-
   }
 }
 

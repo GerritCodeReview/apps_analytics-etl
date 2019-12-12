@@ -26,11 +26,6 @@ import scala.concurrent.Future
 
 case class EnrichedAliasActionResponse(futureAction: Future[AliasActionResponse], path: String)
 
-object ESSparkWriterImplicits {
-  implicit def withAliasSwap[T](data: Dataset[T]): ElasticSearchPimpedWriter[T] =
-    new ElasticSearchPimpedWriter[T](data)
-}
-
 class ElasticSearchPimpedWriter[T](data: Dataset[T])
     extends ElasticSearchAliasOps
     with LazyLogging

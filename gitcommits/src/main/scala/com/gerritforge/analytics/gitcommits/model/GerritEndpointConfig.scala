@@ -18,7 +18,7 @@ import java.net.URLEncoder
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
 
-import com.gerritforge.analytics.common.api.GerritConnectivity
+import com.gerritforge.analytics.common.api.{ETLStorageType, ElasticSearchST, GerritConnectivity}
 import com.gerritforge.analytics.support.ops.AnalyticsDateTimeFormatter
 case class GerritEndpointConfig(
     baseUrl: Option[String] = None,
@@ -32,10 +32,12 @@ case class GerritEndpointConfig(
     emailAlias: Option[String] = None,
     username: Option[String] = None,
     password: Option[String] = None,
+    storageType: Option[ETLStorageType] = None,
     ignoreSSLCert: Option[Boolean] = None,
     extractBranches: Option[Boolean] = None) {
 
-  val gerritApiConnection: GerritConnectivity = new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
+  val gerritApiConnection: GerritConnectivity =
+    new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
 
   val gerritProjectsUrl: Option[String] = baseUrl.map { url =>
     s"${url}/projects/" + prefix.fold("")("?p=" + _)
