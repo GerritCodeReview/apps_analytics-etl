@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d274b080_fcd25f8c",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-12-12T13:31:17Z",
+      "side": 1,
+      "message": "Issue here is that for different storage types we have different number of params, for ES we need just index but for PSQLST we need jdbc string, view name(index param can be reused) and driver name.",
+      "range": {
+        "startLine": 88,
+        "startChar": 38,
+        "endLine": 88,
+        "endChar": 76
+      },
+      "revId": "a8c6743525f9fe2e4777df7d99728fe77aa7443f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
