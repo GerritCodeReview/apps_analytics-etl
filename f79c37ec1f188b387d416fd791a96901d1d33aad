@@ -2,6 +2,29 @@
   "comments": [
     {
       "key": {
+        "uuid": "8f77a607_258c5de5",
+        "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/job/Main.scala",
+        "patchSetId": 6
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2019-12-12T13:23:06Z",
+      "side": 1,
+      "message": "What about something like this (https://gerrit-review.googlesource.com/c/apps/analytics-etl/+/248075) to abstract the storage?",
+      "range": {
+        "startLine": 73,
+        "startChar": 6,
+        "endLine": 97,
+        "endChar": 7
+      },
+      "revId": "f79c37ec1f188b387d416fd791a96901d1d33aad",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "aa924fa7_6c35a3fb",
         "filename": "auditlog/src/main/scala/com/gerritforge/analytics/auditlog/model/CommandLineArguments.scala",
         "patchSetId": 6
