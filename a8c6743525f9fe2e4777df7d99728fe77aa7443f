@@ -46,6 +46,30 @@
       "revId": "a8c6743525f9fe2e4777df7d99728fe77aa7443f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b41a0cbc_e0ac8f3d",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1083454
+      },
+      "writtenOn": "2019-12-12T13:41:05Z",
+      "side": 1,
+      "message": "Isn\u0027t that going to be messy? part of the params have to be passed with spark session, part using command-line. First question I would ask is which one should go where? Another thing is that number of params which we have to setup is already significant and it will only grow. It\u0027s hard to maintain and test between environments. Isn\u0027t it better to use config file? We can do a proper configuration management, use version control ans so on.",
+      "parentUuid": "29a5679a_7f6363a0",
+      "range": {
+        "startLine": 88,
+        "startChar": 38,
+        "endLine": 88,
+        "endChar": 76
+      },
+      "revId": "a8c6743525f9fe2e4777df7d99728fe77aa7443f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
