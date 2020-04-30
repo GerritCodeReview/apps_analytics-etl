@@ -29,7 +29,7 @@ object SharedSettings {
   private val dockerRepositoryPrefix = "gerrit-analytics-etl"
 
   lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
-    scalaVersion := "2.11.8",
+    scalaVersion := "2.11.12",
     organization := "gerritforge",
     parallelExecution in Test := false,
     fork in Test := true,
