@@ -33,9 +33,11 @@ case class GerritEndpointConfig(
     username: Option[String] = None,
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,
-    extractBranches: Option[Boolean] = None) {
+    extractBranches: Option[Boolean] = None
+) {
 
-  val gerritApiConnection: GerritConnectivity = new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
+  val gerritApiConnection: GerritConnectivity =
+    new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
 
   val gerritProjectsUrl: Option[String] = baseUrl.map { url =>
     s"${url}/projects/" + prefix.fold("")("?p=" + _)

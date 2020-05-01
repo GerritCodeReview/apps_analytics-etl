@@ -31,7 +31,9 @@ object ReadsOps {
     } catch {
       case NonFatal(e) =>
         throw new IllegalArgumentException(
-          s"Invalid date '$dateStr' expected format is '${cliDateFormat}'", e)
+          s"Invalid date '$dateStr' expected format is '${cliDateFormat}'",
+          e
+        )
     }
   }
 }

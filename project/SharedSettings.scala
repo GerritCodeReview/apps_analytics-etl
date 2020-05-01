@@ -22,8 +22,8 @@ import sbtdocker.DockerPlugin.autoImport._
 
 object SharedSettings {
   val elastic4s = Seq(
-    "com.sksamuel.elastic4s" %% "elastic4s-core"              % Elastic4sVersion,
-    "com.sksamuel.elastic4s" %% "elastic4s-http"              % Elastic4sVersion
+    "com.sksamuel.elastic4s" %% "elastic4s-core" % Elastic4sVersion,
+    "com.sksamuel.elastic4s" %% "elastic4s-http" % Elastic4sVersion
   )
 
   private val dockerRepositoryPrefix = "gerrit-analytics-etl"
@@ -35,16 +35,18 @@ object SharedSettings {
     fork in Test := true,
     git.useGitDescribe := true,
     libraryDependencies ++= Seq(
-      "org.apache.spark"           %% "spark-core"             % sparkVersion % "provided" exclude("org.spark-project.spark", "unused"),
-      "org.apache.spark"           %% "spark-sql"              % sparkVersion % "provided",
-      "org.elasticsearch"          %% "elasticsearch-spark-20" % esSpark excludeAll ExclusionRule(organization = "org.apache.spark"),
-      "org.json4s"                 %% "json4s-native"          % json4s,
-      "com.google.gerrit"          % "gerrit-plugin-api"       % gerritApiVersion % Provided withSources(),
-      "com.typesafe.scala-logging" %% "scala-logging"          % scalaLogging,
-      "com.github.scopt"           %% "scopt"                  % scopt,
-      "org.scalactic"              %% "scalactic"              % scalactic % "test",
-      "org.scalatest"              %% "scalatest"              % scalaTest % "test",
-      "com.dimafeng"               %% "testcontainers-scala"   % TestContainersScala % Test
+      "org.apache.spark"  %% "spark-core"             % sparkVersion % "provided" exclude ("org.spark-project.spark", "unused"),
+      "org.apache.spark"  %% "spark-sql"              % sparkVersion % "provided",
+      "org.elasticsearch" %% "elasticsearch-spark-20" % esSpark excludeAll ExclusionRule(
+        organization = "org.apache.spark"
+      ),
+      "org.json4s"                 %% "json4s-native"        % json4s,
+      "com.google.gerrit"          % "gerrit-plugin-api"     % gerritApiVersion % Provided withSources (),
+      "com.typesafe.scala-logging" %% "scala-logging"        % scalaLogging,
+      "com.github.scopt"           %% "scopt"                % scopt,
+      "org.scalactic"              %% "scalactic"            % scalactic % "test",
+      "org.scalatest"              %% "scalatest"            % scalaTest % "test",
+      "com.dimafeng"               %% "testcontainers-scala" % TestContainersScala % Test
     ) ++ elastic4s
   )
 
@@ -52,8 +54,8 @@ object SharedSettings {
     val repositoryName = Seq(dockerRepositoryPrefix, projectName).mkString("-")
     Seq(
       name := s"analytics-etl-$projectName",
-      mainClass in (Compile,run) := Some(s"com.gerritforge.analytics.$projectName.job.Main"),
-      packageOptions in(Compile, packageBin) += Package.ManifestAttributes(
+      mainClass in (Compile, run) := Some(s"com.gerritforge.analytics.$projectName.job.Main"),
+      packageOptions in (Compile, packageBin) += Package.ManifestAttributes(
         ("Gerrit-ApiType", "plugin"),
         ("Gerrit-PluginName", s"analytics-etl-$projectName"),
         ("Gerrit-Module", s"com.gerritforge.analytics.$projectName.plugin.Module"),
@@ -79,17 +81,23 @@ object SharedSettings {
     )
   }
 
-  def baseDockerfile(projectName: String, artifact: File, artifactTargetPath: String): Dockerfile = {
+  def baseDockerfile(
+      projectName: String,
+      artifact: File,
+      artifactTargetPath: String
+  ): Dockerfile = {
     new Dockerfile {
       from("openjdk:8-alpine")
       label("maintainer" -> "GerritForge <info@gerritforge.com>")
       runRaw("apk --update add curl tar bash && rm -rf /var/lib/apt/lists/* && rm /var/cache/apk/*")
       env("SPARK_VERSION", sparkVersion)
       env("SPARK_HOME", "/usr/local/spark-$SPARK_VERSION-bin-hadoop2.7")
-      env("PATH","$PATH:$SPARK_HOME/bin")
+      env("PATH", "$PATH:$SPARK_HOME/bin")
       env("SPARK_JAR_PATH", artifactTargetPath)
-      env("SPARK_JAR_CLASS",s"com.gerritforge.analytics.$projectName.job.Main")
-      runRaw("curl -sL \"http://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz\" | tar -xz -C /usr/local")
+      env("SPARK_JAR_CLASS", s"com.gerritforge.analytics.$projectName.job.Main")
+      runRaw(
+        "curl -sL \"http://archive.apache.org/dist/spark/spark-$SPARK_VERSION/spark-$SPARK_VERSION-bin-hadoop2.7.tgz\" | tar -xz -C /usr/local"
+      )
       add(artifact, artifactTargetPath)
       runRaw(s"chmod +x $artifactTargetPath")
     }
@@ -97,14 +105,14 @@ object SharedSettings {
 }
 
 object Versions {
-  val Elastic4sVersion = "6.5.1"
-  val sparkVersion = "2.3.3"
-  val gerritApiVersion = "2.13.7"
-  val esSpark = "6.2.0"
-  val scalaLogging = "3.7.2"
-  val scopt = "3.6.0"
-  val scalactic = "3.0.1"
-  val scalaTest = "3.0.1"
-  val json4s = "3.2.11"
+  val Elastic4sVersion    = "6.5.1"
+  val sparkVersion        = "2.3.3"
+  val gerritApiVersion    = "2.13.7"
+  val esSpark             = "6.2.0"
+  val scalaLogging        = "3.7.2"
+  val scopt               = "3.6.0"
+  val scalactic           = "3.0.1"
+  val scalaTest           = "3.0.1"
+  val json4s              = "3.2.11"
   val TestContainersScala = "0.23.0"
 }

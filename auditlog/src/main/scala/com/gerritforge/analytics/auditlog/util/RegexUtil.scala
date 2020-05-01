@@ -20,8 +20,10 @@ trait RegexUtil {
 
   def matches(regex: Regex, string: String): Boolean = regex.findFirstIn(string).isDefined
 
-  def extractOrElse(rx: Regex, target: String, default: String): String = extractGroup(rx, target).getOrElse(default)
+  def extractOrElse(rx: Regex, target: String, default: String): String =
+    extractGroup(rx, target).getOrElse(default)
 
-  def extractGroup(rx: Regex, target: String): Option[String] = rx.findAllMatchIn(target).toList.headOption.map(_.group("capture"))
+  def extractGroup(rx: Regex, target: String): Option[String] =
+    rx.findAllMatchIn(target).toList.headOption.map(_.group("capture"))
 
 }

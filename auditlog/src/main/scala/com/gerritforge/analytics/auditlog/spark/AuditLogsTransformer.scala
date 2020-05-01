@@ -14,7 +14,11 @@
 
 package com.gerritforge.analytics.auditlog.spark
 
-import com.gerritforge.analytics.auditlog.broadcast.{AdditionalUsersInfo, GerritProjects, GerritUserIdentifiers}
+import com.gerritforge.analytics.auditlog.broadcast.{
+  AdditionalUsersInfo,
+  GerritProjects,
+  GerritUserIdentifiers
+}
 import com.gerritforge.analytics.auditlog.model.{AggregatedAuditEvent, AuditEvent}
 import com.gerritforge.analytics.auditlog.model.ElasticSearchFields._
 import com.gerritforge.analytics.auditlog.range.TimeRange
@@ -24,16 +28,20 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{Dataset, SparkSession}
 
 case class AuditLogsTransformer(
-  gerritIdentifiers: GerritUserIdentifiers = GerritUserIdentifiers.empty,
-  additionalUsersInfo: AdditionalUsersInfo = AdditionalUsersInfo.empty,
-  gerritProjects: GerritProjects = GerritProjects.empty
+    gerritIdentifiers: GerritUserIdentifiers = GerritUserIdentifiers.empty,
+    additionalUsersInfo: AdditionalUsersInfo = AdditionalUsersInfo.empty,
+    gerritProjects: GerritProjects = GerritProjects.empty
 )(implicit spark: SparkSession) {
 
-  private val broadcastUserIdentifiers = spark.sparkContext.broadcast(gerritIdentifiers)
+  private val broadcastUserIdentifiers     = spark.sparkContext.broadcast(gerritIdentifiers)
   private val broadcastAdditionalUsersInfo = spark.sparkContext.broadcast(additionalUsersInfo)
-  private val broadcastGerritProjects = spark.sparkContext.broadcast(gerritProjects)
+  private val broadcastGerritProjects      = spark.sparkContext.broadcast(gerritProjects)
 
-  def transform(auditEventsRDD: RDD[AuditEvent], timeAggregation: String, timeRange: TimeRange = TimeRange.always): Dataset[AggregatedAuditEvent] = {
+  def transform(
+      auditEventsRDD: RDD[AuditEvent],
+      timeAggregation: String,
+      timeRange: TimeRange = TimeRange.always
+  ): Dataset[AggregatedAuditEvent] = {
     import spark.implicits._
     auditEventsRDD
       .filterWithinRange(TimeRange(timeRange.since, timeRange.until))

@@ -39,8 +39,10 @@ class ElasticSearchPimpedWriterIT
 
     // Writing into the first index
     val dataIntoIndexOne: Dataset[String] = "Content in the first index".split(" ").toList.toDS()
-    Await.result(dataIntoIndexOne.saveToEsWithAliasSwap(aliasName, documentName).futureAction,
-                 2 seconds)
+    Await.result(
+      dataIntoIndexOne.saveToEsWithAliasSwap(aliasName, documentName).futureAction,
+      2 seconds
+    )
     // Reading from the alias
     val resultFromAliasFirst: Dataset[String] =
       spark.read.format("es").load(s"$aliasName/$documentName").as[String]
@@ -52,8 +54,10 @@ class ElasticSearchPimpedWriterIT
 
     // Writing into the second index
     val dataIntoIndexTwo: Dataset[String] = "Content in the second index".split(" ").toList.toDS()
-    Await.result(dataIntoIndexTwo.saveToEsWithAliasSwap(aliasName, documentName).futureAction,
-                 2 seconds)
+    Await.result(
+      dataIntoIndexTwo.saveToEsWithAliasSwap(aliasName, documentName).futureAction,
+      2 seconds
+    )
     // Reading from the alias
     val resultFromAliasSecond: Dataset[String] =
       spark.read.format("es").load(s"$aliasName/$documentName").as[String]

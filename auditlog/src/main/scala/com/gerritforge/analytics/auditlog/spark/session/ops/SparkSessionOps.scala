@@ -22,8 +22,7 @@ object SparkSessionOps {
 
   implicit class PimpedSparkSession(spark: SparkSession) {
     def getEventsFromPath(path: String): RDD[AuditEvent] =
-      spark
-        .read
+      spark.read
         .textFile(path)
         .rdd
         .flatMap(auditString => AuditEvent.parseRaw(auditString).toOption)

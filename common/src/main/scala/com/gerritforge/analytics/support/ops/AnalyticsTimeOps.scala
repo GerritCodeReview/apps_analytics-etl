@@ -22,58 +22,62 @@ import java.util.TimeZone
 
 import scala.util.Try
 
-  object AnalyticsDateTimeFormatter {
+object AnalyticsDateTimeFormatter {
 
-    val yyyy_MM_dd_HHmmss_SSSSSSSSS: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS")
-    val yyyy_MM_dd: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+  val yyyy_MM_dd_HHmmss_SSSSSSSSS: DateTimeFormatter =
+    DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSSSSS")
+  val yyyy_MM_dd: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-    val yyyyMMddHH: SimpleDateFormat = buildSimpleDateFormatUTC("yyyyMMddHH")
-    val yyyyMMdd: SimpleDateFormat= buildSimpleDateFormatUTC("yyyyMMdd")
-    val yyyyMM: SimpleDateFormat = buildSimpleDateFormatUTC("yyyyMM")
-    val yyyy: SimpleDateFormat = buildSimpleDateFormatUTC("yyyy")
+  val yyyyMMddHH: SimpleDateFormat = buildSimpleDateFormatUTC("yyyyMMddHH")
+  val yyyyMMdd: SimpleDateFormat   = buildSimpleDateFormatUTC("yyyyMMdd")
+  val yyyyMM: SimpleDateFormat     = buildSimpleDateFormatUTC("yyyyMM")
+  val yyyy: SimpleDateFormat       = buildSimpleDateFormatUTC("yyyy")
 
-    private def buildSimpleDateFormatUTC(pattern: String): SimpleDateFormat =  {
-      val simpleDateFormat = new SimpleDateFormat(pattern)
-      simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
-      simpleDateFormat
-    }
+  private def buildSimpleDateFormatUTC(pattern: String): SimpleDateFormat = {
+    val simpleDateFormat = new SimpleDateFormat(pattern)
+    simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"))
+    simpleDateFormat
+  }
+}
+
+object CommonTimeOperations {
+  def nowEpoch: Long = Instant.now().atOffset(ZoneOffset.UTC).toInstant.getEpochSecond
+
+  def epochToSqlTimestampOps(epoch: Long) = new Timestamp(epoch)
+
+  def nowSqlTimestmap: Timestamp = epochToSqlTimestampOps(nowEpoch)
+
+  def utcDateTimeFromEpoch(epoch: Long): LocalDateTime =
+    LocalDateTime.ofEpochSecond(epoch, 0, ZoneOffset.UTC)
+}
+
+object implicits {
+
+  implicit class LocalDateTimeOps(val localDateTime: LocalDateTime) extends AnyVal {
+    def convertToUTCEpochMillis: Long =
+      localDateTime.atOffset(ZoneOffset.UTC).toInstant.toEpochMilli
+
+    def convertToUTCLocalDateTime: OffsetDateTime = localDateTime.atOffset(ZoneOffset.UTC)
   }
 
-  object CommonTimeOperations {
-    def nowEpoch: Long = Instant.now().atOffset(ZoneOffset.UTC).toInstant.getEpochSecond
+  implicit class StringToTimeParsingOps(val dateStr: String) extends AnyVal {
+    def parseStringToUTCEpoch(stringFormat: DateTimeFormatter): Option[Long] =
+      Try(LocalDateTime.parse(dateStr, stringFormat).convertToUTCEpochMillis).toOption
 
-    def epochToSqlTimestampOps(epoch: Long) = new Timestamp(epoch)
-
-    def nowSqlTimestmap: Timestamp = epochToSqlTimestampOps(nowEpoch)
-
-    def utcDateTimeFromEpoch(epoch: Long): LocalDateTime = LocalDateTime.ofEpochSecond(epoch, 0, ZoneOffset.UTC)
+    def parseStringToLocalDate(stringFormat: DateTimeFormatter): Option[LocalDate] =
+      Try(LocalDate.parse(dateStr, stringFormat)).toOption
   }
 
-  object implicits {
+}
 
-    implicit class LocalDateTimeOps(val localDateTime: LocalDateTime) extends AnyVal {
-      def convertToUTCEpochMillis: Long = localDateTime.atOffset(ZoneOffset.UTC).toInstant.toEpochMilli
+trait DateConversions {
+  val NO_TIMESTAMP = new Timestamp(0L)
 
-      def convertToUTCLocalDateTime: OffsetDateTime = localDateTime.atOffset(ZoneOffset.UTC)
-    }
-
-    implicit class StringToTimeParsingOps(val dateStr: String) extends AnyVal {
-      def parseStringToUTCEpoch(stringFormat: DateTimeFormatter): Option[Long] =
-        Try(LocalDateTime.parse(dateStr, stringFormat).convertToUTCEpochMillis).toOption
-
-      def parseStringToLocalDate(stringFormat: DateTimeFormatter): Option[LocalDate] =
-        Try(LocalDate.parse(dateStr, stringFormat)).toOption
-    }
-
+  implicit def timestampToLocalDate(timestamp: Timestamp): Option[LocalDate] = timestamp match {
+    case NO_TIMESTAMP => None
+    case ts           => Some(ts.toLocalDateTime.toLocalDate)
   }
 
-  trait DateConversions {
-    val NO_TIMESTAMP = new Timestamp(0L)
-
-    implicit def timestampToLocalDate(timestamp: Timestamp): Option[LocalDate] = timestamp match {
-      case NO_TIMESTAMP => None
-      case ts => Some(ts.toLocalDateTime.toLocalDate)
-    }
-
-    implicit def nullableStringToOption(nullableString: String): Option[String] = Option(nullableString)
-  }
+  implicit def nullableStringToOption(nullableString: String): Option[String] =
+    Option(nullableString)
+}

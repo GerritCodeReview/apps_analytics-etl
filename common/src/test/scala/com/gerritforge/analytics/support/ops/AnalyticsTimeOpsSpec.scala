@@ -60,7 +60,8 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
       LocalDateTime
         .of(2018, 1, 1, 12, 0, 0, 0)
         .atOffset(ZoneOffset.UTC)
-        .toInstant.toEpochMilli
+        .toInstant
+        .toEpochMilli
 
     val yyyyMMddHHStr = "2018010112"
     AnalyticsDateTimeFormatter.yyyyMMddHH.format(epochValueUTC) should equal(yyyyMMddHHStr)
@@ -71,7 +72,8 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
       LocalDateTime
         .of(2018, 1, 1, 12, 0, 0, 0)
         .atOffset(ZoneOffset.UTC)
-        .toInstant.toEpochMilli
+        .toInstant
+        .toEpochMilli
 
     val yyyyMMddStr = "20180101"
     AnalyticsDateTimeFormatter.yyyyMMdd.format(epochValueUTC) should equal(yyyyMMddStr)
@@ -82,7 +84,8 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
       LocalDateTime
         .of(2018, 1, 1, 12, 0, 0, 0)
         .atOffset(ZoneOffset.UTC)
-        .toInstant.toEpochMilli
+        .toInstant
+        .toEpochMilli
 
     val yyyyMMStr = "201801"
     AnalyticsDateTimeFormatter.yyyyMM.format(epochValueUTC) should equal(yyyyMMStr)
@@ -93,7 +96,8 @@ class AnalyticsTimeOpsSpec extends FlatSpec with Matchers {
       LocalDateTime
         .of(2018, 1, 1, 12, 0, 0, 0)
         .atOffset(ZoneOffset.UTC)
-        .toInstant.toEpochMilli
+        .toInstant
+        .toEpochMilli
 
     val yyyyStr = "2018"
     AnalyticsDateTimeFormatter.yyyy.format(epochValueUTC) should equal(yyyyStr)

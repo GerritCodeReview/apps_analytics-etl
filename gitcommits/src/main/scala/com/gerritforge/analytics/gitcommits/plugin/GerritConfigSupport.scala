@@ -13,7 +13,7 @@ class GerritConfigSupport @Inject()(@GerritServerConfig val cfg: Config) extends
     listenUrl match {
       case portRegex(_, port, path) =>
         val url = s"http://127.0.0.1:$port/$path"
-        if(url.endsWith("/")) {
+        if (url.endsWith("/")) {
           Some(url.dropRight(1))
         } else {
           Some(url)

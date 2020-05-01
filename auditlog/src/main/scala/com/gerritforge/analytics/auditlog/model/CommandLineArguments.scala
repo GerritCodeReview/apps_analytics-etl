@@ -53,19 +53,21 @@ object CommandLineArguments {
         opt[String]('e', "eventsTimeAggregation") optional () action { (input, c) =>
           c.copy(eventsTimeAggregation = Some(input))
         } text "Events of the same type, produced by the same user will be aggregated with this time granularity: " +
-                 "'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'"
+          "'second', 'minute', 'hour', 'week', 'month', 'quarter'. (Optional) - Default: 'hour'"
 
         opt[Boolean]('k', "ignoreSSLCert") optional () action { (input, c) =>
           c.copy(ignoreSSLCert = Some(input))
         } text "Ignore SSL certificate validation (Optional) - Default: false"
 
-        opt[LocalDate]('s', "since") optional () action { (input, c) => c.copy(since = Some(input))
+        opt[LocalDate]('s', "since") optional () action { (input, c) =>
+          c.copy(since = Some(input))
         } text "process only auditLogs occurred after (and including) this date, expressed as 'yyyy-MM-dd' (Optional)"
 
-        opt[LocalDate]('u', "until") optional () action { (input, c) => c.copy(until = Some(input))
+        opt[LocalDate]('u', "until") optional () action { (input, c) =>
+          c.copy(until = Some(input))
         } text "process only auditLogs occurred before (and including) this date, expressed as 'yyyy-MM-dd' (Optional)"
       }
 
-      parser.parse(args, AuditLogETLConfig())
+    parser.parse(args, AuditLogETLConfig())
   }
 }

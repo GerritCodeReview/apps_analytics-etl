@@ -17,18 +17,28 @@ import java.sql
 
 import com.gerritforge.analytics.SparkTestSupport
 import com.gerritforge.analytics.auditlog.broadcast._
-import com.gerritforge.analytics.auditlog.model.{AggregatedAuditEvent, ElasticSearchFields, HttpAuditEvent, SshAuditEvent}
+import com.gerritforge.analytics.auditlog.model.{
+  AggregatedAuditEvent,
+  ElasticSearchFields,
+  HttpAuditEvent,
+  SshAuditEvent
+}
 import com.gerritforge.analytics.auditlog.spark.AuditLogsTransformer
 import com.gerritforge.analytics.support.ops.CommonTimeOperations._
 import org.scalatest.{FlatSpec, Matchers}
 
-class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupport with TestFixtures {
+class AuditLogsTransformerSpec
+    extends FlatSpec
+    with Matchers
+    with SparkTestSupport
+    with TestFixtures {
   behavior of "AuditLogsTransformer"
 
   it should "process an anonymous http audit entry" in {
     val events = Seq(anonymousHttpAuditEvent)
 
-    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
@@ -50,7 +60,8 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "process an authenticated http audit entry where gerrit account couldn't be identified" in {
     val events = Seq(authenticatedHttpAuditEvent)
 
-    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
@@ -70,12 +81,13 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   }
 
   it should "process an authenticated http audit entry where gerrit account could be identified" in {
-    val events = Seq(authenticatedHttpAuditEvent)
+    val events               = Seq(authenticatedHttpAuditEvent)
     val gerritUserIdentifier = "Antonio Barone"
 
     val aggregatedEventsDS =
-      AuditLogsTransformer(GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier)))
-        .transform(sc.parallelize(events), timeAggregation="hour")
+      AuditLogsTransformer(
+        GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier))
+      ).transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
@@ -97,7 +109,8 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "process an SSH audit entry" in {
     val events = Seq(sshAuditEvent)
 
-    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
@@ -119,7 +132,8 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "group ssh events from the same user together, if they fall within the same time bucket (hour)" in {
     val events = Seq(sshAuditEvent, sshAuditEvent.copy(timeAtStart = timeAtStart + 1000))
 
-    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
@@ -140,9 +154,10 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
 
   it should "group ssh events from different users separately, even if they fall within the same time bucket (hour)" in {
     val user2Id = sshAuditEvent.who.map(_ + 1)
-    val events = Seq(sshAuditEvent, sshAuditEvent.copy(who=user2Id))
+    val events  = Seq(sshAuditEvent, sshAuditEvent.copy(who = user2Id))
 
-    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
@@ -177,9 +192,13 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   }
 
   it should "group different event types separately, event if they fall within the same time bucket (hour)" in {
-    val events = Seq(sshAuditEvent, authenticatedHttpAuditEvent.copy(timeAtStart = sshAuditEvent.timeAtStart + 1000))
+    val events = Seq(
+      sshAuditEvent,
+      authenticatedHttpAuditEvent.copy(timeAtStart = sshAuditEvent.timeAtStart + 1000)
+    )
 
-    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.columns should contain theSameElementsAs ElasticSearchFields.ALL_DOCUMENT_FIELDS
 
@@ -216,31 +235,36 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "process user type" in {
     val events = Seq(authenticatedHttpAuditEvent)
 
-    val userType = "nonDefaultUserType"
+    val userType           = "nonDefaultUserType"
     val additionalUserInfo = AdditionalUserInfo(authenticatedHttpAuditEvent.who.get, userType)
 
-    val aggregatedEventsDS = AuditLogsTransformer(additionalUsersInfo = AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))).transform(
-        auditEventsRDD        = sc.parallelize(events),
-        timeAggregation       = "hour"
+    val aggregatedEventsDS = AuditLogsTransformer(
+      additionalUsersInfo =
+        AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))
+    ).transform(
+      auditEventsRDD = sc.parallelize(events),
+      timeAggregation = "hour"
     )
     aggregatedEventsDS.collect.length shouldBe 1
     aggregatedEventsDS.collect.head.user_type should contain(userType)
   }
 
   it should "process user type when gerrit account could be identified" in {
-    val events = Seq(authenticatedHttpAuditEvent)
+    val events               = Seq(authenticatedHttpAuditEvent)
     val gerritUserIdentifier = "Antonio Barone"
 
-    val userType = "nonDefaultUserType"
+    val userType           = "nonDefaultUserType"
     val additionalUserInfo = AdditionalUserInfo(authenticatedHttpAuditEvent.who.get, userType)
 
     val aggregatedEventsDS =
       AuditLogsTransformer(
-        gerritIdentifiers = GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier)),
-        additionalUsersInfo = AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))
+        gerritIdentifiers =
+          GerritUserIdentifiers(Map(authenticatedHttpAuditEvent.who.get -> gerritUserIdentifier)),
+        additionalUsersInfo =
+          AdditionalUsersInfo(Map(authenticatedHttpAuditEvent.who.get -> additionalUserInfo))
       ).transform(
-          auditEventsRDD        = sc.parallelize(events),
-          timeAggregation       = "hour"
+        auditEventsRDD = sc.parallelize(events),
+        timeAggregation = "hour"
       )
 
     aggregatedEventsDS.collect.length shouldBe 1
@@ -250,8 +274,9 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "extract gerrit project from an http event" in {
     val events = Seq(authenticatedHttpAuditEvent)
 
-    val aggregatedEventsDS = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
-      .transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
+        .transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.collect.length shouldBe 1
     aggregatedEventsDS.collect.head.project should contain(project)
@@ -260,8 +285,9 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "extract gerrit project from an ssh event" in {
     val events = Seq(sshAuditEvent)
 
-    val aggregatedEventsDS = AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
-      .transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer(gerritProjects = GerritProjects(Map(project -> GerritProject(project))))
+        .transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.collect.length shouldBe 1
     aggregatedEventsDS.collect.head.project should contain(project)
@@ -270,7 +296,8 @@ class AuditLogsTransformerSpec extends FlatSpec with Matchers with SparkTestSupp
   it should "extract sub-command" in {
     val events = Seq(sshAuditEvent.copy(what = "aCommand.aSubCommand"))
 
-    val aggregatedEventsDS = AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation="hour")
+    val aggregatedEventsDS =
+      AuditLogsTransformer().transform(sc.parallelize(events), timeAggregation = "hour")
 
     aggregatedEventsDS.collect.length shouldBe 1
     aggregatedEventsDS.collect.head.sub_command should contain("aSubCommand")

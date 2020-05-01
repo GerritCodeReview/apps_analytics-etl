@@ -37,8 +37,7 @@ class GerritProjectsSupport @Inject()(gerritApi: GerritApi) {
 object GerritProjectsSupport {
 
   def parseJsonProjectListResponse(jsonSource: Source): Seq[GerritProject] = {
-    parse(jsonSource.dropGerritPrefix.mkString)
-      .values
+    parse(jsonSource.dropGerritPrefix.mkString).values
       .asInstanceOf[Map[String, Map[String, String]]]
       .mapValues(projectAttributes => projectAttributes("id"))
       .toSeq
