@@ -157,7 +157,7 @@ class GerritAnalyticsTransformationsSpec
     "year", "month", "day", "hour",
     "num_files", "num_distinct_files", "added_lines", "deleted_lines",
     "num_commits", "last_commit_date",
-    "is_merge", "commits", "branches", "is_bot_like", "hash_tags")
+    "is_merge", "commits", "branches", "is_bot_like")
 
     collected should contain allOf (
       Row(
@@ -179,8 +179,7 @@ class GerritAnalyticsTransformationsSpec
           Array(Row("e063a806c33bd524e89a87732bd3f1ad9a77a41e", 0L, false))
         ),
         new mutable.WrappedArray.ofRef(Array("master", "stable-2.14")),
-        false,
-        null
+        false
       ),
       Row(
         "p2",
@@ -204,8 +203,7 @@ class GerritAnalyticsTransformationsSpec
           )
         ),
         null,
-        true,
-        null
+        true
       ),
       Row(
         "p3",
@@ -229,37 +227,9 @@ class GerritAnalyticsTransformationsSpec
           )
         ),
         null,
-        false,
-        null
+        false
       )
     )
-  }
-
-  it should "extract single hashtag" in {
-    import sql.implicits._
-
-    val hashTag = "test-hash-tag"
-    val rdd     = sc.parallelize(Seq(("p1", s"""{"hash_tags": ["$hashTag"] }""")))
-
-    val df = rdd.toDF("project", "json").transformCommitterInfo
-
-    df.count should be(1)
-    df.schema.fields.map(_.name) should contain inOrder ("project", "hash_tags")
-    df.collect.head.getAs[Array[String]]("hash_tags") shouldBe Array(hashTag)
-  }
-
-  it should "extract multiple hashtags" in {
-    import sql.implicits._
-
-    val hashTag1 = "test-hash-tag-1"
-    val hashTag2 = "test-hash-tag-2"
-    val rdd      = sc.parallelize(Seq(("p1", s"""{"hash_tags": ["$hashTag1", "$hashTag2"] }""")))
-
-    val df = rdd.toDF("project", "json").transformCommitterInfo
-
-    df.count should be(1)
-    df.schema.fields.map(_.name) should contain inOrder ("project", "hash_tags")
-    df.collect.head.getAs[Array[String]]("hash_tags") shouldBe Array(hashTag1, hashTag2)
   }
 
   "handleAliases" should "enrich the data with author from the alias DF" in {
