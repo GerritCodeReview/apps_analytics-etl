@@ -1,6 +1,24 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47655bcd_c50eda00",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1147366
+      },
+      "writtenOn": "2022-04-18T04:25:37Z",
+      "side": 1,
+      "message": "good ",
+      "revId": "bc0487f361c1af2dda5f67ab48ca254304129b29",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
       "key": {
         "uuid": "fb405e41_f720f78d",
         "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
@@ -20,10 +38,10 @@
         "endChar": 29
       },
       "revId": "bc0487f361c1af2dda5f67ab48ca254304129b29",
-      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
-      "unresolved": true
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": true,
       "key": {
         "uuid": "84a31a86_5cee4b02",
         "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
@@ -44,10 +62,10 @@
         "endChar": 29
       },
       "revId": "bc0487f361c1af2dda5f67ab48ca254304129b29",
-      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
-      "unresolved": true
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
       "key": {
         "uuid": "6c4b0059_c91d81dc",
         "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
@@ -68,8 +86,7 @@
         "endChar": 29
       },
       "revId": "bc0487f361c1af2dda5f67ab48ca254304129b29",
-      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
-      "unresolved": false
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
