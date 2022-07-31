@@ -35,6 +35,23 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "374b5796_a047c459",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 12
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1147366
+      },
+      "writtenOn": "2022-07-31T00:13:29Z",
+      "side": 1,
+      "message": "mehdiamer all bit",
+      "revId": "bc0487f361c1af2dda5f67ab48ca254304129b29",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb405e41_f720f78d",
