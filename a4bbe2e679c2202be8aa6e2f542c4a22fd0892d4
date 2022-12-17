@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed6054f8_bf1a2609",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1152107
+      },
+      "writtenOn": "2022-12-17T23:24:11Z",
+      "side": 1,
+      "message": "git clone https://gerrit.googlesource.com/All-Users",
+      "revId": "a4bbe2e679c2202be8aa6e2f542c4a22fd0892d4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
