@@ -67,6 +67,23 @@
       "message": "265652: Reformat with scalafmt | https://gerrit-review.googlesource.com/c/apps/analytics-etl/+/265652",
       "revId": "2adcc00ee5fff5d03fc13f1c4ad7dca8a57ede04",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "788b809a_bc8601fb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1158411
+      },
+      "writtenOn": "2023-11-11T06:05:36Z",
+      "side": 1,
+      "message": "#save Gaza",
+      "revId": "2adcc00ee5fff5d03fc13f1c4ad7dca8a57ede04",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
