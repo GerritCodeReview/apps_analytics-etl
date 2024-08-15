@@ -86,6 +86,10 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
         c.copy(extractBranches = Some(input))
       } text "enables branches extraction for each commit"
 
+      opt[String]('m', "manifest") optional () action { (x, c) =>
+        c.copy(aggregate = Some(x))
+      } text "repo manifest XML with the list of projects to process"
+
     }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
@@ -147,11 +151,11 @@ trait FetchProjects {
 }
 
 trait FetchRemoteProjects extends FetchProjects {
-  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
+  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] =
+  config.projectsFromManifest.map(_.toSeq).getOrElse(
     config.gerritProjectsUrl.toSeq.flatMap { url =>
       GerritProjectsSupport.parseJsonProjectListResponse(
         config.gerritApiConnection.getContentFromApi(url)
       )
-    }
-  }
+    })
 }
