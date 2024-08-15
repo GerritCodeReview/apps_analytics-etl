@@ -15,6 +15,7 @@
 package com.gerritforge.analytics.gitcommits.model
 
 import java.net.URLEncoder
+import scala.xml._
 import java.time.format.DateTimeFormatter
 import java.time.{LocalDate, ZoneOffset}
 
@@ -33,8 +34,21 @@ case class GerritEndpointConfig(
     username: Option[String] = None,
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,
-    extractBranches: Option[Boolean] = None
+    extractBranches: Option[Boolean] = None,
+    manifest: Option[String] = None
 ) {
+
+  lazy val manifestProjectNames: Option[Set[String]] = manifest.map { mf =>
+      val mfDoc = XML.loadFile(mf)
+      val mfProjects = mfDoc \ "project"
+    mfProjects.theSeq
+      .flatMap(_.attribute("name").toSeq)
+      .flatten
+      .map(_.text)
+      .toSet
+  }
+
+  val projectInManifest: GerritProject => Boolean = (project: GerritProject) => manifestProjectNames.fold(true)(_.contains(project.name))
 
   val gerritApiConnection: GerritConnectivity =
     new GerritConnectivity(username, password, ignoreSSLCert.getOrElse(false))
