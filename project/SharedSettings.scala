@@ -43,7 +43,8 @@ object SharedSettings {
       "com.github.scopt"           %% "scopt"                % scopt,
       "org.scalactic"              %% "scalactic"            % scalactic % "test",
       "org.scalatest"              %% "scalatest"            % scalaTest % "test",
-      "com.dimafeng"               %% "testcontainers-scala" % TestContainersScala % Test
+      "com.dimafeng"               %% "testcontainers-scala" % TestContainersScala % Test,
+      "org.scala-lang.modules"     %% "scala-xml"            % "1.3.0",
     )
   )
 
