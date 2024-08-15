@@ -30,6 +30,7 @@ object SharedSettings {
 
   lazy val commonSettings: Seq[Def.Setting[_]] = Seq(
     scalaVersion := "2.11.12",
+    javacOptions in Compile ++= Seq("-source", "8", "-target", "8"),
     organization := "gerritforge",
     parallelExecution in Test := false,
     fork in Test := true,
