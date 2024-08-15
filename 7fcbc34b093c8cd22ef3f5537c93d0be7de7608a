@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fe338e9_3c97af3b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-15T08:10:41Z",
+      "side": 1,
+      "message": "The change looks good. However, if we want to keep the CI build we will have to adapt the pipeline to make java available in the docker images for the build. \n\nI quickly tried with this change [1], but then realised java 8 is not available anymore.\n\nMaybe we could just install it in the \"jenkins/gerrit-sbt-build-app.sh\" since it is not required by other applications/plugins.\n\n[1]: https://gerrit-review.googlesource.com/c/gerrit-ci-scripts/+/435078",
+      "revId": "7fcbc34b093c8cd22ef3f5537c93d0be7de7608a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
