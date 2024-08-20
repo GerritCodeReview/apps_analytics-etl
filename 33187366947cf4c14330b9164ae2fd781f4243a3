@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9053c892_0f046359",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-20T15:55:50Z",
+      "side": 1,
+      "message": "The error is coming from the `saveToEsWithAliasSwap` which uses `elastic4s` to write on elastisearch [1].\n\nThe latest version of `elastic4s-core` compatible with scala 2.11 is 7.1.0 [2].\nThe ltest version of `elastic4s-http` compatible with scala 2.11 is 6.7.8 [3].\n\n6.7.8 is also the latest available version of `elastic4s-http` which is probably not compatible with the latest versions of Elastisearch.\n\nI will try bumping up the libraries and see what happens.\n\n[1]: https://gerrit.googlesource.com/apps/analytics-etl/+/7fcbc34b093c8cd22ef3f5537c93d0be7de7608a/common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala#52\n[2]: https://mvnrepository.com/artifact/com.sksamuel.elastic4s/elastic4s-core\n[3]: https://mvnrepository.com/artifact/com.sksamuel.elastic4s/elastic4s-http",
+      "parentUuid": "36cc07f5_274dc027",
+      "revId": "33187366947cf4c14330b9164ae2fd781f4243a3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7ca29317_938a111d",
         "filename": "project/SharedSettings.scala",
         "patchSetId": 1
