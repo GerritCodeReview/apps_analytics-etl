@@ -80,7 +80,7 @@ object Main extends SparkApp with App with LazyLogging {
           config.eventsTimeAggregation.get,
           TimeRange(config.since, config.until)
         )
-        .saveToEs(s"${config.elasticSearchIndex.get}/$DOCUMENT_TYPE")
+        .saveToEs(s"${config.elasticSearchIndex.get}")
 
     case None =>
       logger.error("Could not parse command line arguments")

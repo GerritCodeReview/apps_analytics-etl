@@ -105,7 +105,7 @@ object Versions {
 
   val sparkVersion        = "2.3.3"
   val gerritApiVersion    = "2.13.7"
-  val esSpark             = "6.2.0"
+  val esSpark             = "8.15.0"
   val scalaLogging        = "3.7.2"
   val scopt               = "3.6.0"
   val scalactic           = "3.0.1"
