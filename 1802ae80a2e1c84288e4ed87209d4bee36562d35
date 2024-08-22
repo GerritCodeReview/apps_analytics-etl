@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62292868_dc6d8380",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-22T12:31:01Z",
+      "side": 1,
+      "message": "Might be worth adding a comment explaining why we are reverting the change?",
+      "revId": "1802ae80a2e1c84288e4ed87209d4bee36562d35",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
