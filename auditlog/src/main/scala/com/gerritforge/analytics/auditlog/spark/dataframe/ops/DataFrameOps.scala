@@ -53,7 +53,7 @@ object DataFrameOps {
 
     }
 
-    def withTimeBucketColumn(timeBucketCol: String, timeAggregation: String): DataFrame = {
+    def withTimeBucketColum(timeBucketCol: String, timeAggregation: String): DataFrame = {
       dataFrame
         .withColumn(
           timeBucketCol,

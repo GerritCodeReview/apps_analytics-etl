@@ -43,5 +43,5 @@ object ElasticSearchFields {
 
   val ALL_DOCUMENT_FIELDS: List[String] = FACETING_FIELDS :+ NUM_EVENTS_FIELD
 
-  val DOCUMENT_TYPE: String = "auditlog"
+  val DOCUMENT_TYPE = "auditlog"
 }

@@ -104,18 +104,13 @@ class ProcessGitCommitsCommand @Inject()(
       val projectStats = buildProjectStats().cache()
       val numRows      = projectStats.count()
 
+      import org.elasticsearch.spark.sql._
       config.elasticIndex.foreach { esIndex =>
         stdout.println(
           s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'"
         )
         stdout.flush()
-        import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
-        import scala.concurrent.ExecutionContext.Implicits.global
-        projectStats
-          .saveToEsWithAliasSwap(esIndex, indexType)
-          .futureAction
-          .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
-          .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
+        projectStats.saveToEs(s"$esIndex/$indexType")
       }
 
       val elaspsedTs = (System.currentTimeMillis - startTs) / 1000L

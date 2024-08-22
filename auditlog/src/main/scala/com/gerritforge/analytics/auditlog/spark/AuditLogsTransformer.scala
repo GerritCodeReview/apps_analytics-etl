@@ -48,7 +48,7 @@ case class AuditLogsTransformer(
       .toJsonString
       .toJsonTableDataFrame
       .hydrateWithUserIdentifierColumn(USER_IDENTIFIER_FIELD, broadcastUserIdentifiers.value)
-      .withTimeBucketColumn(TIME_BUCKET_FIELD, timeAggregation)
+      .withTimeBucketColum(TIME_BUCKET_FIELD, timeAggregation)
       .withCommandColumns(COMMAND_FIELD, COMMAND_ARGS_FIELD)
       .withSubCommandColumns(SUB_COMMAND_FIELD)
       .withUserTypeColumn(USER_TYPE_FIELD, broadcastAdditionalUsersInfo.value)

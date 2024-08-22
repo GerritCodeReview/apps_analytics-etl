@@ -134,13 +134,11 @@ trait Job {
   }
 
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
-    import scala.concurrent.ExecutionContext.Implicits.global
+    import org.elasticsearch.spark.sql._
     config.elasticIndex.foreach { esIndex =>
-      import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
-      df.saveToEsWithAliasSwap(esIndex, indexType)
-        .futureAction
-        .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
-        .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
+      logger.info(
+        s"ES content created, saving it to elastic search instance at '${config.elasticIndex}/$indexType'")
+      df.saveToEs(s"$esIndex/$indexType")
     }
 
   }
