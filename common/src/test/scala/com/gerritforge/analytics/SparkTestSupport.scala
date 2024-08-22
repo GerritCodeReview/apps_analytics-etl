@@ -32,7 +32,7 @@ trait SparkTestSupport extends BeforeAndAfterAll { this: Suite =>
     .getOrCreate()
 
   implicit lazy val sc: SparkContext = spark.sparkContext
-  implicit lazy val sql: SQLContext  = spark.sqlContext
+  implicit lazy val sql: SQLContext = spark.sqlContext
 
   override protected def afterAll() = {
     spark.close()

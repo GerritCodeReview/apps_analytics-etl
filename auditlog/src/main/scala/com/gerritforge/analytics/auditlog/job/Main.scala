@@ -27,6 +27,7 @@ import com.gerritforge.analytics.auditlog.spark.session.ops.SparkSessionOps._
 import com.gerritforge.analytics.common.api.GerritConnectivity
 import com.gerritforge.analytics.spark.SparkApp
 import com.typesafe.scalalogging.LazyLogging
+import org.elasticsearch.spark.sql._
 
 object Main extends SparkApp with App with LazyLogging {
   override val appName = "Gerrit AuditLog Analytics ETL"
@@ -70,8 +71,6 @@ object Main extends SparkApp with App with LazyLogging {
         sys.exit(1)
       }
 
-      import com.gerritforge.analytics.infrastructure.ESSparkWriterImplicits.withAliasSwap
-      import scala.concurrent.ExecutionContext.Implicits.global
       spark
         .getEventsFromPath(config.eventsPath.get)
         .transformEvents(
@@ -81,10 +80,7 @@ object Main extends SparkApp with App with LazyLogging {
           config.eventsTimeAggregation.get,
           TimeRange(config.since, config.until)
         )
-        .saveToEsWithAliasSwap(config.elasticSearchIndex.get, DOCUMENT_TYPE)
-        .futureAction
-        .map(actionRespose => logger.info(s"Completed index swap ${actionRespose}"))
-        .recover { case exception: Exception => logger.info(s"Index swap failed ${exception}") }
+        .saveToEs(s"${config.elasticSearchIndex.get}/$DOCUMENT_TYPE")
 
     case None =>
       logger.error("Could not parse command line arguments")
