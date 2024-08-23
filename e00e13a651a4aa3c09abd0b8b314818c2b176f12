@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c52e706_77a331e9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-23T07:14:01Z",
+      "side": 1,
+      "message": "This would make the gitcommit and auditlog indexes clash.",
+      "revId": "e00e13a651a4aa3c09abd0b8b314818c2b176f12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
