@@ -109,8 +109,6 @@ trait Job {
   self: LazyLogging with FetchProjects =>
   implicit val codec = Codec.ISO8859
 
-  val indexType = "gitCommits"
-
   def buildProjectStats()(implicit config: GerritEndpointConfig, spark: SparkSession): DataFrame = {
     import com.gerritforge.analytics.gitcommits.engine.GerritAnalyticsTransformations._
 
@@ -137,8 +135,8 @@ trait Job {
     import org.elasticsearch.spark.sql._
     config.elasticIndex.foreach { esIndex =>
       logger.info(
-        s"ES content created, saving it to elastic search instance at '${config.elasticIndex}/$indexType'")
-      df.saveToEs(s"$esIndex/$indexType")
+        s"ES content created, saving it to elastic search instance at '${config.elasticIndex}'")
+      df.saveToEs(esIndex)
     }
 
   }
