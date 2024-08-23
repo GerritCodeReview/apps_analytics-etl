@@ -107,10 +107,10 @@ class ProcessGitCommitsCommand @Inject()(
       import org.elasticsearch.spark.sql._
       config.elasticIndex.foreach { esIndex =>
         stdout.println(
-          s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}/$indexType'"
+          s"$numRows rows extracted. Posting Elasticsearch at '${config.elasticIndex}'"
         )
         stdout.flush()
-        projectStats.saveToEs(s"$esIndex/$indexType")
+        projectStats.saveToEs(esIndex)
       }
 
       val elaspsedTs = (System.currentTimeMillis - startTs) / 1000L
