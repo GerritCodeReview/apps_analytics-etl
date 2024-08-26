@@ -163,6 +163,30 @@
       },
       "revId": "3ebf05ea220084f4e7439117fbcd0671a241fa51",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80479da4_4c0e39f6",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfig.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-26T10:29:12Z",
+      "side": 1,
+      "message": "Isn\u0027t it the same? I personally prefer to have one modification per map step, as it won\u0027t make any difference at runtime and it is more readable",
+      "parentUuid": "a8ab8912_cada7446",
+      "range": {
+        "startLine": 47,
+        "startChar": 5,
+        "endLine": 48,
+        "endChar": 33
+      },
+      "revId": "3ebf05ea220084f4e7439117fbcd0671a241fa51",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
