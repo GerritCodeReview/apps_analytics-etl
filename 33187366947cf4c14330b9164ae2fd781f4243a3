@@ -54,6 +54,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e85bbff_3394a9d9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-26T09:45:06Z",
+      "side": 1,
+      "message": "That is now resolved in master, as we don\u0027t use elastic4s anymore.",
+      "parentUuid": "32f12a3c_efc2f9b5",
+      "revId": "33187366947cf4c14330b9164ae2fd781f4243a3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ca29317_938a111d",
@@ -67,6 +85,30 @@
       "writtenOn": "2024-08-20T14:49:09Z",
       "side": 1,
       "message": "Different version of the client relies on different documents structure. In the code we are currently using the document type in the resource [1] which is not supported from ES 7.x.\n\nIf document type was NOT mandatory in 6.X we can just remove it.\n\nOtheriwse, instead of injecting the version from a varaible I think we should branch the repo if we want to maintain different versions.\n\n[1]: https://gerrit.googlesource.com/apps/analytics-etl/+/7fcbc34b093c8cd22ef3f5537c93d0be7de7608a/common/src/main/scala/com/gerritforge/analytics/infrastructure/esSparkWriter.scala#44",
+      "range": {
+        "startLine": 113,
+        "startChar": 100,
+        "endLine": 113,
+        "endChar": 105
+      },
+      "revId": "33187366947cf4c14330b9164ae2fd781f4243a3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6d0fe9e9_c05f0b9b",
+        "filename": "project/SharedSettings.scala",
+        "patchSetId": 1
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-26T09:45:06Z",
+      "side": 1,
+      "message": "This is now resolved as we don\u0027t assume anymore the structure of the index type.",
+      "parentUuid": "7ca29317_938a111d",
       "range": {
         "startLine": 113,
         "startChar": 100,
