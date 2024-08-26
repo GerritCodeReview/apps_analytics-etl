@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d776b2e_0638a594",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-26T10:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4647019f_3cf83bf6",
+      "range": {
+        "startLine": 12,
+        "startChar": 45,
+        "endLine": 12,
+        "endChar": 57
+      },
+      "revId": "3ebf05ea220084f4e7439117fbcd0671a241fa51",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fae79f08_495302a0",
@@ -47,6 +71,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "95dc8775_9cab9e79",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-26T10:28:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fae79f08_495302a0",
+      "range": {
+        "startLine": 13,
+        "startChar": 42,
+        "endLine": 13,
+        "endChar": 56
+      },
+      "revId": "3ebf05ea220084f4e7439117fbcd0671a241fa51",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0a9305b_0ccbd674",
@@ -60,6 +108,30 @@
       "writtenOn": "2024-08-15T18:39:18Z",
       "side": 1,
       "message": "`getContentFromApi` calls the Gerrit `projects` API. Currently the ETL doesn\u0027t take pagination into consideration, hence if the number of projects matching the query exceeds the internal limit we might not get in the response all the repositories we are after.\n\nIn case of a manifest file like the Android one, it is really likely to have more than 600 projects.\n\nI think we could:\n1. call `getContentFromApi` for each project, but we would end up with hundreds of calls to the project API for a single project\n2. keep the filtering at the end, but we would need to implement the pagination logic and we would scan all the projects in Gerrit even if interested in just a subset of them\n\nI we can assume we are able to filter all the projects in the manifest using the prefix option, we could go with 2. If that\u0027s the case we can add pagination in a followup change.\n\nWDYT?",
+      "range": {
+        "startLine": 163,
+        "startChar": 6,
+        "endLine": 163,
+        "endChar": 12
+      },
+      "revId": "3ebf05ea220084f4e7439117fbcd0671a241fa51",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33f58e00_f505d344",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/job/Main.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-26T10:28:11Z",
+      "side": 1,
+      "message": "True, fixed in the next PS where the project list is just obtained from the manifest as-is.",
+      "parentUuid": "e0a9305b_0ccbd674",
       "range": {
         "startLine": 163,
         "startChar": 6,
