@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3e9e97e_66cfdd5e",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfig.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-26T13:37:49Z",
+      "side": 1,
+      "message": "nice!",
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c4c40a05_116756c8",
+        "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfigTest.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-26T13:37:49Z",
+      "side": 1,
+      "message": "nit: not needed the assertion at line #41 already implies it",
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f465ff4c_8f56ef78",
+        "filename": "project/SharedSettings.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-26T13:37:49Z",
+      "side": 1,
+      "message": "Version 1.3.1 is available",
+      "range": {
+        "startLine": 47,
+        "startChar": 68,
+        "endLine": 47,
+        "endChar": 69
+      },
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
