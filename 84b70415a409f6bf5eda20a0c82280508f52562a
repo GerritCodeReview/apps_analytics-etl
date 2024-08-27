@@ -43,6 +43,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4f41d8bd_278033ca",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfig.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-27T08:32:30Z",
+      "side": 1,
+      "message": "This has to be `contributorsUrl(p)`",
+      "range": {
+        "startLine": 49,
+        "startChar": 32,
+        "endLine": 49,
+        "endChar": 33
+      },
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4c40a05_116756c8",
         "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfigTest.scala",
         "patchSetId": 7
