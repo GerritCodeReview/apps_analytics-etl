@@ -135,6 +135,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b761797_40d7d3a4",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfig.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-08-27T10:22:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b3e9e97e_66cfdd5e",
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2669defb_05f79f37",
