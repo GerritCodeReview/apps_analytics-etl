@@ -351,6 +351,30 @@
       },
       "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b3b134d_f126aebf",
+        "filename": "project/SharedSettings.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-31T07:26:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f465ff4c_8f56ef78",
+      "range": {
+        "startLine": 47,
+        "startChar": 68,
+        "endLine": 47,
+        "endChar": 69
+      },
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
