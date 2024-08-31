@@ -277,6 +277,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "721cb9d8_39a8c471",
+        "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfigTest.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-31T07:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c4c40a05_116756c8",
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c6d93001_03344bfa",
@@ -290,6 +308,24 @@
       "writtenOn": "2024-08-27T10:17:12Z",
       "side": 1,
       "message": "We should add a case with a project name containing `/` to make sure we handle it correctly.",
+      "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4066b59_00daaaf5",
+        "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfigTest.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-08-31T07:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c6d93001_03344bfa",
       "revId": "84b70415a409f6bf5eda20a0c82280508f52562a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
