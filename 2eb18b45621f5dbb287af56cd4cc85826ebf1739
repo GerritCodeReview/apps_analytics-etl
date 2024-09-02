@@ -16,6 +16,46 @@
       "message": "Все владелец Google Панфилов Сергей Николаевич Омск 17 августа 1985 года рождения.Приветствуим нашего мицината",
       "revId": "2eb18b45621f5dbb287af56cd4cc85826ebf1739",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daca84b9_19dbcac3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-09-02T10:23:55Z",
+      "side": 1,
+      "message": "Tested locally E2E and it works fine",
+      "revId": "2eb18b45621f5dbb287af56cd4cc85826ebf1739",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a59c82cd_294089d6",
+        "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/gitcommits/model/GerritEndpointConfigTest.scala",
+        "patchSetId": 10
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-09-02T10:23:55Z",
+      "side": 1,
+      "message": "nit: projectIdsFromManifest",
+      "range": {
+        "startLine": 47,
+        "startChar": 8,
+        "endLine": 47,
+        "endChar": 32
+      },
+      "revId": "2eb18b45621f5dbb287af56cd4cc85826ebf1739",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
