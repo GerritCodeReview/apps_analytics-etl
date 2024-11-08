@@ -34,7 +34,13 @@ class GerritEndpointConfigTest extends FlatSpec with Matchers with ManifestXML {
     conf.gerritProjectsUrl should contain(s"testBaseUrl/projects/")
   }
 
-  it should "return projects contained in a repo manifest XML" in {
+  "contributorsUrl" should "" in {
+    val conf = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), prefix = None)
+    conf.contributorsUrl(GerritProjectWithBranch("opensbi","opensbi",Some("refs/tags/v0.8"))) should be
+      (Some(s"testBaseUrl/projects/opensbi/analytics~contributors?&branch=refs/tags/v0.8"))
+  }
+
+  "projectsFromManifest" should "return projects contained in a repo manifest XML" in {
     val conf = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), manifest = Option(manifestFile.getAbsolutePath))
     val projectNamesFromManifest = conf.projectsFromManifest.toSeq.flatten.map(_.name)
 
@@ -47,6 +53,23 @@ class GerritEndpointConfigTest extends FlatSpec with Matchers with ManifestXML {
     val projectIdsFromManifest = conf.projectsFromManifest.toSeq.flatten.map(_.id)
 
     projectIdsFromManifest should contain only ("sel4_projects_libs", "seL4_tools", "sel4runtime", "musllibc", "seL4_libs", "prefix%2Futil_libs", "sel4test", "nanopb", "opensbi")
+  }
+
+  it should "return projects with the version contained in a repo manifest XML with" in {
+    val conf = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), manifest = Option(manifestFile.getAbsolutePath))
+    val projectNamesFromManifest = conf.projectsFromManifest.toSeq.flatten
+
+    projectNamesFromManifest should contain only (
+      GerritProjectWithBranch("musllibc","musllibc",Some("sel4")),
+      GerritProjectWithBranch("nanopb","nanopb",Some("refs/tags/0.4.3")),
+      GerritProjectWithBranch("opensbi","opensbi",Some("refs/tags/v0.8")),
+      GerritProjectWithBranch("prefix%2Futil_libs","prefix/util_libs",Some("master")),
+      GerritProjectWithBranch("sel4_projects_libs","sel4_projects_libs",Some("master")),
+      GerritProjectWithBranch("sel4runtime","sel4runtime",Some("master")),
+      GerritProjectWithBranch("sel4test","sel4test",Some("master")),
+      GerritProjectWithBranch("seL4_libs","seL4_libs",Some("master")),
+      GerritProjectWithBranch("seL4_tools","seL4_tools",Some("master"))
+    )
   }
 }
 
