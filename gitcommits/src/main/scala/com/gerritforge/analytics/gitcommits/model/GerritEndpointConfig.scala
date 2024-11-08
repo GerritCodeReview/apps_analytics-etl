@@ -42,14 +42,15 @@ case class GerritEndpointConfig(
 
   lazy val projectsFromManifest: Option[Set[GerritProject]] = manifest.map { mf =>
       val mfDoc = XML.loadFile(mf)
+      val defaultBranch = (mfDoc \ "default" \@ "revision").trim
       val mfProjects = mfDoc \ "project"
-    mfProjects.theSeq
-      .flatMap(_.attribute("name").toSeq)
-      .flatten
-      .map(_.text)
-      .map(_.stripSuffix(".git"))
-      .map(p => GerritProject(URLEncoder.encode(p, "UTF-8"),p))
-      .toSet
+
+      mfProjects.flatMap { projectNode =>
+        for {
+          name <- projectNode.attribute("name").map(_.text.stripSuffix(".git"))
+          version = projectNode.attribute("revision").map(_.text).orElse(Some(defaultBranch))
+        } yield GerritProject(URLEncoder.encode(name, "UTF-8"), name, version)
+      }.toSet
   }
 
   val gerritApiConnection: GerritConnectivity =
@@ -75,8 +76,9 @@ case class GerritEndpointConfig(
     "extract-branches" -> extractBranches.map(_.toString)
   ).flatMap(queryOpt).mkString("?", "&", "")
 
-  def contributorsUrl(projectName: String): Option[String] =
+  def contributorsUrl(project: GerritProject): Option[String] =
     baseUrl.map { url =>
-      s"$url/projects/$projectName/analytics~contributors$queryString"
+      val branchFilter = project.branch.fold("")(branch => s"&branch=$branch")
+      s"$url/projects/${project.name}/analytics~contributors$queryString$branchFilter"
     }
 }
