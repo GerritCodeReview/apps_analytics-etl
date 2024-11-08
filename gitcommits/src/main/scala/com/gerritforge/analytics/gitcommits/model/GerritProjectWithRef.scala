@@ -21,28 +21,28 @@ import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
 import scala.util.Try
-case class GerritProject(id: String, name: String)
+case class GerritProjectWithRef(id: String, name: String, refName: Option[String] = None)
 
 class GerritProjectsSupport @Inject()(gerritApi: GerritApi) {
 
-  def getProject(projectName: String): Try[GerritProject] = {
+  def getProject(projectName: String): Try[GerritProjectWithRef] = {
     val projectApi = gerritApi.projects().name(projectName)
     Try {
       val project = projectApi.get()
-      GerritProject(project.id, project.name)
+      GerritProjectWithRef(project.id, project.name)
     }
   }
 }
 
 object GerritProjectsSupport {
 
-  def parseJsonProjectListResponse(jsonSource: Source): Seq[GerritProject] = {
+  def parseJsonProjectListResponse(jsonSource: Source): Seq[GerritProjectWithRef] = {
     parse(jsonSource.dropGerritPrefix.mkString).values
       .asInstanceOf[Map[String, Map[String, String]]]
       .mapValues(projectAttributes => projectAttributes("id"))
       .toSeq
       .map {
-        case (name, id) => GerritProject(id, name)
+        case (name, id) => GerritProjectWithRef(id, name)
       }
   }
 }

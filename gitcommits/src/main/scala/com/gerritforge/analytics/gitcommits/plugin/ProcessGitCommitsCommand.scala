@@ -6,7 +6,7 @@ import java.time.LocalDate
 import com.gerritforge.analytics.gitcommits.job.{FetchProjects, Job}
 import com.gerritforge.analytics.gitcommits.model.{
   GerritEndpointConfig,
-  GerritProject,
+  GerritProjectWithRef,
   GerritProjectsSupport
 }
 import com.google.gerrit.server.project.ProjectControl
@@ -125,7 +125,7 @@ class ProcessGitCommitsCommand @Inject()(
     }
   }
 
-  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] = {
+  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProjectWithRef] = {
     config.prefix.toSeq.flatMap(
       projectName =>
         gerritProjects.getProject(projectName) match {

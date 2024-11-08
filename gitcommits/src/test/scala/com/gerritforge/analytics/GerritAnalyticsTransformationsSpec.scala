@@ -20,7 +20,7 @@ import java.nio.charset.StandardCharsets
 import com.gerritforge.analytics.common.api.GerritConnectivity
 import com.gerritforge.analytics.gitcommits.engine.GerritAnalyticsTransformations._
 import com.gerritforge.analytics.gitcommits.model.{
-  GerritProject,
+  GerritProjectWithRef,
   GerritProjectsSupport,
   ProjectContributionSource
 }
@@ -54,7 +54,7 @@ class GerritAnalyticsTransformationsSpec
         |""".stripMargin)
     )
 
-    projects should contain only (GerritProject("All-Projects-id", "All-Projects-name"), GerritProject(
+    projects should contain only (GerritProjectWithRef("All-Projects-id", "All-Projects-name"), GerritProjectWithRef(
       "Test-id",
       "Test-name"
     ))
@@ -62,10 +62,10 @@ class GerritAnalyticsTransformationsSpec
 
   "enrichWithSource" should "enrich project RDD object with its source" in {
 
-    val projectRdd = sc.parallelize(Seq(GerritProject("project-id", "project-name")))
+    val projectRdd = sc.parallelize(Seq(GerritProjectWithRef("project-id", "project-name")))
 
     val projectWithSource = projectRdd
-      .enrichWithSource(projectId => Some(s"http://somewhere.com/$projectId"))
+      .enrichWithSource(project => Some(s"http://somewhere.com/${project.id}"))
       .collect
 
     projectWithSource should have size 1
@@ -73,6 +73,24 @@ class GerritAnalyticsTransformationsSpec
       case ProjectContributionSource(projectName, url) => {
         projectName should be("project-name")
         url should contain("http://somewhere.com/project-id")
+      }
+    }
+  }
+
+  it should "enrich project RDD object with ref" in {
+
+    val ref = "aRef"
+    val projectRdd = sc.parallelize(Seq(GerritProjectWithRef("project-id", "project-name", Some(ref))))
+
+    val projectWithSource = projectRdd
+      .enrichWithSource(project => Some(s"http://somewhere.com/${project.id}?ref=${project.refName.get}"))
+      .collect
+
+    projectWithSource should have size 1
+    inside(projectWithSource.head) {
+      case ProjectContributionSource(projectName, url) => {
+        projectName should be("project-name")
+        url should contain(s"http://somewhere.com/project-id?ref=$ref")
       }
     }
   }

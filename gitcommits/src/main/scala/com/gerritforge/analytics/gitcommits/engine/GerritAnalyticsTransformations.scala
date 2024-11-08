@@ -28,15 +28,15 @@ import scala.io.BufferedSource
 
 object GerritAnalyticsTransformations {
 
-  implicit class PimpedGerritProjectRDD(val rdd: RDD[GerritProject]) extends AnyVal {
+  implicit class PimpedGerritProjectRDD(val rdd: RDD[GerritProjectWithRef]) extends AnyVal {
 
     def enrichWithSource(
-        projectToContributorsAnalyticsUrlFactory: String => Option[String]
+        projectToContributorsAnalyticsUrlFactory: GerritProjectWithRef => Option[String]
     ): RDD[ProjectContributionSource] = {
       rdd.map { project =>
         ProjectContributionSource(
           project.name,
-          projectToContributorsAnalyticsUrlFactory(project.id)
+          projectToContributorsAnalyticsUrlFactory(project)
         )
       }
     }
@@ -223,9 +223,9 @@ object GerritAnalyticsTransformations {
     ) format DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
   def getContributorStats(
-      projects: RDD[GerritProject],
-      projectToContributorsAnalyticsUrlFactory: String => Option[String],
-      gerritApiConnection: GerritConnectivity
+                           projects: RDD[GerritProjectWithRef],
+                           projectToContributorsAnalyticsUrlFactory: GerritProjectWithRef => Option[String],
+                           gerritApiConnection: GerritConnectivity
   )(implicit spark: SparkSession) = {
     import spark.sqlContext.implicits._ // toDF
 

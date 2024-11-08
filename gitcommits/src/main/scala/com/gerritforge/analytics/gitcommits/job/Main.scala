@@ -18,7 +18,7 @@ import java.time.LocalDate
 
 import com.gerritforge.analytics.gitcommits.model.{
   GerritEndpointConfig,
-  GerritProject,
+  GerritProjectWithRef,
   GerritProjectsSupport
 }
 import com.gerritforge.analytics.spark.SparkApp
@@ -147,11 +147,11 @@ trait Job {
 }
 
 trait FetchProjects {
-  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject]
+  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProjectWithRef]
 }
 
 trait FetchRemoteProjects extends FetchProjects {
-  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProject] =
+  def fetchProjects(config: GerritEndpointConfig): Seq[GerritProjectWithRef] =
   config.projectsFromManifest.map(_.toSeq).getOrElse(
     config.gerritProjectsUrl.toSeq.flatMap { url =>
       GerritProjectsSupport.parseJsonProjectListResponse(
