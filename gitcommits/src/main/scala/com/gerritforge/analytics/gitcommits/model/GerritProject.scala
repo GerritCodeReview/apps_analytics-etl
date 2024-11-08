@@ -21,7 +21,7 @@ import org.json4s.native.JsonMethods.parse
 
 import scala.io.Source
 import scala.util.Try
-case class GerritProject(id: String, name: String)
+case class GerritProject(id: String, name: String, branch: Option[String] = None)
 
 class GerritProjectsSupport @Inject()(gerritApi: GerritApi) {
 

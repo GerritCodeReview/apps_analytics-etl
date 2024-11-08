@@ -31,12 +31,12 @@ object GerritAnalyticsTransformations {
   implicit class PimpedGerritProjectRDD(val rdd: RDD[GerritProject]) extends AnyVal {
 
     def enrichWithSource(
-        projectToContributorsAnalyticsUrlFactory: String => Option[String]
+        projectToContributorsAnalyticsUrlFactory: GerritProject => Option[String]
     ): RDD[ProjectContributionSource] = {
       rdd.map { project =>
         ProjectContributionSource(
           project.name,
-          projectToContributorsAnalyticsUrlFactory(project.id)
+          projectToContributorsAnalyticsUrlFactory(project)
         )
       }
     }
@@ -224,7 +224,7 @@ object GerritAnalyticsTransformations {
 
   def getContributorStats(
       projects: RDD[GerritProject],
-      projectToContributorsAnalyticsUrlFactory: String => Option[String],
+      projectToContributorsAnalyticsUrlFactory: GerritProject => Option[String],
       gerritApiConnection: GerritConnectivity
   )(implicit spark: SparkSession) = {
     import spark.sqlContext.implicits._ // toDF
