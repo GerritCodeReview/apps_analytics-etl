@@ -64,9 +64,9 @@ class GerritAnalyticsTransformationsSpec
 
     val projectRdd = sc.parallelize(Seq(GerritProject("project-id", "project-name")))
 
-    val projectWithSource = projectRdd
-      .enrichWithSource(projectId => Some(s"http://somewhere.com/$projectId"))
-      .collect
+    val rdd = projectRdd
+      .enrichWithSource(project => None)
+    val projectWithSource = rdd.collect
 
     projectWithSource should have size 1
     inside(projectWithSource.head) {
@@ -74,6 +74,7 @@ class GerritAnalyticsTransformationsSpec
         projectName should be("project-name")
         url should contain("http://somewhere.com/project-id")
       }
+      case _ => throw new Exception("What's going on!?!")
     }
   }
 
