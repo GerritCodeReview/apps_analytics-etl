@@ -189,6 +189,10 @@ object GerritAnalyticsTransformations {
         .handleAliases(aliasesDFMaybe)
         .dropCommits
     }
+
+    def addProductInfo(productName: String)(implicit spark: SparkSession): DataFrame = {
+      df.withColumn("product_name", lit(productName))
+    }
   }
 
   private def emailToDomain(email: String): String = email match {

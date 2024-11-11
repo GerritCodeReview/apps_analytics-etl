@@ -316,6 +316,35 @@ class GerritAnalyticsTransformationsSpec
     df.collect should contain theSameElementsAs expectedDF.collect
   }
 
+  "addProductInfo" should "enrich the data with product info from the configuration" in {
+    import spark.implicits._
+
+    val productName = "testProduct"
+    val inputDF = sc
+      .parallelize(
+        Seq(
+          ("input_value1"),
+          ("input_value2")
+        )
+      )
+      .toDF("input")
+
+    val expectedDF = sc
+      .parallelize(
+        Seq(
+          ("input_value1", productName),
+          ("input_value2", productName)
+        )
+      )
+      .toDF("input", "product_name")
+
+    val df = inputDF.addProductInfo("testProduct")
+
+    df.schema.fields.map(_.name) should contain allOf ("input", "product_name")
+
+    df.collect should contain theSameElementsAs expectedDF.collect
+  }
+
   it should "enrich the data with organization from the alias DF when available" in {
     import spark.implicits._
 
