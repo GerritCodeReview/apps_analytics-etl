@@ -316,6 +316,65 @@ class GerritAnalyticsTransformationsSpec
     df.collect should contain theSameElementsAs expectedDF.collect
   }
 
+  "addManifestInfo" should "enrich the data with manifest-label from the configuration" in {
+    import spark.implicits._
+
+    val manifestLabel = "testManifestLabel"
+    val inputDF = sc
+      .parallelize(
+        Seq(
+          ("input_value1"),
+          ("input_value2")
+        )
+      )
+      .toDF("input")
+
+    val expectedDF = sc
+      .parallelize(
+        Seq(
+          ("input_value1", manifestLabel),
+          ("input_value2", manifestLabel)
+        )
+      )
+      .toDF("input", "manifest_label")
+
+    val df = inputDF.addManifestInfo(manifestLabel, None)
+
+    df.schema.fields.map(_.name) should contain allOf ("input", "manifest_label")
+
+    df.collect should contain theSameElementsAs expectedDF.collect
+  }
+
+  it should "enrich the data with manifest-label and manifest branch from the configuration" in {
+    import spark.implicits._
+
+    val manifestLabel = "testManifestLabel"
+    val manifestBranch = "manifestBranch"
+    val inputDF = sc
+      .parallelize(
+        Seq(
+          ("input_value1"),
+          ("input_value2")
+        )
+      )
+      .toDF("input")
+
+    val expectedDF = sc
+      .parallelize(
+        Seq(
+          ("input_value1", manifestLabel, manifestBranch),
+          ("input_value2", manifestLabel, manifestBranch)
+        )
+      )
+      .toDF("input", "manifest_label", "manifest_branch")
+
+    val df = inputDF.addManifestInfo(manifestLabel, Some(manifestBranch))
+
+    df.schema.fields.map(_.name) should contain allOf ("input", "manifest_label", "manifest_branch")
+
+    df.collect should contain theSameElementsAs expectedDF.collect
+  }
+
   it should "enrich the data with organization from the alias DF when available" in {
     import spark.implicits._
 
