@@ -37,7 +37,9 @@ case class GerritEndpointConfig(
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,
     extractBranches: Option[Boolean] = None,
-    manifest: Option[String] = None
+    manifest: Option[String] = None,
+    manifestBranch: Option[String] = None,
+    productName: Option[String] = None
 ) {
 
   lazy val projectsFromManifest: Option[Set[GerritProject]] = manifest.map { mf =>
@@ -48,8 +50,8 @@ case class GerritEndpointConfig(
       mfProjects.flatMap { projectNode =>
         for {
           name <- projectNode.attribute("name").map(_.text.stripSuffix(".git"))
-          version = projectNode.attribute("revision").map(_.text).orElse(Some(defaultBranch))
-        } yield GerritProject(URLEncoder.encode(name, "UTF-8"), name, version)
+          revision = projectNode.attribute("revision").map(_.text).orElse(Some(defaultBranch))
+        } yield GerritProject(URLEncoder.encode(name, "UTF-8"), name, revision)
       }.toSet
   }
 
