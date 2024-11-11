@@ -37,7 +37,9 @@ case class GerritEndpointConfig(
     password: Option[String] = None,
     ignoreSSLCert: Option[Boolean] = None,
     extractBranches: Option[Boolean] = None,
-    manifest: Option[String] = None
+    manifest: Option[String] = None,
+    manifestBranch: Option[String] = None,
+    productName: Option[String] = None
 ) {
 
   lazy val projectsFromManifest: Option[Set[GerritProjectWithBranch]] = manifest.map { mf =>
