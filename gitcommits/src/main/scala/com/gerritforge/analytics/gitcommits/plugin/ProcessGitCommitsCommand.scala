@@ -73,11 +73,11 @@ class ProcessGitCommitsCommand @Inject()(
   var extractBranches: Boolean = false
 
   @ArgOption(
-    name = "--manifest",
-    aliases = Array("-m"),
-    usage = "repo manifest XML with the list of projects to process"
+    name = "--product",
+    aliases = Array("-t"),
+    usage = "A 'product' is an aggregation of projects imported from the same manifest. Add it to allow filtering by 'product'"
   )
-  var manifest: String = null
+  var productName: String = null
 
   override def run() {
     implicit val config = GerritEndpointConfig(
