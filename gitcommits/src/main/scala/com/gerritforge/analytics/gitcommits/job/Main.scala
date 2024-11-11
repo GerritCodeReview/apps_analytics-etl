@@ -90,6 +90,14 @@ object Main extends App with SparkApp with Job with LazyLogging with FetchRemote
         c.copy(manifest = Some(x))
       } text "repo manifest XML with the list of projects to process"
 
+      opt[String]('n', "manifest-branch") optional () action { (input, c) =>
+        c.copy(manifestBranch = Some(input))
+      } text "manifest file git branch"
+
+      opt[String]('t', "product") optional () action { (input, c) =>
+        c.copy(productName = Some(input))
+      } text "a 'product' is an aggregation of projects imported from the same manifest. Add to allow query by 'product'."
+
     }
 
   cliOptionParser.parse(args, GerritEndpointConfig()) match {
@@ -132,7 +140,10 @@ trait Job {
       config.contributorsUrl,
       config.gerritApiConnection
     )
-    contributorsStats.dashboardStats(aliasesDF)
+    val df = contributorsStats.dashboardStats(aliasesDF)
+    config.manifest.flatMap(_ =>
+      config.productName.map(p => df.addProductInfo(p, config.manifestBranch)))
+        .getOrElse(df)
   }
 
   def saveES(df: DataFrame)(implicit config: GerritEndpointConfig) {
