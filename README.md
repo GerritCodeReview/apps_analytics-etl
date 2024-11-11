@@ -57,6 +57,8 @@ docker run -ti --rm \
 - -u --url Gerrit server URL with the analytics plugins installed
 - -m --manifest Repo manifest XML path. Absolute path of the Repo manifest XML to import project
 from. Each project will be imported with the branch specified in the `revision` attribute.
+- -t --product (*optional*) Product name. A `product` is an aggregation of projects imported from the same manifest.
+Add it to allow filtering by `product`.
 - -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
 - -e --elasticIndex Elastic Search index name. If not provided no ES export will be performed. _Note: ElastiSearch 6.x
 requires this index format `name/type`, while from ElasticSearch 7.x just `name`_
