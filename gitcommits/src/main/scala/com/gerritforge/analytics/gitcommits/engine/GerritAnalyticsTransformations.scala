@@ -189,6 +189,11 @@ object GerritAnalyticsTransformations {
         .handleAliases(aliasesDFMaybe)
         .dropCommits
     }
+
+    def addManifestInfo(manifestLabel: String, manifestBranch: Option[String])(implicit spark: SparkSession): DataFrame = {
+      val dfWithManifestInfo = df.withColumn("manifest_label", lit(manifestLabel))
+      manifestBranch.fold(dfWithManifestInfo)(mb => dfWithManifestInfo.withColumn("manifest_branch", lit(mb)))
+    }
   }
 
   private def emailToDomain(email: String): String = email match {
