@@ -79,6 +79,20 @@ class ProcessGitCommitsCommand @Inject()(
   )
   var manifest: String = null
 
+  @ArgOption(
+    name = "--manifest-branch",
+    aliases = Array("-n"),
+    usage = "manifest file git branch"
+  )
+  var manifestBranch: String = null
+
+  @ArgOption(
+    name = "--manifest-label",
+    aliases = Array("-l"),
+    usage = "A 'manifest_label' is an aggregation of projects imported from the same manifest. Add it to allow filtering by 'manifest_label'"
+  )
+  var productName: String = null
+
   override def run() {
     implicit val config = GerritEndpointConfig(
       gerritConfig.getListenUrl(),
