@@ -72,6 +72,13 @@ class ProcessGitCommitsCommand @Inject()(
   )
   var extractBranches: Boolean = false
 
+  @ArgOption(
+    name = "--manifest",
+    aliases = Array("-m"),
+    usage = "repo manifest XML with the list of projects to process"
+  )
+  var manifest: String = null
+
   override def run() {
     implicit val config = GerritEndpointConfig(
       gerritConfig.getListenUrl(),
