@@ -22,6 +22,30 @@
       },
       "revId": "2bd815e797a82798e823ed361428a1d6b959086c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e1bc65c_f61868ca",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritProject.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-20T08:19:26Z",
+      "side": 1,
+      "message": "Good point! Done",
+      "parentUuid": "d496e44c_f6c65022",
+      "range": {
+        "startLine": 24,
+        "startChar": 11,
+        "endLine": 24,
+        "endChar": 24
+      },
+      "revId": "2bd815e797a82798e823ed361428a1d6b959086c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
