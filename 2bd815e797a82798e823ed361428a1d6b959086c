@@ -46,6 +46,30 @@
       },
       "revId": "2bd815e797a82798e823ed361428a1d6b959086c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "093d7d67_6077867f",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritProject.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-27T21:21:07Z",
+      "side": 1,
+      "message": "Apologies, I just realised that the `branch` parameter is actually wrongly named and it is a `ref` instead.\n\n\n\n```suggestion\ncase class GerritProjectWithRef(id: String, name: String, refName: Option[String] \u003d None)\n```",
+      "parentUuid": "8e1bc65c_f61868ca",
+      "range": {
+        "startLine": 24,
+        "startChar": 11,
+        "endLine": 24,
+        "endChar": 24
+      },
+      "revId": "2bd815e797a82798e823ed361428a1d6b959086c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
