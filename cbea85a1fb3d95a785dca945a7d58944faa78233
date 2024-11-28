@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0d85e44_f3b1bafb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T10:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fa63c58_0eb7483c",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98284992_9b6d3359",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-11-28T08:44:48Z",
       "side": 1,
       "message": "This is a _way to use it_ but you could use the labels in completely different ways.\n\n```suggestion\nLabelling the results could be used for the aggregation of projects imported\nfrom the same manifest file.\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 28
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05b49b77_9a15ec77",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T10:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98284992_9b6d3359",
       "range": {
         "startLine": 9,
         "startChar": 0,
@@ -116,6 +164,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "04ba9af2_869d3f78",
+        "filename": "README.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T10:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "996eb28e_b072e9e5",
+      "range": {
+        "startLine": 61,
+        "startChar": 3,
+        "endLine": 61,
+        "endChar": 4
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10aacb7d_1dead3b6",
@@ -129,6 +201,30 @@
       "writtenOn": "2024-11-28T08:44:48Z",
       "side": 1,
       "message": "```suggestion\n    def addManifestInfo(manifestLabel: String, manifestBranch: Option[String])(implicit spark: SparkSession): DataFrame \u003d {\n```",
+      "range": {
+        "startLine": 193,
+        "startChar": 8,
+        "endLine": 193,
+        "endChar": 22
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04e91ed4_5f71b3c0",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T10:15:15Z",
+      "side": 1,
+      "message": "Good call!",
+      "parentUuid": "10aacb7d_1dead3b6",
       "range": {
         "startLine": 193,
         "startChar": 8,
@@ -162,6 +258,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ec799c4_4a4a1f84",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T10:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f037039_fd7113f1",
+      "range": {
+        "startLine": 194,
+        "startChar": 41,
+        "endLine": 194,
+        "endChar": 53
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c0da00ca_c96181b1",
@@ -185,6 +305,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "372268cf_d8bd2bef",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/plugin/ProcessGitCommitsCommand.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T10:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0da00ca_c96181b1",
+      "range": {
+        "startLine": 90,
+        "startChar": 14,
+        "endLine": 90,
+        "endChar": 21
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f70e7a2_bb98b667",
@@ -198,6 +342,30 @@
       "writtenOn": "2024-11-28T08:44:48Z",
       "side": 1,
       "message": "```suggestion\n    usage \u003d \"A \u0027manifest_label\u0027 is an aggregation of projects imported from the same manifest. Add it to allow filtering by \u0027manifest_label\u0027\"\n```",
+      "range": {
+        "startLine": 92,
+        "startChar": 16,
+        "endLine": 92,
+        "endChar": 23
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "049e2523_a42353f5",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/plugin/ProcessGitCommitsCommand.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T10:15:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f70e7a2_bb98b667",
       "range": {
         "startLine": 92,
         "startChar": 16,
