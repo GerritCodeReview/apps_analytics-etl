@@ -1,0 +1,211 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6fa63c58_0eb7483c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "The naming is misleading.\n\n```suggestion\nLabel results and add manifest branch information\n```",
+      "range": {
+        "startLine": 7,
+        "startChar": 4,
+        "endLine": 7,
+        "endChar": 16
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98284992_9b6d3359",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "This is a _way to use it_ but you could use the labels in completely different ways.\n\n```suggestion\nLabelling the results could be used for the aggregation of projects imported\nfrom the same manifest file.\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 28
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8d0f8f8_63024c0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "```suggestion\nAdd \"manifest_label\" and \"manifest_branch\" fields to allow\n```",
+      "range": {
+        "startLine": 11,
+        "startChar": 5,
+        "endLine": 11,
+        "endChar": 17
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a84c7fa8_11c7c28c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 7
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "```suggestion\naggregation and filtering by information associated with the manifest.\n```",
+      "range": {
+        "startLine": 12,
+        "startChar": 26,
+        "endLine": 12,
+        "endChar": 48
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "996eb28e_b072e9e5",
+        "filename": "README.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "```suggestion\n- -l --manifest-label (*optional*) Manifest label. A `manifest_label` is an aggregation of projects imported from the same manifest.\n```",
+      "range": {
+        "startLine": 61,
+        "startChar": 3,
+        "endLine": 61,
+        "endChar": 4
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10aacb7d_1dead3b6",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 193,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "```suggestion\n    def addManifestInfo(manifestLabel: String, manifestBranch: Option[String])(implicit spark: SparkSession): DataFrame \u003d {\n```",
+      "range": {
+        "startLine": 193,
+        "startChar": 8,
+        "endLine": 193,
+        "endChar": 22
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f037039_fd7113f1",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "```suggestion\n      val dfWithProduct \u003d df.withColumn(\"manifest_label\", lit(manifestLabel))\n```",
+      "range": {
+        "startLine": 194,
+        "startChar": 41,
+        "endLine": 194,
+        "endChar": 53
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0da00ca_c96181b1",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/plugin/ProcessGitCommitsCommand.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "```suggestion\n    name \u003d \"--manifest-label\",\n```",
+      "range": {
+        "startLine": 90,
+        "startChar": 14,
+        "endLine": 90,
+        "endChar": 21
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f70e7a2_bb98b667",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/plugin/ProcessGitCommitsCommand.scala",
+        "patchSetId": 7
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2024-11-28T08:44:48Z",
+      "side": 1,
+      "message": "```suggestion\n    usage \u003d \"A \u0027manifest_label\u0027 is an aggregation of projects imported from the same manifest. Add it to allow filtering by \u0027manifest_label\u0027\"\n```",
+      "range": {
+        "startLine": 92,
+        "startChar": 16,
+        "endLine": 92,
+        "endChar": 23
+      },
+      "revId": "cbea85a1fb3d95a785dca945a7d58944faa78233",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
