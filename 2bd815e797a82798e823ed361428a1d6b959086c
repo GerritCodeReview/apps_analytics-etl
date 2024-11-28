@@ -70,6 +70,30 @@
       },
       "revId": "2bd815e797a82798e823ed361428a1d6b959086c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "293c1d28_10297878",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/model/GerritProject.scala",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2024-11-28T09:09:33Z",
+      "side": 1,
+      "message": "Ops, you are right :/ Amended here and other references to branches.",
+      "parentUuid": "093d7d67_6077867f",
+      "range": {
+        "startLine": 24,
+        "startChar": 11,
+        "endLine": 24,
+        "endChar": 24
+      },
+      "revId": "2bd815e797a82798e823ed361428a1d6b959086c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
