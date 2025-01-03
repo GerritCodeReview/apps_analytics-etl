@@ -70,7 +70,7 @@ class GerritAnalyticsTransformationsSpec
 
     projectWithSource should have size 1
     inside(projectWithSource.head) {
-      case ProjectContributionSource(projectName, url) => {
+      case ProjectContributionSource(projectName, _, url) => {
         projectName should be("project-name")
         url should contain("http://somewhere.com/project-id")
       }
@@ -88,7 +88,7 @@ class GerritAnalyticsTransformationsSpec
 
     projectWithSource should have size 1
     inside(projectWithSource.head) {
-      case ProjectContributionSource(projectName, url) => {
+      case ProjectContributionSource(projectName, _, url) => {
         projectName should be("project-name")
         url should contain(s"http://somewhere.com/project-id?ref=$ref")
       }
@@ -118,8 +118,8 @@ class GerritAnalyticsTransformationsSpec
     val line3  = "foo2" -> "bar2"
     val line3b = "foo3" -> "bar3"
 
-    val projectSource1 = ProjectContributionSource("p1", newSource(line1, line2, line3))
-    val projectSource2 = ProjectContributionSource("p2", newSource(line3b))
+    val projectSource1 = ProjectContributionSource("p1", None, newSource(line1, line2, line3))
+    val projectSource2 = ProjectContributionSource("p2", None, newSource(line3b))
 
     val rawContributors = sc
       .parallelize(Seq(projectSource1, projectSource2))
@@ -128,16 +128,16 @@ class GerritAnalyticsTransformationsSpec
 
     rawContributors should have size (4)
     rawContributors should contain allOf (
-      ("p1", """{"foo":"bar"}"""),
-      ("p1", """{"foo1":"bar1"}"""),
-      ("p1", """{"foo2":"bar2"}"""),
-      ("p2", """{"foo3":"bar3"}""")
+      (projectSource1, """{"foo":"bar"}"""),
+      (projectSource1, """{"foo1":"bar1"}"""),
+      (projectSource1, """{"foo2":"bar2"}"""),
+      (projectSource2, """{"foo3":"bar3"}""")
     )
   }
 
   it should "fetch file content from the initial list of project names and file names with non-latin chars" in {
     val rawContributors = sc
-      .parallelize(Seq(ProjectContributionSource("p1", newSource("foo2" -> "bar2\u0100"))))
+      .parallelize(Seq(ProjectContributionSource("p1", None, newSource("foo2" -> "bar2\u0100"))))
       .fetchRawContributors(new GerritConnectivity(None, None))
       .collect
 
@@ -151,16 +151,16 @@ class GerritAnalyticsTransformationsSpec
     val rdd = sc.parallelize(
       Seq(
         (
-          "p1",
+          ProjectContributionSource("p1", None, None),
           """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1, "num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0, "is_merge": false, "is_bot_like": false, "commits":[{ "sha1": "e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":false, "files": ["file1.txt", "file2.txt"]}], "branches": ["master", "stable-2.14"]}"""
         ),
         (
-          "p2",
+          ProjectContributionSource("p2", None, None),
           """{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428, "num_files": 2, "num_distinct_files": 3, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000, "is_merge": true, "is_bot_like":true, "commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file3.txt", "file4.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1500000000000,"merge":true, "files": ["file1.txt", "file4.txt"]}]}, "branches":[]"""
         ),
         // last commit is missing hour,day,month,year to check optionality
         (
-          "p3",
+          ProjectContributionSource("p3", None, None),
           """{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"is_merge": true, "is_bot_like":false,"commits":[{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":0,"merge":true, "files": ["file1.txt", "file2.txt"] },{"sha1":"e063a806c33bd524e89a87732bd3f1ad9a77a41e", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}]}, "branches":[]"""
         )
       )
@@ -171,7 +171,7 @@ class GerritAnalyticsTransformationsSpec
     df.count should be(3)
     val collected: Array[Row] = df.collect
 
-    df.schema.fields.map(_.name) should contain inOrder ("project", "author", "email",
+    df.schema.fields.map(_.name) should contain inOrder ("project", "project_revision", "author", "email",
     "year", "month", "day", "hour",
     "num_files", "num_distinct_files", "added_lines", "deleted_lines",
     "num_commits", "last_commit_date",
@@ -180,6 +180,7 @@ class GerritAnalyticsTransformationsSpec
     collected should contain allOf (
       Row(
         "p1",
+        null,
         "a",
         "a@mail.com",
         2017,
@@ -202,6 +203,7 @@ class GerritAnalyticsTransformationsSpec
       ),
       Row(
         "p2",
+        null,
         "b",
         "b@mail.com",
         2017,
@@ -227,6 +229,7 @@ class GerritAnalyticsTransformationsSpec
       ),
       Row(
         "p3",
+        null,
         "c",
         "c@mail.com",
         null,
@@ -253,11 +256,47 @@ class GerritAnalyticsTransformationsSpec
     )
   }
 
+  it should "transform an RDD to a DataFrame containing project name and version" in {
+    import sql.implicits._
+
+    val rdd = sc.parallelize(
+      Seq(
+        (
+          ProjectContributionSource("p1", Some("branch1"), None),
+          "{}"
+        ),
+        (
+          ProjectContributionSource("p2", Some("branch2"), None),
+          "{}"
+        ),
+        (
+          ProjectContributionSource("p3", Some("branch3"), None),
+          "{}"
+        )
+      )
+    )
+
+    val df = rdd.toDF("project", "json").transformCommitterInfo
+
+    df.count should be(3)
+    val collected: Array[Row] = df.collect
+
+    df.schema.fields.map(_.name) should contain inOrder ("project", "project_revision")
+
+    val expectedRows = Seq(
+      Row.fromSeq(Seq("p1", "branch1") ++ Seq.fill(17)(null)),
+      Row.fromSeq(Seq("p2", "branch2") ++ Seq.fill(17)(null)),
+      Row.fromSeq(Seq("p3", "branch3") ++ Seq.fill(17)(null))
+    )
+
+    df.collect() should contain theSameElementsAs expectedRows
+  }
+
   it should "extract single hashtag" in {
     import sql.implicits._
 
     val hashTag = "test-hash-tag"
-    val rdd     = sc.parallelize(Seq(("p1", s"""{"hash_tags": ["$hashTag"] }""")))
+    val rdd     = sc.parallelize(Seq((ProjectContributionSource("p1", None, None), s"""{"hash_tags": ["$hashTag"] }""")))
 
     val df = rdd.toDF("project", "json").transformCommitterInfo
 
@@ -271,7 +310,7 @@ class GerritAnalyticsTransformationsSpec
 
     val hashTag1 = "test-hash-tag-1"
     val hashTag2 = "test-hash-tag-2"
-    val rdd      = sc.parallelize(Seq(("p1", s"""{"hash_tags": ["$hashTag1", "$hashTag2"] }""")))
+    val rdd      = sc.parallelize(Seq((ProjectContributionSource("p1", None, None), s"""{"hash_tags": ["$hashTag1", "$hashTag2"] }""")))
 
     val df = rdd.toDF("project", "json").transformCommitterInfo
 
@@ -546,16 +585,16 @@ class GerritAnalyticsTransformationsSpec
       .parallelize(
         Seq(
           (
-            "p1",
+            ProjectContributionSource("p1", None, None),
             """{"name":"a","email":"a@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":1, "num_files": 2, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":0, "is_merge": false, "commits":[{ "sha1": "sha_1", "date":0,"merge":false, "files": ["file1.txt", "file2.txt"]}] }"""
           ),
           (
-            "p2",
+            ProjectContributionSource("p2", None, None),
             """{"name":"b","email":"b@mail.com","year":2017,"month":9, "day":11, "hour":23, "num_commits":428, "num_files": 2, "num_distinct_files": 3, "added_lines":1, "deleted_lines":1, "last_commit_date":1500000000000, "is_merge": true, "commits":[{"sha1":"sha_2", "date":0,"merge":true, "files": ["file3.txt", "file4.txt"] },{"sha1":"sha_3", "date":1500000000000,"merge":true, "files": ["file1.txt", "file4.txt"]}]}"""
           ),
           // last commit is missing hour,day,month,year to check optionality
           (
-            "p3",
+            ProjectContributionSource("p3", None, None),
             """{"name":"c","email":"c@mail.com","num_commits":12,"num_files": 4, "num_distinct_files": 2, "added_lines":1, "deleted_lines":1, "last_commit_date":1600000000000,"is_merge": true,"commits":[{"sha1":"sha_4", "date":0,"merge":true, "files": ["file1.txt", "file2.txt"] },{"sha1":"sha_5", "date":1600000000000,"merge":true, "files": ["file1.txt", "file2.txt"]}]}"""
           )
         )

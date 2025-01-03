@@ -36,6 +36,7 @@ object GerritAnalyticsTransformations {
       rdd.map { project =>
         ProjectContributionSource(
           project.name,
+          project.refName,
           projectToContributorsAnalyticsUrlFactory(project)
         )
       }
@@ -43,11 +44,10 @@ object GerritAnalyticsTransformations {
   }
 
   def getProjectJsonContributorsArray(
-      project: String,
-      sourceURL: Option[String],
+      project: ProjectContributionSource,
       gerritApiConnection: GerritConnectivity
-  ): Array[(String, String)] = {
-    sourceURL.toArray.flatMap(
+  ): Array[(ProjectContributionSource, String)] = {
+    project.contributorsUrl.toArray.flatMap(
       getProjectJsonContributorsArrayFromUrl(project, _, gerritApiConnection)
     )
   }
@@ -58,10 +58,10 @@ object GerritAnalyticsTransformations {
       .filterNot(_.trim.isEmpty)
 
   def getProjectJsonContributorsArrayFromUrl(
-      project: String,
+      project: ProjectContributionSource,
       sourceURL: String,
       gerritApiConnection: GerritConnectivity
-  ): Array[(String, String)] = {
+  ): Array[(ProjectContributionSource, String)] = {
     try {
       filterEmptyStrings(gerritApiConnection.getContentFromApi(sourceURL))
         .map(s => (project, s))
@@ -128,7 +128,8 @@ object GerritAnalyticsTransformations {
       import spark.sqlContext.implicits._
       df.withColumn("json", from_json($"json", schema))
         .selectExpr(
-          "project",
+          "project.name as project",
+          "project.refName as project_revision",
           "json.name as author",
           "json.email as email",
           "json.year as year",
@@ -209,9 +210,9 @@ object GerritAnalyticsTransformations {
 
     def fetchRawContributors(
         gerritApiConnection: GerritConnectivity
-    )(implicit spark: SparkSession): RDD[(String, String)] = {
+    )(implicit spark: SparkSession): RDD[(ProjectContributionSource, String)] = {
       projectsAndUrls.flatMap { p =>
-        getProjectJsonContributorsArray(p.name, p.contributorsUrl, gerritApiConnection)
+        getProjectJsonContributorsArray(p, gerritApiConnection)
       }
     }
   }
