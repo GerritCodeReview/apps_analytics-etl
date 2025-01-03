@@ -47,4 +47,4 @@ object GerritProjectsSupport {
   }
 }
 
-case class ProjectContributionSource(name: String, contributorsUrl: Option[String])
+case class ProjectContributionSource(name: String, refName: Option[String], contributorsUrl: Option[String])
