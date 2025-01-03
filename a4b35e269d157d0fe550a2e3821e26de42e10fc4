@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5111b74_c967edb4",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2025-01-03T17:41:33Z",
+      "side": 1,
+      "message": "I’m wondering whether we should keep this as a separate field or integrate it into the `branches` field.\n\nWith the current implementation:\n* `branches` is only populated when importing *from URL* **AND** specify the `extract-branches` option\n* `project_revision` is only populated when importing *from manifest*\n\nI’m inclined to keep them as separate fields to avoid inconsistent behavior in `branches` depending on the import method.\n\nFurthermore the source of information is different (manifest Vs analytics plugin response).",
+      "range": {
+        "startLine": 132,
+        "startChar": 30,
+        "endLine": 132,
+        "endChar": 46
+      },
+      "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
