@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ca03d6e2_89ff5372",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1054778
+      },
+      "writtenOn": "2025-01-14T15:43:29Z",
+      "side": 1,
+      "message": "Alternative implementation [1] in analytics.\n\n\n[1]: https://gerrit-review.googlesource.com/c/plugins/analytics/+/447614",
+      "parentUuid": "9459487d_521e2ae6",
+      "range": {
+        "startLine": 132,
+        "startChar": 30,
+        "endLine": 132,
+        "endChar": 46
+      },
+      "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac41a5cc_95bfa0e6",
         "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
         "patchSetId": 3
