@@ -22,6 +22,30 @@
       },
       "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9459487d_521e2ae6",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1072905
+      },
+      "writtenOn": "2025-01-14T11:02:54Z",
+      "side": 1,
+      "message": "The `revision` extracted from the manifest, could be used to populate the already existing `branches` field (it will be an array of one element).\n\nIf the manifest has `project\u003dfoo revision\u003dbar`, the stats extracted for project foo will be for the branch bar, so I think we could reuse that rather than insert a new field.\n\nThe only thing I don\u0027t like is that the word `branch` is restrictive/misleading, since revision could be a `tag`, a `sha1`, etc.\n\nHowever that value is already passed as:\n\n```--branch -f extract results only for a specific branch```\n\nto the `analytics` plugin, so kinda crossed that bridge already.\n\nI would suggest to have the `analytics` plugin just return the value that was passed in as part of the payload (and perhaps re-consider the name of the field).\n\nWDYT?\n\n@luca.milanesio@gmail.com, @ponch78@gmail.com",
+      "parentUuid": "d5111b74_c967edb4",
+      "range": {
+        "startLine": 132,
+        "startChar": 30,
+        "endLine": 132,
+        "endChar": 46
+      },
+      "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
