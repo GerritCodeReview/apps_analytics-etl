@@ -46,6 +46,40 @@
       },
       "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac41a5cc_95bfa0e6",
+        "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1149185
+      },
+      "writtenOn": "2025-01-14T11:37:56Z",
+      "side": 1,
+      "message": "nit: is this not check redundant? For me it is already tested in line L291",
+      "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "97aab492_a48f3643",
+        "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 1149185
+      },
+      "writtenOn": "2025-01-14T11:37:56Z",
+      "side": 1,
+      "message": "nit: is the order relevant?",
+      "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
