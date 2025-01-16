@@ -74,6 +74,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec6fe970_d9b1a5b7",
+        "filename": "gitcommits/src/main/scala/com/gerritforge/analytics/gitcommits/engine/GerritAnalyticsTransformations.scala",
+        "patchSetId": 3
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1006192
+      },
+      "writtenOn": "2025-01-16T09:10:40Z",
+      "side": 1,
+      "message": "\u003e The only thing I don\u0027t like is that the word branch is restrictive/misleading,\n\u003e since revision could be a tag, a sha1, etc.\n\nI agree, that should be `ref` and not `branch` at all. I\u0027ve added a similar comment on Change 447614.",
+      "parentUuid": "ca03d6e2_89ff5372",
+      "range": {
+        "startLine": 132,
+        "startChar": 30,
+        "endLine": 132,
+        "endChar": 46
+      },
+      "revId": "a4b35e269d157d0fe550a2e3821e26de42e10fc4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac41a5cc_95bfa0e6",
         "filename": "gitcommits/src/test/scala/com/gerritforge/analytics/GerritAnalyticsTransformationsSpec.scala",
         "patchSetId": 3
