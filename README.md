@@ -56,7 +56,7 @@ docker run -ti --rm \
     see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
 - -u --url Gerrit server URL with the analytics plugins installed
 - -m --manifest Repo manifest XML path. Absolute path of the Repo manifest XML to import project
-from. Each project will be imported with the branch specified in the `revision` attribute.
+from. Each project will be imported from the revision specified in the `revision` attribute.
 - -n --manifest-branch (*optional*) Manifest branch. Manifest file git branch.
 - -l --manifest-label (*optional*) Manifest label. A `manifest_label` is an aggregation of projects imported from the same manifest.
 Add it to allow filtering by `manifest_label`.

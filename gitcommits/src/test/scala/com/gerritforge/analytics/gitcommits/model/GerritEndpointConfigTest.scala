@@ -37,7 +37,7 @@ class GerritEndpointConfigTest extends FlatSpec with Matchers with ManifestXML {
   "contributorsUrl" should "" in {
     val conf = GerritEndpointConfig(baseUrl = Some("testBaseUrl"), prefix = None)
     conf.contributorsUrl(GerritProjectWithRef("opensbi","opensbi",Some("refs/tags/v0.8"))) should be
-      (Some(s"testBaseUrl/projects/opensbi/analytics~contributors?&branch=refs/tags/v0.8"))
+      (Some(s"testBaseUrl/projects/opensbi/analytics~contributors?&starting-revision=refs/tags/v0.8"))
   }
 
   "projectsFromManifest" should "return projects contained in a repo manifest XML" in {
