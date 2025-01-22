@@ -103,7 +103,8 @@ object GerritAnalyticsTransformations {
       branches: Array[String],
       last_commit_date: Long,
       is_merge: Boolean,
-      is_bot_like: Boolean
+      is_bot_like: Boolean,
+      starting_revision: String
   )
 
   import org.apache.spark.sql.Encoders
@@ -145,7 +146,8 @@ object GerritAnalyticsTransformations {
           "json.commits as commits",
           "json.branches as branches",
           "json.is_bot_like",
-          "json.hash_tags as hash_tags"
+          "json.hash_tags as hash_tags",
+          "json.starting_revision as starting_revision"
         )
     }
 
