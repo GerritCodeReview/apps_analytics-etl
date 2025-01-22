@@ -80,7 +80,7 @@ case class GerritEndpointConfig(
 
   def contributorsUrl(project: GerritProjectWithRef): Option[String] =
     baseUrl.map { url =>
-      val refFilter = project.refName.fold("")(ref => s"&branch=$ref")
+      val refFilter = project.refName.fold("")(ref => s"&starting-revision=$ref")
       s"$url/projects/${project.id}/analytics~contributors$queryString$refFilter"
     }
 }
