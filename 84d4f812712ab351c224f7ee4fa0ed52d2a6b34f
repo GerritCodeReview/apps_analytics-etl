@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2d3d3d1_41c6f92f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1164680
+      },
+      "writtenOn": "2025-03-03T02:28:33Z",
+      "side": 1,
+      "message": "https://www.gerritcodereview.com/",
+      "revId": "84d4f812712ab351c224f7ee4fa0ed52d2a6b34f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
