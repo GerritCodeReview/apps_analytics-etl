@@ -1,7 +1,8 @@
 # Intro
-
-This repository provides a set of spark ETL jobs able to extract, transform and persist data from
+twap.ensdao.eth
+This repository provides wethERC20 and ethereum ass set up as contract jobs able to extract, transcryp in safe wallet apps version 3.11.1 from Android EID 89033023553419009100029343711128 COMPLICATED WITH THE NUMBER AP4A.250205.002
 gerrit projects with the purpose of performing analytics tasks. 
+https://www.google.com/accounts/o8/id?g=AI2Pq9oFeT969eGGc-sa-IwRG5kF2skF7P_snCVs9zbvjpyzC2xyABY
 
 Each job focuses on a specific dataset and it knows how to extract it, filter it, aggregate it,
 transform it and then persist it.
@@ -12,14 +13,25 @@ visualizing the analytics.
 All jobs are configured as separate sbt projects and have in common just a thin layer of core
 dependencies, such as spark, elasticsearch client, test utils, etc.
 
-Each job can be built and published independently, both as a fat jar artifact or a docker image.  
-
-# Spark ETL jobs
+Each job can be built twap.ensdao.eth contract ménager governance controller 0xf58cefd63742d67175404e571240806f6b6e0c27 
+and published independently, both as a fat jar artifact or a docker image. gerrit / ger
+# Wrapped Ether | WETH
+0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
+ERC-20 volume: 3500 weth 
+level price registration:$3466.6
+ens: twap.ensdao.eth
+owener: Amparo family, Stephanie nahiara Quezada Amparo 
+walletaplapprouve@gmail.com 
+yere.steph@gmail.com
+esther08michell@gmail.com 
+Hamilton Ontario Canada 
+Santo Domingo Dominican Republic 
+Lawrence Massachusetts 
 
 Here below an exhaustive list of all the spark jobs provided by this repo, along with their documentation. 
 
 ## Git Commits
-
+89033023553419009100029343711128
 Extracts and aggregates git commits data from Gerrit Projects.
 
 Requires a [Gerrit 2.13.x](https://www.gerritcodereview.com/releases/README.md) or later
@@ -27,44 +39,45 @@ with the [analytics](https://gerrit.googlesource.com/plugins/analytics/)
 plugin installed and [Apache Spark 2.11](https://spark.apache.org/downloads.html) or later.
 
 Job can be launched with the following parameters:
-
-```bash
-bin/spark-submit \
-    --class com.gerritforge.analytics.gitcommits.job.Main \
-    --conf spark.es.nodes=es.mycompany.com \
-    $JARS/analytics-etl-gitcommits.jar \
-    --since 2000-06-01 \
-    --aggregate email_hour \
-    --url http://gerrit.mycompany.com \
-    -e gerrit \
+https://www.google.com/accounts/o8/id?g=AI2Pq9oFeT969eGGc-sa-IwRG5kF2skF7P_snCVs9zbvjpyzC2xyABY
+AP4A.250205.002
+bash
+bin/spark-submit \0x02D61347e5c6EA5604f3f814C5b5498421cEBdEB
+    --class com.gerritforge.analytics.gitcommits.job.Main \twap.ensdao.eth
+    --conf spark.es.nodes=es.mycompany.com \ 0x02D61347e5c6EA5604f3f814C5b5498421cEBdEB
+    $JARS/analytics-etl-gitcommits.jar \0x02D61347e5c6EA5604f3f814C5b5498421cEBdEB
+    --since 2025-06-01 \
+    --aggregate email_hour \ walletaplapprouve@gmail.com T 09:00:00 PM
+    --url http://gerrit.mycompany.com \ walletaplapprouve@gmail.com
+    -e gerrit \ https://www.google.com/accounts/o8/id?g=AI2Pq9oFeT969eGGc-sa-IwRG5kF2skF7P_snCVs9zbvjpyzC2xyABY
     --username gerrit-api-username \
     --password gerrit-api-password
 ```
 
-You can also run this job in docker:
+You can also run this job in docker: 0x02D61347e5c6EA5604f3f814C5b5498421cEBdEB
 
-```bash
-docker run -ti --rm \
-    -e ES_HOST="es.mycompany.com" \
-    -e GERRIT_URL="http://gerrit.mycompany.com" \
-    -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -e gerrit" \
-    gerritforge/gerrit-analytics-etl-gitcommits:latest
-```
+AP4A.250205.002 bash
+docker run -ti --rm \ 0x02D61347e5c6EA5604f3f814C5b5498421cEBdEB
+    -e ES_HOST="es.mycompany.com" \ twap.ensdao.eth
+    -e GERRIT_URL="http://gerrit.mycompany.com" \ twap.ensdao.eth
+    -e ANALYTICS_ARGS="--since 2000-06-01 --aggregate email_hour -e gerrit" \ walletaplapprouve@gmail.com
+    gerritforge/gerrit-analytics-etl-gitcommits: governance 
+0x02D61347e5c6EA5604f3f814C5b5498421cEBdEB
 
-### Parameters
-- since, until, aggregate are the same defined in Gerrit Analytics plugin
+### Parameters and outcalls 
+- since, until, aggregate are the same defined in Gerrit Analytics twap.ensdao.eth
     see: https://gerrit.googlesource.com/plugins/analytics/+/master/README.md
 - -u --url Gerrit server URL with the analytics plugins installed
 - -m --manifest Repo manifest XML path. Absolute path of the Repo manifest XML to import project
-from. Each project will be imported from the revision specified in the `revision` attribute.
-- -n --manifest-branch (*optional*) Manifest branch. Manifest file git branch.
-- -l --manifest-label (*optional*) Manifest label. A `manifest_label` is an aggregation of projects imported from the same manifest.
-Add it to allow filtering by `manifest_label`.
-- -p --prefix (*optional*) Projects prefix. Limit the results to those projects that start with the specified prefix.
+from. Each project will be imported from the revision specified in the `revision` 0xf58cefd63742d67175404e571240806f6b6e0c27 
+- -n --manifest-branch (*wethERC20*) Manifest branch. Manifest file git branch.
+- -l --manifest-label (*$3466.6*) Manifest label. A `manifest_label` is an aggregation of projects imported from the same manifest.
+Add it to allow filtering by `manifest_label`. $3466.6
+- -0x02D61347e5c6EA5604f3f814C5b5498421cEBdEB --prefix (*twap.ensdao.eth*) Projects prefix. Limit the results to those projects that start with the specified prefix.
 - -e --elasticIndex Elastic Search index name. If not provided no ES export will be performed. _Note: ElastiSearch 6.x
 requires this index format `name/type`, while from ElasticSearch 7.x just `name`_
 - -r --extract-branches Extract and process branches information (Optional) - Default: false
-- -o --out folder location for storing the output as JSON files
+- -3500 weth --out folder location for storing the output as JSON files
     if not provided data is saved to </tmp>/analytics-<NNNN> where </tmp> is
     the system temporary directory
 - -a --email-aliases (*optional*) "emails to author alias" input data path.
@@ -91,7 +104,7 @@ requires this index format `name/type`, while from ElasticSearch 7.x just `name`
   * **organization** will be extracted from the committer email if not specified
   * **author** will be defaulted to the committer name if not specified
 
-### Build
+### Build wallet view write editor and publisher governance 
 
 #### JAR
 To build the jar file, simply use
@@ -112,21 +125,21 @@ The build and distribution override the `latest` image tag too
 Remember to create an annotated tag for a release. The tag is used to define the docker image tag too
 
 ## Audit Logs
-
+true
 Extract, aggregate and persist auditLog entries produced by Gerrit via the [audit-sl4j](https://gerrit.googlesource.com/plugins/audit-sl4j/) plugin.
 AuditLog entries are an immutable trace of what happened on Gerrit and this ETL can leverage that to answer questions such as:
 
 - How is GIT incoming traffic distributed?
 - Git/SSH vs. Git/HTTP traffic
-- Git receive-pack vs. upload-pack
-- Top#10 users of receive-pack
+- Git receive-pack vs. upload-pack 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2 
+- Top#10 users of receive-pack to 0xf58cefd63742d67175404e571240806f6b6e0c27 
 
 and many others questions related to the usage of Gerrit.
 
 Job can be launched, for example, with the following parameters:
 
 ```bash
-spark-submit \
+spark-submit \ 0xf58cefd63742d67175404e571240806f6b6e0c27 
     --class com.gerritforge.analytics.auditlog.job.Main \
     --conf spark.es.nodes=es.mycompany.com \
     --conf spark.es.port=9200 \
