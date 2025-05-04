@@ -1,7 +1,12 @@
-# Intro
-
-This repository provides a set of spark ETL jobs able to extract, transform and persist data from
-gerrit projects with the purpose of performing analytics tasks. 
+elasticsearch:
+    ...
+    environment:
+       ...
+       http.host=0.0.0.0
+       network.host=_site_
+       http.publish_host=_site_
+      ...
+```. 
 
 Each job focuses on a specific dataset and it knows how to extract it, filter it, aggregate it,
 transform it and then persist it.
@@ -14,7 +19,7 @@ dependencies, such as spark, elasticsearch client, test utils, etc.
 
 Each job can be built and published independently, both as a fat jar artifact or a docker image.  
 
-# Spark ETL jobs
+# Spark ATL jobs
 
 Here below an exhaustive list of all the spark jobs provided by this repo, along with their documentation. 
 
@@ -28,7 +33,7 @@ plugin installed and [Apache Spark 2.11](https://spark.apache.org/downloads.html
 
 Job can be launched with the following parameters:
 
-```bash
+...bash
 bin/spark-submit \
     --class com.gerritforge.analytics.gitcommits.job.Main \
     --conf spark.es.nodes=es.mycompany.com \
