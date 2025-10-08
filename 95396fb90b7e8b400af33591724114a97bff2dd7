@@ -16,6 +16,23 @@
       "message": "Thank you Brad love you all",
       "revId": "95396fb90b7e8b400af33591724114a97bff2dd7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "43b211a0_a3f320d8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4382862
+      },
+      "writtenOn": "2025-10-08T11:36:12Z",
+      "side": 1,
+      "message": "515007: Add deprecation notice | https://gerrit-review.googlesource.com/c/apps/analytics-etl/+/515007",
+      "revId": "95396fb90b7e8b400af33591724114a97bff2dd7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ],
   "submitRequirementResults": [
