@@ -50,6 +50,23 @@
       "message": "95396fb90b7e8b400af33591724114a97bff2dd7\t[log] [tgz]\nauthor\tLuca Milanesio \u003cluca.milanesio@gmail.com\u003e\tFri Oct 03 09:44:39 2025 -0700\ncommitter\tLuca Milanesio \u003cluca.milanesio@gmail.com\u003e\tFri Oct 03 09:45:18 2025 -0700\ntree\t9f85e23691ad2693235fced12a754ede4484e513\nparent\tdd094865fe07d2bb11ea1a181113b97133ebaf13 [diff]",
       "revId": "95396fb90b7e8b400af33591724114a97bff2dd7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "12719b9f_31d36532",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5177560
+      },
+      "writtenOn": "2026-09-19T04:01:56Z",
+      "side": 1,
+      "message": "Hi",
+      "revId": "95396fb90b7e8b400af33591724114a97bff2dd7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ],
   "submitRequirementResults": [
