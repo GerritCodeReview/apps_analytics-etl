@@ -84,6 +84,23 @@
       "message": "Program padlock",
       "revId": "95396fb90b7e8b400af33591724114a97bff2dd7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9078c6f_cb406681",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 5177560
+      },
+      "writtenOn": "2026-09-19T04:06:41Z",
+      "side": 1,
+      "message": "95396fb90b7e8b400af33591724114a97bff2dd7",
+      "revId": "95396fb90b7e8b400af33591724114a97bff2dd7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ],
   "submitRequirementResults": [
